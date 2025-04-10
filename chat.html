@@ -122,6 +122,11 @@
   <script>
     const chat = document.getElementById('chat');
 
+    // Génère ou récupère un ID de session persistant
+    const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
+    localStorage.setItem('chatSession', sessionId);
+    console.log('🆔 sessionId =', sessionId);
+
     function addMessage(content, sender) {
       const msg = document.createElement('div');
       msg.className = `message ${sender}`;
@@ -143,8 +148,7 @@
       const typing = document.getElementById('typing');
       if (typing) typing.remove();
     }
-// Génère un ID unique pour la session (conversation)
-const sessionId = crypto.randomUUID();
+
     function sendMessage() {
       const input = document.getElementById('user-input');
       const message = input.value.trim();
@@ -157,7 +161,7 @@ const sessionId = crypto.randomUUID();
       fetch('https://4068-2001-861-2cab-2ce0-794a-23e-6ff5-4650.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message })
+        body: JSON.stringify({ message, sessionId })
       })
         .then(response => response.json())
         .then(data => {
