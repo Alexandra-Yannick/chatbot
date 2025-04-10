@@ -160,8 +160,9 @@
       })
         .then(res => res.json())
         .then(data => {
-          removeTyping();
-          addMessage((data.response || (data[0] && data[0].output)) ?? "Je n'ai pas compris 😅", 'bot');
+  console.log('🧾 Données reçues du webhook :', data);
+  addMessage((data.response || (data[0] && data[0].output)) ?? "Je n'ai pas compris 😅", 'bot');
+})
         })
         .catch(() => {
           removeTyping();
