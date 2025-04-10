@@ -158,13 +158,14 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message })
       })
-        .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
-  console.log('🧾 Données reçues du webhook :', data);
-  addMessage((data.response || (data[0] && data[0].output)) ?? "Je n'ai pas compris 😅", 'bot');
-})
+          console.log('🧾 Données reçues du webhook :', data);
+          removeTyping();
+          addMessage((data.response || (data[0] && data[0].output)) ?? "Je n'ai pas compris 😅", 'bot');
         })
-        .catch(() => {
+        .catch(err => {
+          console.error('❌ Erreur du fetch :', err);
           removeTyping();
           addMessage("Erreur de connexion 😓", 'bot');
         });
