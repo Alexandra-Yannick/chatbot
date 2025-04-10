@@ -161,7 +161,7 @@
         .then(res => res.json())
         .then(data => {
           removeTyping();
-          addMessage(data.response || "Je n'ai pas compris 😅", 'bot');
+          addMessage((data.response || (data[0] && data[0].output)) ?? "Je n'ai pas compris 😅", 'bot');
         })
         .catch(() => {
           removeTyping();
