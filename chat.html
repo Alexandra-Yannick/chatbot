@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot IA</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f6f8fc, #e6ebf5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    .message {
+      max-width: 80%;
+      margin-bottom: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      line-height: 1.4;
+    }
+    .user {
+      background: #d0eaff;
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+    .bot {
+      background: #f0f0f0;
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+    }
+    .input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      font-size: 16px;
+      outline: none;
+    }
+    .input-area button {
+      background: #007aff;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .typing {
+      font-style: italic;
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-messages" id="chat"></div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Pose ta question...">
+      <button onclick="sendMessage()">Envoyer</button>
+    </div>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+
+    function addMessage(content, sender) {
+      const msg = document.createElement('div');
+      msg.className = `message ${sender}`;
+      msg.textContent = content;
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function showTyping() {
+      const typing = document.createElement('div');
+      typing.className = 'typing';
+      typing.id = 'typing';
+      typing.textContent = 'Julie est en train de répondre...';
+      chat.appendChild(typing);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function removeTyping() {
+      const typing = document.getElementById('typing');
+      if (typing) typing.remove();
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('user-input');
+      const message = input.value.trim();
+      if (!message) return;
+
+      addMessage(message, 'user');
+      input.value = '';
+      showTyping();
+
+      fetch('https://ton-n8n.com/webhook/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      })
+        .then(res => res.json())
+        .then(data => {
+          removeTyping();
+          addMessage(data.response || "Je n'ai pas compris 😅", 'bot');
+        })
+        .catch(err => {
+          removeTyping();
+          addMessage("Erreur de connexion 😓", 'bot');
+        });
+    }
+
+    document.getElementById("user-input").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
+  </script>
+</body>
+</html>
