@@ -26,6 +26,8 @@
       box-shadow: 0 10px 60px rgba(0, 0, 0, 0.25);
       margin: 0 auto;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     .status-bar {
       height: 24px;
@@ -34,23 +36,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
-      position: relative;
-      z-index: 10;
-    }
-    .status-left {
+      padding: 0 12px;
       font-size: 13px;
       font-weight: 500;
+      color: black;
     }
     .status-center {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      transform: translateX(-50%);
-      height: 24px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      position: relative;
+      flex: 1;
     }
     .notch {
       width: 120px;
@@ -68,8 +64,7 @@
       width: auto;
     }
     .iphone-wrapper {
-      width: 100%;
-      height: calc(100% - 24px);
+      flex: 1;
       display: flex;
       flex-direction: column;
     }
@@ -164,7 +159,7 @@
 <body>
   <div class="iphone-frame">
     <div class="status-bar">
-      <div class="status-left">9:41</div>
+      <div>9:41</div>
       <div class="status-center">
         <div class="notch"></div>
       </div>
@@ -174,7 +169,6 @@
         <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h-1V2h-6v2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 0h-6v2h6V4z"/></svg>
       </div>
     </div>
-
     <div class="iphone-wrapper">
       <div class="chat-header">💬 Julie – Ton assistante IA</div>
       <div class="chat-messages" id="chat"></div>
@@ -254,6 +248,13 @@
     document.getElementById("user-input").addEventListener("keydown", function(e) {
       if (e.key === "Enter") sendMessage();
     });
+
+    // Afficher un premier message automatiquement
+    window.onload = () => {
+      setTimeout(() => {
+        addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t’as envie de sortir en mode resto, bar, lieu insolite… ou tu veux te laisser surprendre ?", 'bot');
+      }, 300);
+    }
   </script>
 </body>
 </html>
