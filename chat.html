@@ -118,13 +118,20 @@
     }
     .input-area button {
       background: #7f5af0;
-      color: white;
       border: none;
-      padding: 10px 16px;
-      font-size: 14px;
-      border-radius: 20px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
       cursor: pointer;
       margin-left: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .input-area button svg {
+      fill: #fff;
+      width: 24px;
+      height: 24px;
     }
     .typing {
       font-style: italic;
@@ -148,7 +155,11 @@
       <div class="chat-messages" id="chat"></div>
       <div class="input-area">
         <input type="text" id="user-input" placeholder="Écris ton message ici...">
-        <button onclick="sendMessage()">Envoyer</button>
+        <button onclick="sendMessage()">
+          <svg viewBox="0 0 24 24">
+            <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
