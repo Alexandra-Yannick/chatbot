@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Julie – Ton assistante IA</title>
   <style>
     * {
@@ -12,8 +12,6 @@
     }
 
     html, body {
-      overflow-x: hidden;
-      max-width: 100vw;
       width: 100%;
       height: 100%;
       background: #60C0E6;
@@ -32,56 +30,78 @@
       margin: 0 auto;
     }
 
-    /* Faux haut-parleur + caméra */
-    .notch {
+    .status-bar {
+      position: relative;
+      height: 24px;
+      width: 100%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-size: 13px;
+      color: #000;
+      z-index: 20;
+    }
+
+    .status-left {
+      font-weight: 500;
+    }
+
+    .status-center {
       position: absolute;
-      top: 10px;
+      top: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 140px;
       height: 28px;
       background: #000;
       border-radius: 14px;
-      z-index: 10;
     }
 
-    /* Faux boutons sur le côté */
-    .side-button {
-      position: absolute;
-      width: 4px;
-      height: 40px;
-      background: #000;
-      border-radius: 2px;
+    .status-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .volume-up {
-      left: 0px;
-      top: 80px;
+
+    .signal-bars, .wifi, .battery {
+      display: inline-block;
+      height: 12px;
     }
-    .volume-down {
-      left: 0px;
-      top: 130px;
+
+    .signal-bars {
+      width: 18px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cellular_signal_strength_bars.svg/32px-Cellular_signal_strength_bars.svg.png') no-repeat center;
+      background-size: contain;
     }
-    .power {
-      right: 0px;
-      top: 100px;
+
+    .wifi {
+      width: 16px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Wi-Fi_Icon.svg/32px-Wi-Fi_Icon.svg.png') no-repeat center;
+      background-size: contain;
+    }
+
+    .battery {
+      width: 24px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Battery_full_100_icon.svg/32px-Battery_full_100_icon.svg.png') no-repeat center;
+      background-size: contain;
     }
 
     .iphone-wrapper {
       width: 100%;
-      height: 100%;
+      height: calc(100% - 24px);
       display: flex;
       flex-direction: column;
     }
 
     .chat-header {
-      padding: 40px 12px 12px 12px;
       background: #7f5af0;
       color: white;
       text-align: center;
       padding: 12px;
       font-size: 16px;
       font-weight: bold;
-      flex-shrink: 0;
     }
 
     .chat-messages {
@@ -139,11 +159,6 @@
       border-top: 1px solid #ccc;
       background: #fff;
       padding: 10px;
-      position: sticky;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 10;
     }
 
     .input-area input {
@@ -181,10 +196,15 @@
 </head>
 <body>
   <div class="iphone-frame">
-    <div class="notch"></div>
-    <div class="side-button volume-up"></div>
-    <div class="side-button volume-down"></div>
-    <div class="side-button power"></div>
+    <div class="status-bar">
+      <div class="status-left">9:41</div>
+      <div class="status-center"></div>
+      <div class="status-right">
+        <span class="signal-bars"></span>
+        <span class="wifi"></span>
+        <span class="battery"></span>
+      </div>
+    </div>
 
     <div class="iphone-wrapper">
       <div class="chat-header">💬 Julie – Ton assistante IA</div>
