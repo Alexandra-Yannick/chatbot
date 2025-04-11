@@ -18,31 +18,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
     }
-    /* Frame du chat : démarre en petit, puis passe en fullscreen */
     .iphone-frame {
       position: relative;
       width: 390px;
-      height: 300px;  /* Hauteur initiale réduite */
+      height: 600px;
       background: #fff;
       border-radius: 40px;
       box-shadow: 0 10px 60px rgba(0, 0, 0, 0.25);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: all 0.5s ease;
     }
-    .iphone-frame.expanded {
-      width: 100%;
-      height: 100vh;
-      border-radius: 0;
-      box-shadow: none;
-    }
+    /* Partie supérieure : status-bar et en-tête fixes */
     .status-bar {
-      position: relative;
+      position: sticky;
+      top: 0;
       height: 24px;
       background: #fff;
+      z-index: 2;
     }
     .status-notch {
       position: absolute;
@@ -54,34 +48,30 @@
       background: #000;
       border-radius: 10px;
     }
-    .iphone-wrapper {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
     .chat-header {
+      position: sticky;
+      top: 24px; /* immédiatement après la status-bar */
       background: #7f5af0;
       color: white;
       text-align: center;
       padding: 12px;
       font-size: 16px;
       font-weight: bold;
+      z-index: 2;
     }
-    .chat-messages {
+    /* Zone centrale défilable pour les messages */
+    .chat-scroll {
       flex: 1;
-      padding: 12px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       background: #f2f2f7;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      scroll-behavior: smooth;
+      padding: 12px;
     }
     .message-wrapper {
       display: flex;
       align-items: flex-end;
       gap: 8px;
+      margin-bottom: 10px;
     }
     .message {
       max-width: 75%;
@@ -112,12 +102,16 @@
       border-radius: 50%;
       object-fit: cover;
     }
+    /* Zone inférieure fixe pour la saisie */
     .input-area {
-      display: flex;
-      align-items: center;
-      border-top: 1px solid #ccc;
+      position: sticky;
+      bottom: 0;
       background: #fff;
       padding: 10px;
+      border-top: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      z-index: 2;
     }
     .input-area input {
       flex: 1;
@@ -154,51 +148,24 @@
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* Overlay incitant à démarrer le chat */
-    .chat-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(96, 192, 230, 0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      cursor: pointer;
-    }
-    .chat-overlay button {
-      background: #7f5af0;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 16px;
-      border-radius: 20px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
-  <div class="iphone-frame" id="iphone-frame">
-    <!-- Overlay de démarrage -->
-    <div class="chat-overlay" id="chat-overlay">
-      <button id="start-chat-btn">Commencer le chat</button>
-    </div>
+  <div class="iphone-frame">
     <div class="status-bar">
       <div class="status-notch"></div>
     </div>
-    <div class="iphone-wrapper">
-      <div class="chat-header">💬 Julie - Serial Chilleuse</div>
+    <div class="chat-header">💬 Julie - Serial Chilleuse</div>
+    <div class="chat-scroll">
       <div class="chat-messages" id="chat"></div>
-      <div class="input-area">
-        <input type="text" id="user-input" placeholder="Écris ton message ici...">
-        <button onclick="sendMessage()">
-          <svg viewBox="0 0 24 24">
-            <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
-          </svg>
-        </button>
-      </div>
+    </div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Écris ton message ici...">
+      <button onclick="sendMessage()">
+        <svg viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
+        </svg>
+      </button>
     </div>
   </div>
   
@@ -206,12 +173,6 @@
     const chat = document.getElementById('chat');
     const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
     localStorage.setItem('chatSession', sessionId);
-  
-    // Lors du clic sur l'overlay, supprime l'overlay et active le mode fullscreen
-    document.getElementById('chat-overlay').addEventListener('click', () => {
-      document.getElementById('chat-overlay').style.display = 'none';
-      document.getElementById('iphone-frame').classList.add('expanded');
-    });
   
     function addMessage(content, sender) {
       const wrapper = document.createElement('div');
@@ -230,9 +191,10 @@
       msg.textContent = content;
       wrapper.appendChild(msg);
   
-      chat.appendChild(wrapper);
-      // Défilement vers le bas pour afficher le dernier message
-      chat.scrollTop = chat.scrollHeight;
+      document.getElementById('chat').appendChild(wrapper);
+      // Défilement vers le bas de la zone scrollable
+      const chatScroll = document.querySelector('.chat-scroll');
+      chatScroll.scrollTop = chatScroll.scrollHeight;
     }
   
     function showTyping() {
@@ -240,8 +202,9 @@
       typing.className = 'typing';
       typing.id = 'typing';
       typing.textContent = 'Julie est en train de répondre...';
-      chat.appendChild(typing);
-      chat.scrollTop = chat.scrollHeight;
+      document.getElementById('chat').appendChild(typing);
+      const chatScroll = document.querySelector('.chat-scroll');
+      chatScroll.scrollTop = chatScroll.scrollHeight;
     }
   
     function removeTyping() {
