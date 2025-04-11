@@ -10,7 +10,6 @@
       margin: 0;
       padding: 0;
     }
-    /* Centrage du conteneur de la frame sur toute la fenêtre */
     html, body {
       width: 100%;
       height: 100%;
@@ -19,6 +18,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
     .iphone-frame {
       position: relative;
@@ -63,6 +63,7 @@
       flex: 1;
       padding: 12px;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch; /* Pour un scroll fluide sur mobile */
       background: #f2f2f7;
       display: flex;
       flex-direction: column;
@@ -165,16 +166,16 @@
       </div>
     </div>
   </div>
-
+  
   <script>
     const chat = document.getElementById('chat');
     const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
     localStorage.setItem('chatSession', sessionId);
-
+    
     function addMessage(content, sender) {
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
-
+      
       if (sender === 'bot') {
         const avatar = document.createElement('img');
         avatar.src = 'image.png';
@@ -182,16 +183,17 @@
         avatar.className = 'bot-pic';
         wrapper.appendChild(avatar);
       }
-
+      
       const msg = document.createElement('div');
       msg.className = `message ${sender}`;
       msg.textContent = content;
       wrapper.appendChild(msg);
-
+      
       chat.appendChild(wrapper);
+      // Faire défiler la zone vers le bas pour afficher le dernier message
       chat.scrollTop = chat.scrollHeight;
     }
-
+    
     function showTyping() {
       const typing = document.createElement('div');
       typing.className = 'typing';
@@ -200,21 +202,21 @@
       chat.appendChild(typing);
       chat.scrollTop = chat.scrollHeight;
     }
-
+    
     function removeTyping() {
       const typing = document.getElementById('typing');
       if (typing) typing.remove();
     }
-
+    
     function sendMessage() {
       const input = document.getElementById('user-input');
       const message = input.value.trim();
       if (!message) return;
-
+      
       addMessage(message, 'user');
       input.value = '';
       showTyping();
-
+      
       fetch('https://4068-2001-861-2cab-2ce0-794a-23e-6ff5-4650.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -231,14 +233,15 @@
         addMessage("Erreur de connexion 😓", 'bot');
       });
     }
-
+    
     document.getElementById("user-input").addEventListener("keydown", function(e) {
       if (e.key === "Enter") sendMessage();
     });
-
+    
     window.onload = () => {
       setTimeout(() => {
-        addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t’as envie de sortir en mode resto, bar, lieu insolite… ou tu veux te laisser surprendre ?", 'bot');
+        // Message de recommandations sans étoiles superflues
+        addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?", 'bot');
       }, 300);
     }
   </script>
