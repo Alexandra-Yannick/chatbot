@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0,">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Julie – Ton assistante IA</title>
   <style>
     * {
@@ -12,6 +12,8 @@
     }
 
     html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
       width: 100%;
       height: 100%;
       background: #60C0E6;
@@ -19,18 +21,56 @@
       overflow: hidden;
     }
 
-    .iphone-wrapper {
-      width: 100%;
-      height: 100%;
-      max-width: 390px;
-      max-height: 600px;
-      margin: 0 auto;
+    .iphone-frame {
+      position: relative;
+      width: 390px;
+      height: 600px;
       background: #fff;
       border-radius: 40px;
       box-shadow: 0 10px 60px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    /* Faux haut-parleur + caméra */
+    .notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 28px;
+      background: #000;
+      border-radius: 14px;
+      z-index: 10;
+    }
+
+    /* Faux boutons sur le côté */
+    .side-button {
+      position: absolute;
+      width: 4px;
+      height: 40px;
+      background: #000;
+      border-radius: 2px;
+    }
+    .volume-up {
+      left: -6px;
+      top: 80px;
+    }
+    .volume-down {
+      left: -6px;
+      top: 130px;
+    }
+    .power {
+      right: -6px;
+      top: 100px;
+    }
+
+    .iphone-wrapper {
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
     }
 
     .chat-header {
@@ -139,12 +179,19 @@
   </style>
 </head>
 <body>
-  <div class="iphone-wrapper">
-    <div class="chat-header">💬 Julie – Ton assistante IA</div>
-    <div class="chat-messages" id="chat"></div>
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Écris ton message ici...">
-      <button onclick="sendMessage()">Envoyer</button>
+  <div class="iphone-frame">
+    <div class="notch"></div>
+    <div class="side-button volume-up"></div>
+    <div class="side-button volume-down"></div>
+    <div class="side-button power"></div>
+
+    <div class="iphone-wrapper">
+      <div class="chat-header">💬 Julie – Ton assistante IA</div>
+      <div class="chat-messages" id="chat"></div>
+      <div class="input-area">
+        <input type="text" id="user-input" placeholder="Écris ton message ici...">
+        <button onclick="sendMessage()">Envoyer</button>
+      </div>
     </div>
   </div>
 
