@@ -30,38 +30,39 @@
       flex-direction: column;
     }
     .status-bar {
-      height: 24px;
-      width: 100%;
-      background: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: 24px;
       padding: 0 12px;
+      background: #fff;
+      position: relative;
       font-size: 13px;
       font-weight: 500;
-      color: black;
     }
-    .status-center {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
+    .status-time {
       flex: 1;
+      text-align: left;
     }
-    .notch {
+    .status-icons {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+    .status-icons svg {
+      height: 12px;
+      width: auto;
+    }
+    .status-notch {
+      position: absolute;
+      top: 3px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 120px;
       height: 18px;
       background: #000;
       border-radius: 10px;
-    }
-    .status-right {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .status-right svg {
-      height: 12px;
-      width: auto;
     }
     .iphone-wrapper {
       flex: 1;
@@ -122,6 +123,7 @@
     }
     .input-area {
       display: flex;
+      align-items: center;
       border-top: 1px solid #ccc;
       background: #fff;
       padding: 10px;
@@ -138,11 +140,11 @@
       background: #7f5af0;
       color: white;
       border: none;
-      margin-left: 8px;
-      padding: 0 16px;
+      padding: 10px 16px;
       font-size: 14px;
       border-radius: 20px;
       cursor: pointer;
+      margin-left: 8px;
     }
     .typing {
       font-style: italic;
@@ -159,11 +161,9 @@
 <body>
   <div class="iphone-frame">
     <div class="status-bar">
-      <div>9:41</div>
-      <div class="status-center">
-        <div class="notch"></div>
-      </div>
-      <div class="status-right">
+      <div class="status-time">9:41</div>
+      <div class="status-notch"></div>
+      <div class="status-icons">
         <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M2 22h2V10H2v12zm4-5h2V5H6v12zm4-4h2V2h-2v11zm4-3h2V7h-2v3zm4-1h2V8h-2v1z"/></svg>
         <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M12 4C7.03 4 2.73 7.11 1 11.5l2.74 1.44C5.23 10.13 8.35 8 12 8s6.77 2.13 8.26 4.94L23 11.5C21.27 7.11 16.97 4 12 4zm0 4c-2.21 0-4.19 1.2-5.23 3.05L12 18l5.23-6.95C16.19 9.2 14.21 8 12 8z"/></svg>
         <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h-1V2h-6v2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 0h-6v2h6V4z"/></svg>
@@ -249,7 +249,6 @@
       if (e.key === "Enter") sendMessage();
     });
 
-    // Afficher un premier message automatiquement
     window.onload = () => {
       setTimeout(() => {
         addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t’as envie de sortir en mode resto, bar, lieu insolite… ou tu veux te laisser surprendre ?", 'bot');
