@@ -5,17 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Julie – Ton assistante IA</title>
   <style>
-    html, body {
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background: #60C0E6;
-      font-family: 'Inter', sans-serif;
+    }
+
+    html, body {
       height: 100%;
+      width: 100%;
+      background: #60C0E6;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
     }
 
     body {
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
     }
@@ -23,13 +28,13 @@
     .chat-container {
       width: 100vw;
       height: 100vh;
-      background: #fff;
+      max-width: 430px;
+      background: white;
       border-radius: 24px 24px 0 0;
-      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      position: relative;
+      box-shadow: 0 0 30px rgba(0,0,0,0.15);
     }
 
     .chat-header {
@@ -146,7 +151,7 @@
 
       if (sender === 'bot') {
         const avatar = document.createElement('img');
-        avatar.src = 'https://i.imgur.com/lY6zFjK.png'; // Photo de Julie
+        avatar.src = 'image.png'; // Nouvelle image locale de Julie
         avatar.alt = 'Julie';
         avatar.className = 'bot-pic';
         wrapper.appendChild(avatar);
