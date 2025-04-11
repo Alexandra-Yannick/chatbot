@@ -20,16 +20,24 @@
       justify-content: center;
       overflow: hidden;
     }
+    /* Frame du chat : démarre en petit, puis passe en fullscreen */
     .iphone-frame {
       position: relative;
       width: 390px;
-      height: 600px;
+      height: 300px;  /* Hauteur initiale réduite */
       background: #fff;
       border-radius: 40px;
       box-shadow: 0 10px 60px rgba(0, 0, 0, 0.25);
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: all 0.5s ease;
+    }
+    .iphone-frame.expanded {
+      width: 100%;
+      height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
     }
     .status-bar {
       position: relative;
@@ -63,7 +71,7 @@
       flex: 1;
       padding: 12px;
       overflow-y: auto;
-      -webkit-overflow-scrolling: touch; /* Pour un scroll fluide sur mobile */
+      -webkit-overflow-scrolling: touch;
       background: #f2f2f7;
       display: flex;
       flex-direction: column;
@@ -146,10 +154,37 @@
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    /* Overlay incitant à démarrer le chat */
+    .chat-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(96, 192, 230, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      cursor: pointer;
+    }
+    .chat-overlay button {
+      background: #7f5af0;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <div class="iphone-frame">
+  <div class="iphone-frame" id="iphone-frame">
+    <!-- Overlay de démarrage -->
+    <div class="chat-overlay" id="chat-overlay">
+      <button id="start-chat-btn">Commencer le chat</button>
+    </div>
     <div class="status-bar">
       <div class="status-notch"></div>
     </div>
@@ -171,11 +206,17 @@
     const chat = document.getElementById('chat');
     const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
     localStorage.setItem('chatSession', sessionId);
-    
+  
+    // Lors du clic sur l'overlay, supprime l'overlay et active le mode fullscreen
+    document.getElementById('chat-overlay').addEventListener('click', () => {
+      document.getElementById('chat-overlay').style.display = 'none';
+      document.getElementById('iphone-frame').classList.add('expanded');
+    });
+  
     function addMessage(content, sender) {
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
-      
+  
       if (sender === 'bot') {
         const avatar = document.createElement('img');
         avatar.src = 'image.png';
@@ -183,17 +224,17 @@
         avatar.className = 'bot-pic';
         wrapper.appendChild(avatar);
       }
-      
+  
       const msg = document.createElement('div');
       msg.className = `message ${sender}`;
       msg.textContent = content;
       wrapper.appendChild(msg);
-      
+  
       chat.appendChild(wrapper);
-      // Faire défiler la zone vers le bas pour afficher le dernier message
+      // Défilement vers le bas pour afficher le dernier message
       chat.scrollTop = chat.scrollHeight;
     }
-    
+  
     function showTyping() {
       const typing = document.createElement('div');
       typing.className = 'typing';
@@ -202,21 +243,21 @@
       chat.appendChild(typing);
       chat.scrollTop = chat.scrollHeight;
     }
-    
+  
     function removeTyping() {
       const typing = document.getElementById('typing');
       if (typing) typing.remove();
     }
-    
+  
     function sendMessage() {
       const input = document.getElementById('user-input');
       const message = input.value.trim();
       if (!message) return;
-      
+  
       addMessage(message, 'user');
       input.value = '';
       showTyping();
-      
+  
       fetch('https://4068-2001-861-2cab-2ce0-794a-23e-6ff5-4650.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -233,14 +274,13 @@
         addMessage("Erreur de connexion 😓", 'bot');
       });
     }
-    
+  
     document.getElementById("user-input").addEventListener("keydown", function(e) {
       if (e.key === "Enter") sendMessage();
     });
-    
+  
     window.onload = () => {
       setTimeout(() => {
-        // Message de recommandations sans étoiles superflues
         addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?", 'bot');
       }, 300);
     }
