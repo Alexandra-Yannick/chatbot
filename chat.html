@@ -10,15 +10,13 @@
       margin: 0;
       padding: 0;
     }
-
     html, body {
       width: 100%;
       height: 100%;
       background: #60C0E6;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow: hidden;
     }
-
     .iphone-frame {
       position: relative;
       width: 390px;
@@ -26,75 +24,55 @@
       background: #fff;
       border-radius: 40px;
       box-shadow: 0 10px 60px rgba(0, 0, 0, 0.25);
-      overflow: hidden;
       margin: 0 auto;
+      overflow: hidden;
     }
-
     .status-bar {
-      position: relative;
       height: 24px;
       width: 100%;
       background: #fff;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
-      font-size: 13px;
-      color: #000;
-      z-index: 20;
+      padding: 0 10px;
+      position: relative;
+      z-index: 10;
     }
-
     .status-left {
+      font-size: 13px;
       font-weight: 500;
     }
-
     .status-center {
       position: absolute;
-      top: 0;
       left: 50%;
+      top: 0;
       transform: translateX(-50%);
-      width: 140px;
-      height: 28px;
-      background: #000;
-      border-radius: 14px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-
+    .notch {
+      width: 120px;
+      height: 18px;
+      background: #000;
+      border-radius: 10px;
+    }
     .status-right {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
-
-    .signal-bars, .wifi, .battery {
-      display: inline-block;
+    .status-right svg {
       height: 12px;
+      width: auto;
     }
-
-    .signal-bars {
-      width: 18px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Cellular_signal_strength_bars.svg/32px-Cellular_signal_strength_bars.svg.png') no-repeat center;
-      background-size: contain;
-    }
-
-    .wifi {
-      width: 16px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Wi-Fi_Icon.svg/32px-Wi-Fi_Icon.svg.png') no-repeat center;
-      background-size: contain;
-    }
-
-    .battery {
-      width: 24px;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Battery_full_100_icon.svg/32px-Battery_full_100_icon.svg.png') no-repeat center;
-      background-size: contain;
-    }
-
     .iphone-wrapper {
       width: 100%;
       height: calc(100% - 24px);
       display: flex;
       flex-direction: column;
     }
-
     .chat-header {
       background: #7f5af0;
       color: white;
@@ -103,7 +81,6 @@
       font-size: 16px;
       font-weight: bold;
     }
-
     .chat-messages {
       flex: 1;
       padding: 12px;
@@ -114,13 +91,11 @@
       gap: 10px;
       scroll-behavior: smooth;
     }
-
     .message-wrapper {
       display: flex;
       align-items: flex-end;
       gap: 8px;
     }
-
     .message {
       max-width: 75%;
       padding: 10px 14px;
@@ -130,7 +105,6 @@
       animation: fadeIn 0.2s ease-in;
       word-break: break-word;
     }
-
     .user {
       background: #007aff;
       color: white;
@@ -138,7 +112,6 @@
       border-bottom-right-radius: 4px;
       border-top-left-radius: 18px;
     }
-
     .bot {
       background: #e5e5ea;
       color: black;
@@ -146,21 +119,18 @@
       border-bottom-left-radius: 4px;
       border-top-right-radius: 18px;
     }
-
     .bot-pic {
       width: 32px;
       height: 32px;
       border-radius: 50%;
       object-fit: cover;
     }
-
     .input-area {
       display: flex;
       border-top: 1px solid #ccc;
       background: #fff;
       padding: 10px;
     }
-
     .input-area input {
       flex: 1;
       padding: 10px 14px;
@@ -169,7 +139,6 @@
       font-size: 14px;
       outline: none;
     }
-
     .input-area button {
       background: #7f5af0;
       color: white;
@@ -180,14 +149,12 @@
       border-radius: 20px;
       cursor: pointer;
     }
-
     .typing {
       font-style: italic;
       font-size: 13px;
       color: #999;
       margin-left: 8px;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
@@ -198,11 +165,13 @@
   <div class="iphone-frame">
     <div class="status-bar">
       <div class="status-left">9:41</div>
-      <div class="status-center"></div>
+      <div class="status-center">
+        <div class="notch"></div>
+      </div>
       <div class="status-right">
-        <span class="signal-bars"></span>
-        <span class="wifi"></span>
-        <span class="battery"></span>
+        <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M2 22h2V10H2v12zm4-5h2V5H6v12zm4-4h2V2h-2v11zm4-3h2V7h-2v3zm4-1h2V8h-2v1z"/></svg>
+        <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M12 4C7.03 4 2.73 7.11 1 11.5l2.74 1.44C5.23 10.13 8.35 8 12 8s6.77 2.13 8.26 4.94L23 11.5C21.27 7.11 16.97 4 12 4zm0 4c-2.21 0-4.19 1.2-5.23 3.05L12 18l5.23-6.95C16.19 9.2 14.21 8 12 8z"/></svg>
+        <svg viewBox="0 0 24 24" fill="black" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h-1V2h-6v2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 0h-6v2h6V4z"/></svg>
       </div>
     </div>
 
