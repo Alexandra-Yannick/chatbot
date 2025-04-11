@@ -30,29 +30,18 @@
       flex-direction: column;
     }
     .status-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: relative;
       height: 24px;
       padding: 0 12px;
       background: #fff;
-      position: relative;
       font-size: 13px;
       font-weight: 500;
     }
     .status-time {
-      flex: 1;
-      text-align: left;
-    }
-    .status-icons {
-      flex: 1;
-      display: flex;
-      justify-content: flex-end;
-      gap: 6px;
-    }
-    .status-icons svg {
-      height: 12px;
-      width: auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
     .status-notch {
       position: absolute;
@@ -63,6 +52,18 @@
       height: 18px;
       background: #000;
       border-radius: 10px;
+    }
+    .status-icons {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 6px;
+    }
+    .status-icons svg {
+      height: 12px;
+      width: auto;
     }
     .iphone-wrapper {
       flex: 1;
