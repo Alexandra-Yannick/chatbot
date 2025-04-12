@@ -149,7 +149,7 @@
       padding: 10px 14px;
       border: 1px solid #ccc;
       border-radius: 20px;
-      font-size: 16px;
+      font-size: 16px; /* évite le zoom sur mobile */
       outline: none;
     }
     .input-area button {
@@ -185,10 +185,11 @@
   <div class="iphone-frame">
     <!-- Overlay de sélection de langue -->
     <div class="language-selection" id="language-selection">
-      <p>Choose your language / Choisissez votre langue</p>
+      <p>Choose your language / Choisissez votre langue / Elige tu idioma / Wähle deine Sprache</p>
       <button class="lang-btn" data-lang="fr">Français</button>
       <button class="lang-btn" data-lang="en">English</button>
       <button class="lang-btn" data-lang="es">Español</button>
+      <button class="lang-btn" data-lang="de">Deutsch</button>
     </div>
     <div class="status-bar">
       <div class="status-notch"></div>
@@ -205,7 +206,6 @@
           <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
         </svg>
       </button>
-      <!-- Bouton micro pour la reconnaissance vocale -->
       <button id="voice-btn">
         <svg viewBox="0 0 24 24">
           <path d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3z"/>
@@ -217,9 +217,37 @@
   
   <script>
     // Variables globales
-    let selectedLanguage = 'fr'; // valeur par défaut
+    let selectedLanguage = 'fr'; // langue par défaut
+    // Textes par langue
+    const languageTexts = {
+      fr: {
+        welcome: "Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?",
+        typing: "Julie est en train de répondre...",
+        placeholder: "Écris ton message ici..."
+      },
+      en: {
+        welcome: "Hi there 👋 Tell me what you feel like: would you like to go out to a restaurant, bar or an unusual venue? Or do you prefer to be surprised?",
+        typing: "Julie is typing...",
+        placeholder: "Type your message here..."
+      },
+      es: {
+        welcome: "¡Hola! 👋 Cuéntame: ¿te apetece ir a un restaurante, un bar o un lugar diferente? ¿O prefieres que te sorprenda?",
+        typing: "Julie está respondiendo...",
+        placeholder: "Escribe tu mensaje aquí..."
+      },
+      de: {
+        welcome: "Hallo! 👋 Sag mir, hast du Lust, in ein Restaurant, eine Bar oder einen ungewöhnlichen Ort zu gehen? Oder möchtest du überrascht werden?",
+        typing: "Julie antwortet gerade...",
+        placeholder: "Schreib deine Nachricht hier..."
+      }
+    };
     
-    // Fonctions d'affichage des messages avec prise en compte de la langue
+    // Met à jour le placeholder de l'input selon la langue sélectionnée
+    function updatePlaceholder() {
+      document.getElementById('user-input').setAttribute('placeholder', languageTexts[selectedLanguage].placeholder);
+    }
+    
+    // Ajout d'un message dans la zone de chat
     function addMessage(content, sender) {
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
@@ -238,7 +266,8 @@
       wrapper.appendChild(msg);
       
       document.getElementById('chat').appendChild(wrapper);
-      // Défilement vers le bas de la zone scrollable
+      
+      // Défilement jusqu'au bas de la zone scrollable
       const chatScroll = document.querySelector('.chat-scroll');
       chatScroll.scrollTop = chatScroll.scrollHeight;
     }
@@ -247,7 +276,8 @@
       const typing = document.createElement('div');
       typing.className = 'typing';
       typing.id = 'typing';
-      typing.textContent = 'Julie est en train de répondre...';
+      // Affichage du texte de saisie selon la langue sélectionnée
+      typing.textContent = languageTexts[selectedLanguage].typing;
       document.getElementById('chat').appendChild(typing);
       const chatScroll = document.querySelector('.chat-scroll');
       chatScroll.scrollTop = chatScroll.scrollHeight;
@@ -267,7 +297,6 @@
       input.value = '';
       showTyping();
       
-      // Envoi de la requête à ton serveur / webhook
       fetch('https://4068-2001-861-2cab-2ce0-794a-23e-6ff5-4650.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -285,37 +314,40 @@
       });
     }
     
-    // Gestion de l'événement "Enter" dans l'input
+    // Déclenchement de l'envoi du message lors de la touche "Enter"
     document.getElementById("user-input").addEventListener("keydown", function(e) {
       if (e.key === "Enter") sendMessage();
     });
     
-    // Au chargement : initialisation de la session et attente du choix de langue
+    // Initialisation de la session
     const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
     localStorage.setItem('chatSession', sessionId);
     
     // Gestion de la sélection de langue
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', function() {
-        selectedLanguage = this.dataset.lang; // sauvegarde de la langue choisie
+        selectedLanguage = this.dataset.lang;
         document.getElementById('language-selection').style.display = 'none';
-        // Optionnel : afficher un premier message adapté à la langue sélectionnée
-        if(selectedLanguage === 'fr'){
-          addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?", 'bot');
-        } else if(selectedLanguage === 'en'){
-          addMessage("Hi there 👋 Tell me what you feel like: would you like to go out to a restaurant, bar or an unusual venue? Or do you prefer to be surprised?", 'bot');
-        } else if(selectedLanguage === 'es'){
-          addMessage("¡Hola! 👋 Cuéntame: ¿te apetece ir a un restaurante, un bar o un lugar diferente? ¿O prefieres que te sorprenda?", 'bot');
+        updatePlaceholder();
+        addMessage(languageTexts[selectedLanguage].welcome, 'bot');
+        // Mise à jour de la langue pour la reconnaissance vocale
+        if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+          recognition.lang =
+            selectedLanguage === 'fr' ? 'fr-FR' :
+            selectedLanguage === 'en' ? 'en-US' :
+            selectedLanguage === 'es' ? 'es-ES' :
+            selectedLanguage === 'de' ? 'de-DE' : 'fr-FR';
         }
       });
     });
     
     // Reconnaissance vocale via l'API Web Speech
+    let recognition;
     if (window.SpeechRecognition || window.webkitSpeechRecognition) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
-      // On adapte la langue de reconnaissance selon la sélection
-      recognition.lang = selectedLanguage === 'fr' ? 'fr-FR' : (selectedLanguage === 'en' ? 'en-US' : 'es-ES');
+      recognition = new SpeechRecognition();
+      // Configuration initiale (sera mise à jour lors de la sélection de langue)
+      recognition.lang = 'fr-FR';
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
       
