@@ -118,7 +118,7 @@
       padding: 10px 14px;
       border: 1px solid #ccc;
       border-radius: 20px;
-      font-size: 16px;
+      font-size: 16px; /* Evite le zoom sur mobile */
       outline: none;
     }
     .input-area button {
@@ -159,11 +159,19 @@
     <div class="chat-scroll">
       <div class="chat-messages" id="chat"></div>
     </div>
+    <!-- Zone de saisie unique regroupant l'envoi et la reconnaissance vocale -->
     <div class="input-area">
       <input type="text" id="user-input" placeholder="Écris ton message ici...">
       <button onclick="sendMessage()">
         <svg viewBox="0 0 24 24">
           <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
+        </svg>
+      </button>
+      <!-- Bouton micro pour la reconnaissance vocale -->
+      <button id="voice-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3z"/>
+          <path d="M19.3 11c0 3.07-2.46 5.64-5.5 5.96v2.04h-3.6v-2.04C7.16 16.64 4.7 14.07 4.7 11H3c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-1.7z"/>
         </svg>
       </button>
     </div>
@@ -173,11 +181,11 @@
     const chat = document.getElementById('chat');
     const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
     localStorage.setItem('chatSession', sessionId);
-  
+    
     function addMessage(content, sender) {
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
-  
+      
       if (sender === 'bot') {
         const avatar = document.createElement('img');
         avatar.src = 'image.png';
@@ -185,18 +193,18 @@
         avatar.className = 'bot-pic';
         wrapper.appendChild(avatar);
       }
-  
+      
       const msg = document.createElement('div');
       msg.className = `message ${sender}`;
       msg.innerHTML = content;
       wrapper.appendChild(msg);
-  
+      
       document.getElementById('chat').appendChild(wrapper);
       // Défilement vers le bas de la zone scrollable
       const chatScroll = document.querySelector('.chat-scroll');
       chatScroll.scrollTop = chatScroll.scrollHeight;
     }
-  
+    
     function showTyping() {
       const typing = document.createElement('div');
       typing.className = 'typing';
@@ -206,21 +214,21 @@
       const chatScroll = document.querySelector('.chat-scroll');
       chatScroll.scrollTop = chatScroll.scrollHeight;
     }
-  
+    
     function removeTyping() {
       const typing = document.getElementById('typing');
       if (typing) typing.remove();
     }
-  
+    
     function sendMessage() {
       const input = document.getElementById('user-input');
       const message = input.value.trim();
       if (!message) return;
-  
+      
       addMessage(message, 'user');
       input.value = '';
       showTyping();
-  
+      
       fetch('https://4068-2001-861-2cab-2ce0-794a-23e-6ff5-4650.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -237,15 +245,45 @@
         addMessage("Erreur de connexion 😓", 'bot');
       });
     }
-  
+    
     document.getElementById("user-input").addEventListener("keydown", function(e) {
       if (e.key === "Enter") sendMessage();
     });
-  
+    
     window.onload = () => {
       setTimeout(() => {
         addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?", 'bot');
       }, 300);
+    }
+    
+    // Intégration de la reconnaissance vocale
+    if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'fr-FR';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      
+      recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('user-input').value = transcript;
+      };
+      
+      recognition.onerror = function(event) {
+        console.error("Erreur de reconnaissance vocale:", event.error);
+      };
+      
+      const voiceBtn = document.getElementById('voice-btn');
+      voiceBtn.addEventListener('mousedown', () => {
+        recognition.start();
+        voiceBtn.style.backgroundColor = "#ccc";
+      });
+      voiceBtn.addEventListener('mouseup', () => {
+        recognition.stop();
+        voiceBtn.style.backgroundColor = "";
+      });
+    } else {
+      console.log("Votre navigateur ne supporte pas l'API de reconnaissance vocale.");
     }
   </script>
 </body>
