@@ -30,6 +30,37 @@
       display: flex;
       flex-direction: column;
     }
+    /* Overlay pour la sélection de la langue */
+    .language-selection {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(96, 192, 230, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      text-align: center;
+      color: #fff;
+      padding: 20px;
+    }
+    .language-selection p {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .language-selection button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #7f5af0;
+      color: #fff;
+    }
     /* Partie supérieure : status-bar et en-tête fixes */
     .status-bar {
       position: sticky;
@@ -118,7 +149,7 @@
       padding: 10px 14px;
       border: 1px solid #ccc;
       border-radius: 20px;
-      font-size: 16px; /* Evite le zoom sur mobile */
+      font-size: 16px;
       outline: none;
     }
     .input-area button {
@@ -152,6 +183,13 @@
 </head>
 <body>
   <div class="iphone-frame">
+    <!-- Overlay de sélection de langue -->
+    <div class="language-selection" id="language-selection">
+      <p>Choose your language / Choisissez votre langue</p>
+      <button class="lang-btn" data-lang="fr">Français</button>
+      <button class="lang-btn" data-lang="en">English</button>
+      <button class="lang-btn" data-lang="es">Español</button>
+    </div>
     <div class="status-bar">
       <div class="status-notch"></div>
     </div>
@@ -178,10 +216,10 @@
   </div>
   
   <script>
-    const chat = document.getElementById('chat');
-    const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
-    localStorage.setItem('chatSession', sessionId);
+    // Variables globales
+    let selectedLanguage = 'fr'; // valeur par défaut
     
+    // Fonctions d'affichage des messages avec prise en compte de la langue
     function addMessage(content, sender) {
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
@@ -229,10 +267,11 @@
       input.value = '';
       showTyping();
       
+      // Envoi de la requête à ton serveur / webhook
       fetch('https://4068-2001-861-2cab-2ce0-794a-23e-6ff5-4650.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message, sessionId })
+        body: JSON.stringify({ message, sessionId: localStorage.getItem('chatSession'), language: selectedLanguage })
       })
       .then(response => response.json())
       .then(data => {
@@ -246,21 +285,37 @@
       });
     }
     
+    // Gestion de l'événement "Enter" dans l'input
     document.getElementById("user-input").addEventListener("keydown", function(e) {
       if (e.key === "Enter") sendMessage();
     });
     
-    window.onload = () => {
-      setTimeout(() => {
-        addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?", 'bot');
-      }, 300);
-    }
+    // Au chargement : initialisation de la session et attente du choix de langue
+    const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
+    localStorage.setItem('chatSession', sessionId);
     
-    // Intégration de la reconnaissance vocale
+    // Gestion de la sélection de langue
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        selectedLanguage = this.dataset.lang; // sauvegarde de la langue choisie
+        document.getElementById('language-selection').style.display = 'none';
+        // Optionnel : afficher un premier message adapté à la langue sélectionnée
+        if(selectedLanguage === 'fr'){
+          addMessage("Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?", 'bot');
+        } else if(selectedLanguage === 'en'){
+          addMessage("Hi there 👋 Tell me what you feel like: would you like to go out to a restaurant, bar or an unusual venue? Or do you prefer to be surprised?", 'bot');
+        } else if(selectedLanguage === 'es'){
+          addMessage("¡Hola! 👋 Cuéntame: ¿te apetece ir a un restaurante, un bar o un lugar diferente? ¿O prefieres que te sorprenda?", 'bot');
+        }
+      });
+    });
+    
+    // Reconnaissance vocale via l'API Web Speech
     if (window.SpeechRecognition || window.webkitSpeechRecognition) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
-      recognition.lang = 'fr-FR';
+      // On adapte la langue de reconnaissance selon la sélection
+      recognition.lang = selectedLanguage === 'fr' ? 'fr-FR' : (selectedLanguage === 'en' ? 'en-US' : 'es-ES');
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
       
