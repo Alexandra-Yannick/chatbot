@@ -340,37 +340,40 @@
     });
 
     // Reconnaissance vocale via l'API Web Speech
-    let recognition;
-    if (window.SpeechRecognition || window.webkitSpeechRecognition) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SpeechRecognition();
-      recognition.lang = 'fr-FR';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-      recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById('user-input').value = transcript;
-      };
-      recognition.onerror = function(event) {
-        console.error("Erreur de reconnaissance vocale:", event.error);
-      };
-      const voiceBtn = document.getElementById('voice-btn');
-      // Utilisation exclusive des événements tactiles pour mobile
-      voiceBtn.addEventListener('touchstart', (e) => {
-       //  e.preventDefault();
-        console.log("Touchstart déclenché");
-        recognition.start();
-        voiceBtn.style.backgroundColor = "#ccc";
-      });
-      voiceBtn.addEventListener('touchend', (e) => {
-      //  e.preventDefault();
-        console.log("Touchend déclenché");
-        recognition.stop();
-        voiceBtn.style.backgroundColor = "";
-      });
-    } else {
-      console.log("Votre navigateur ne supporte pas l'API de reconnaissance vocale.");
-    }
+   if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SpeechRecognition();
+  recognition.lang = 'fr-FR';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+  recognition.continuous = true;  // Ajoute cette ligne
+  
+  recognition.onstart = () => {
+    console.log("La reconnaissance vocale a démarré.");
+  };
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById('user-input').value = transcript;
+    console.log("Résultat :", transcript);
+  };
+  recognition.onerror = function(event) {
+    console.error("Erreur de reconnaissance vocale:", event.error);
+  };
+
+  const voiceBtn = document.getElementById('voice-btn');
+  voiceBtn.addEventListener('touchstart', (e) => {
+    console.log("Touchstart déclenché");
+    recognition.start();
+    voiceBtn.style.backgroundColor = "#ccc";
+  });
+  voiceBtn.addEventListener('touchend', (e) => {
+    console.log("Touchend déclenché");
+    recognition.stop();
+    voiceBtn.style.backgroundColor = "";
+  });
+} else {
+  console.log("Votre navigateur ne supporte pas l'API de reconnaissance vocale.");
+}
   </script>
 </body>
 </html>
