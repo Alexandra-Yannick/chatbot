@@ -210,6 +210,12 @@
   </div>
   
   <script>
+    // Fonction pour transformer automatiquement les URLs en liens cliquables
+    function linkify(text) {
+      const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+      return text.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
+    }
+
     // Variables globales et textes par langue
     let selectedLanguage = 'fr';
     const languageTexts = {
@@ -235,15 +241,18 @@
       }
     };
 
-    // Met à jour le placeholder en fonction de la langue sélectionnée
+    // Met à jour le placeholder de l'input en fonction de la langue sélectionnée
     function updatePlaceholder() {
       document.getElementById('user-input').setAttribute('placeholder', languageTexts[selectedLanguage].placeholder);
     }
 
-    // Fonction d'ajout de message dans le chat
+    // Fonction d'ajout de message dans le chat, intégrant linkify
     function addMessage(content, sender) {
-      // Nettoyage : suppression des astérisques et des retours à la ligne
-      content = content.replace(/\*\*/g, '').replace(/\n+/g, ' ');
+      // Nettoyage : suppression des astérisques et remplacements des retours à la ligne par un espace
+      const cleanContent = content.replace(/\*\*/g, '').replace(/\n+/g, ' ');
+      // Conversion des URLs en liens cliquables
+      const formattedContent = linkify(cleanContent);
+      
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
       if (sender === 'bot') {
@@ -255,9 +264,10 @@
       }
       const msg = document.createElement('div');
       msg.className = `message ${sender}`;
-      msg.innerHTML = content;
+      msg.innerHTML = formattedContent;
       wrapper.appendChild(msg);
       document.getElementById('chat').appendChild(wrapper);
+      
       // Ajustement du scroll pour afficher le dernier message
       const chatScroll = document.querySelector('.chat-scroll');
       chatScroll.scrollTop = chatScroll.scrollHeight;
