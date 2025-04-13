@@ -210,8 +210,24 @@
   </div>
   
   <script>
-    // Fonction pour transformer automatiquement les URLs en liens cliquables
+    // Fonction pour générer dynamiquement un lien Google Maps en extrayant l'adresse
+    // Ici, on recherche un motif du type "situé(s) au ..." suivi de texte jusqu'au premier point.
+    function generateMapLink(text) {
+      const regex = /situé(?:s)? au ([^\.]+)/i;
+      const match = regex.exec(text);
+      if (match && match[1]) {
+        const address = encodeURIComponent(match[1].trim());
+        return '<a href="https://maps.google.com/?q=' + address + '" target="_blank">c\'est par ici</a>';
+      }
+      // Lien par défaut si aucun motif n'est trouvé (à adapter)
+      return '<a href="https://maps.google.com" target="_blank">c\'est par ici</a>';
+    }
+
+    // Fonction pour transformer automatiquement les URLs en liens cliquables et remplacer le texte "c'est par ici" par un lien dynamique
     function linkify(text) {
+      if (text.includes("c'est par ici")) {
+        text = text.replace("c'est par ici", generateMapLink(text));
+      }
       const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
       return text.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
     }
@@ -241,16 +257,16 @@
       }
     };
 
-    // Met à jour le placeholder de l'input en fonction de la langue sélectionnée
+    // Met à jour le placeholder selon la langue sélectionnée
     function updatePlaceholder() {
       document.getElementById('user-input').setAttribute('placeholder', languageTexts[selectedLanguage].placeholder);
     }
 
     // Fonction d'ajout de message dans le chat, intégrant linkify
     function addMessage(content, sender) {
-      // Nettoyage : suppression des astérisques et remplacements des retours à la ligne par un espace
+      // Nettoyage : suppression des astérisques et remplacement des retours à la ligne par un espace
       const cleanContent = content.replace(/\*\*/g, '').replace(/\n+/g, ' ');
-      // Conversion des URLs en liens cliquables
+      // Application de la fonction linkify pour convertir les URLs en liens cliquables et gérer "c'est par ici"
       const formattedContent = linkify(cleanContent);
       
       const wrapper = document.createElement('div');
