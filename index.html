@@ -30,7 +30,7 @@
       display: flex;
       flex-direction: column;
     }
-    /* Overlay pour la sélection de la langue */
+    /* Overlay de sélection de langue */
     .language-selection {
       position: absolute;
       top: 0;
@@ -61,7 +61,7 @@
       background: #7f5af0;
       color: #fff;
     }
-    /* Partie supérieure : status-bar et en-tête fixes */
+    /* Partie supérieure : status-bar et chat-header fixes */
     .status-bar {
       position: sticky;
       top: 0;
@@ -81,7 +81,7 @@
     }
     .chat-header {
       position: sticky;
-      top: 24px; /* immédiatement après la status-bar */
+      top: 24px;
       background: #7f5af0;
       color: white;
       text-align: center;
@@ -169,6 +169,13 @@
       width: 24px;
       height: 24px;
     }
+    /* Désactivation de la sélection de texte pour le bouton micro */
+    #voice-btn {
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      touch-action: manipulation;
+    }
     .typing {
       font-style: italic;
       font-size: 13px;
@@ -216,9 +223,8 @@
   </div>
   
   <script>
-    // Variables globales
-    let selectedLanguage = 'fr'; // langue par défaut
-    // Textes par langue
+    // Variables globales et textes par langue
+    let selectedLanguage = 'fr';
     const languageTexts = {
       fr: {
         welcome: "Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?",
@@ -241,17 +247,16 @@
         placeholder: "Schreib deine Nachricht hier..."
       }
     };
-    
-    // Met à jour le placeholder de l'input selon la langue sélectionnée
+
+    // Met à jour le placeholder en fonction de la langue sélectionnée
     function updatePlaceholder() {
       document.getElementById('user-input').setAttribute('placeholder', languageTexts[selectedLanguage].placeholder);
     }
-    
-    // Ajout d'un message dans la zone de chat
+
+    // Fonction d'ajout de message dans le chat
     function addMessage(content, sender) {
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
-      
       if (sender === 'bot') {
         const avatar = document.createElement('img');
         avatar.src = 'image.png';
@@ -259,44 +264,38 @@
         avatar.className = 'bot-pic';
         wrapper.appendChild(avatar);
       }
-      
       const msg = document.createElement('div');
       msg.className = `message ${sender}`;
       msg.innerHTML = content;
       wrapper.appendChild(msg);
-      
       document.getElementById('chat').appendChild(wrapper);
-      
-      // Défilement jusqu'au bas de la zone scrollable
+      // Ajuste le scroll pour afficher le dernier message
       const chatScroll = document.querySelector('.chat-scroll');
       chatScroll.scrollTop = chatScroll.scrollHeight;
     }
-    
+
     function showTyping() {
       const typing = document.createElement('div');
       typing.className = 'typing';
       typing.id = 'typing';
-      // Affichage du texte de saisie selon la langue sélectionnée
       typing.textContent = languageTexts[selectedLanguage].typing;
       document.getElementById('chat').appendChild(typing);
       const chatScroll = document.querySelector('.chat-scroll');
       chatScroll.scrollTop = chatScroll.scrollHeight;
     }
-    
+
     function removeTyping() {
       const typing = document.getElementById('typing');
       if (typing) typing.remove();
     }
-    
+
     function sendMessage() {
       const input = document.getElementById('user-input');
       const message = input.value.trim();
       if (!message) return;
-      
       addMessage(message, 'user');
       input.value = '';
       showTyping();
-      
       fetch('https://4068-2001-861-2cab-2ce0-794a-23e-6ff5-4650.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -313,16 +312,15 @@
         addMessage("Erreur de connexion 😓", 'bot');
       });
     }
-    
-    // Déclenchement de l'envoi du message lors de la touche "Enter"
+
     document.getElementById("user-input").addEventListener("keydown", function(e) {
       if (e.key === "Enter") sendMessage();
     });
-    
+
     // Initialisation de la session
     const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
     localStorage.setItem('chatSession', sessionId);
-    
+
     // Gestion de la sélection de langue
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', function() {
@@ -330,8 +328,8 @@
         document.getElementById('language-selection').style.display = 'none';
         updatePlaceholder();
         addMessage(languageTexts[selectedLanguage].welcome, 'bot');
-        // Mise à jour de la langue pour la reconnaissance vocale
-        if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+        // Met à jour la langue pour la reconnaissance vocale
+        if (recognition) {
           recognition.lang =
             selectedLanguage === 'fr' ? 'fr-FR' :
             selectedLanguage === 'en' ? 'en-US' :
@@ -340,32 +338,33 @@
         }
       });
     });
-    
+
     // Reconnaissance vocale via l'API Web Speech
     let recognition;
     if (window.SpeechRecognition || window.webkitSpeechRecognition) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
-      // Configuration initiale (sera mise à jour lors de la sélection de langue)
       recognition.lang = 'fr-FR';
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
-      
       recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
         document.getElementById('user-input').value = transcript;
       };
-      
       recognition.onerror = function(event) {
         console.error("Erreur de reconnaissance vocale:", event.error);
       };
-      
       const voiceBtn = document.getElementById('voice-btn');
-      voiceBtn.addEventListener('mousedown', () => {
+      // Utilisation exclusive des événements tactiles pour mobile
+      voiceBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        console.log("Touchstart déclenché");
         recognition.start();
         voiceBtn.style.backgroundColor = "#ccc";
       });
-      voiceBtn.addEventListener('mouseup', () => {
+      voiceBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        console.log("Touchend déclenché");
         recognition.stop();
         voiceBtn.style.backgroundColor = "";
       });
