@@ -169,13 +169,6 @@
       width: 24px;
       height: 24px;
     }
-    /* Désactivation de la sélection de texte pour le bouton micro */
-    #voice-btn {
-      user-select: none;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      touch-action: manipulation;
-    }
     .typing {
       font-style: italic;
       font-size: 13px;
@@ -205,18 +198,12 @@
     <div class="chat-scroll">
       <div class="chat-messages" id="chat"></div>
     </div>
-    <!-- Zone de saisie unique regroupant l'envoi et la reconnaissance vocale -->
+    <!-- Zone de saisie unique (sans bouton micro) -->
     <div class="input-area">
       <input type="text" id="user-input" placeholder="Écris ton message ici...">
       <button onclick="sendMessage()">
         <svg viewBox="0 0 24 24">
           <path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/>
-        </svg>
-      </button>
-      <button id="voice-btn">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3z"/>
-          <path d="M19.3 11c0 3.07-2.46 5.64-5.5 5.96v2.04h-3.6v-2.04C7.16 16.64 4.7 14.07 4.7 11H3c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-1.7z"/>
         </svg>
       </button>
     </div>
@@ -328,52 +315,8 @@
         document.getElementById('language-selection').style.display = 'none';
         updatePlaceholder();
         addMessage(languageTexts[selectedLanguage].welcome, 'bot');
-        // Met à jour la langue pour la reconnaissance vocale
-        if (recognition) {
-          recognition.lang =
-            selectedLanguage === 'fr' ? 'fr-FR' :
-            selectedLanguage === 'en' ? 'en-US' :
-            selectedLanguage === 'es' ? 'es-ES' :
-            selectedLanguage === 'de' ? 'de-DE' : 'fr-FR';
-        }
       });
     });
-
-    // Reconnaissance vocale via l'API Web Speech
-   if (window.SpeechRecognition || window.webkitSpeechRecognition) {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new SpeechRecognition();
-  recognition.lang = 'fr-FR';
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-  recognition.continuous = true;  // Ajoute cette ligne
-  
-  recognition.onstart = () => {
-    console.log("La reconnaissance vocale a démarré.");
-  };
-  recognition.onresult = function(event) {
-    const transcript = event.results[0][0].transcript;
-    document.getElementById('user-input').value = transcript;
-    console.log("Résultat :", transcript);
-  };
-  recognition.onerror = function(event) {
-    console.error("Erreur de reconnaissance vocale:", event.error);
-  };
-
-  const voiceBtn = document.getElementById('voice-btn');
-  voiceBtn.addEventListener('touchstart', (e) => {
-    console.log("Touchstart déclenché");
-    recognition.start();
-    voiceBtn.style.backgroundColor = "#ccc";
-  });
-  voiceBtn.addEventListener('touchend', (e) => {
-    console.log("Touchend déclenché");
-    recognition.stop();
-    voiceBtn.style.backgroundColor = "";
-  });
-} else {
-  console.log("Votre navigateur ne supporte pas l'API de reconnaissance vocale.");
-}
   </script>
 </body>
 </html>
