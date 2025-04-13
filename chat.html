@@ -357,13 +357,13 @@
       const voiceBtn = document.getElementById('voice-btn');
       // Utilisation exclusive des événements tactiles pour mobile
       voiceBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+       //  e.preventDefault();
         console.log("Touchstart déclenché");
         recognition.start();
         voiceBtn.style.backgroundColor = "#ccc";
       });
       voiceBtn.addEventListener('touchend', (e) => {
-        e.preventDefault();
+      //  e.preventDefault();
         console.log("Touchend déclenché");
         recognition.stop();
         voiceBtn.style.backgroundColor = "";
