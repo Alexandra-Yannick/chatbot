@@ -8,6 +8,7 @@
 <body>
   <button id="voice-btn">Tester le micro</button>
   <script>
+    // Test minimal de SpeechRecognition
     if (window.SpeechRecognition || window.webkitSpeechRecognition) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
