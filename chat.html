@@ -149,7 +149,7 @@
       padding: 10px 14px;
       border: 1px solid #ccc;
       border-radius: 20px;
-      font-size: 16px; /* évite le zoom sur mobile */
+      font-size: 16px;
       outline: none;
     }
     .input-area button {
@@ -198,7 +198,7 @@
     <div class="chat-scroll">
       <div class="chat-messages" id="chat"></div>
     </div>
-    <!-- Zone de saisie unique (sans bouton micro) -->
+    <!-- Zone de saisie unique -->
     <div class="input-area">
       <input type="text" id="user-input" placeholder="Écris ton message ici...">
       <button onclick="sendMessage()">
@@ -242,6 +242,8 @@
 
     // Fonction d'ajout de message dans le chat
     function addMessage(content, sender) {
+      // Nettoyage : suppression des astérisques et des retours à la ligne
+      content = content.replace(/\*\*/g, '').replace(/\n+/g, ' ');
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
       if (sender === 'bot') {
@@ -256,7 +258,7 @@
       msg.innerHTML = content;
       wrapper.appendChild(msg);
       document.getElementById('chat').appendChild(wrapper);
-      // Ajuste le scroll pour afficher le dernier message
+      // Ajustement du scroll pour afficher le dernier message
       const chatScroll = document.querySelector('.chat-scroll');
       chatScroll.scrollTop = chatScroll.scrollHeight;
     }
