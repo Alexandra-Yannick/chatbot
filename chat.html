@@ -311,7 +311,8 @@
       addMessage(message, 'user');
       input.value = '';
       showTyping();
-      fetch('https://4068-2001-861-2cab-2ce0-794a-23e-6ff5-4650.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
+      fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',
+            {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message, sessionId: localStorage.getItem('chatSession'), language: selectedLanguage })
