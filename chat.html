@@ -236,22 +236,22 @@
     let selectedLanguage = 'fr';
     const languageTexts = {
       fr: {
-        welcome: "Salut toi 👋 Pour que je te propose des pépites, dis-moi : t'as envie de sortir en mode resto, bar ou lieu insolite ? Ou tu veux te laisser surprendre ?",
+        welcome: "Salut, je m'appelle Julie, comment puis-je t'aider aujourd'hui ?",
         typing: "Julie est en train de répondre...",
         placeholder: "Écris ton message ici..."
       },
       en: {
-        welcome: "Hi there 👋 Tell me what you feel like: would you like to go out to a restaurant, bar or an unusual venue? Or do you prefer to be surprised?",
+        welcome: "Hi, my name is Julie. How can I help you today?",
         typing: "Julie is typing...",
         placeholder: "Type your message here..."
       },
       es: {
-        welcome: "¡Hola! 👋 Cuéntame: ¿te apetece ir a un restaurante, un bar o un lugar diferente? ¿O prefieres que te sorprenda?",
+        welcome: "Hola, me llamo Julie. ¿Cómo puedo ayudarte hoy?",
         typing: "Julie está respondiendo...",
         placeholder: "Escribe tu mensaje aquí..."
       },
       de: {
-        welcome: "Hallo! 👋 Sag mir, hast du Lust, in ein Restaurant, eine Bar oder einen ungewöhnlichen Ort zu gehen? Oder möchtest du überrascht werden?",
+        welcome: "Hallo, ich heiße Julie. Wie kann ich dir heute helfen?",
         typing: "Julie antwortet gerade...",
         placeholder: "Schreib deine Nachricht hier..."
       }
@@ -344,6 +344,61 @@
         document.getElementById('language-selection').style.display = 'none';
         updatePlaceholder();
         addMessage(languageTexts[selectedLanguage].welcome, 'bot');
+        setTimeout(() => {
+  const buttonOptions = [
+    "Les services de mon hôtel",
+    "Le livret d'accueil de ma chambre",
+    "Une réclamation",
+    "Où chiller ?"
+  ];
+
+  const container = document.createElement('div');
+  container.style.display = 'flex';
+  container.style.flexDirection = 'column';
+  container.style.alignItems = 'flex-start';
+  container.style.marginTop = '10px';
+  container.style.gap = '8px';
+
+  buttonOptions.forEach(option => {
+    const btn = document.createElement('button');
+    btn.textContent = option;
+    btn.style.padding = '10px 16px';
+    btn.style.border = 'none';
+    btn.style.borderRadius = '20px';
+    btn.style.background = '#7f5af0';
+    btn.style.color = '#fff';
+    btn.style.cursor = 'pointer';
+    btn.style.fontSize = '14px';
+
+    btn.onclick = () => {
+      container.remove(); // supprime les boutons après clic
+      document.getElementById('chat').appendChild(container);
+      addMessage(option, 'user');
+      showTyping();
+      fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: option, sessionId: localStorage.getItem('chatSession'), language: selectedLanguage })
+      })
+      .then(response => response.json())
+      .then(data => {
+        removeTyping();
+        addMessage((data.response || (data[0] && data[0].output)) ?? "Je n'ai pas compris 😅", 'bot');
+      })
+      .catch(err => {
+        console.error('❌ Erreur du fetch :', err);
+        removeTyping();
+        addMessage("Erreur de connexion 😓", 'bot');
+      });
+    };
+
+    container.appendChild(btn);
+  });
+
+  document.getElementById('chat').appendChild(container);
+  const chatScroll = document.querySelector('.chat-scroll');
+  chatScroll.scrollTop = chatScroll.scrollHeight;
+}, 400);
       });
     });
   </script>
