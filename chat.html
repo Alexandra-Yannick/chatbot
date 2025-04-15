@@ -382,8 +382,17 @@
       })
       .then(response => response.json())
       .then(data => {
-        removeTyping();
-        addMessage((data.response || (data[0] && data[0].output)) ?? "Je n'ai pas compris 😅", 'bot');
+  removeTyping();
+
+  // Adaptation pour les réponses de n8n qui renvoient { message: "...text..." }
+  const reply =
+    data.response ||
+    (data[0] && data[0].output) ||
+    data.message || // ✅ ici on ajoute le fallback vers data.message
+    "Je n'ai pas compris 😅";
+
+  addMessage(reply, 'bot');
+})
       })
       .catch(err => {
         console.error('❌ Erreur du fetch :', err);
