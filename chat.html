@@ -6,86 +6,22 @@
   <title>Julie - Serial Chilleuse</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      width: 100%; height: 100vh;
-      background: linear-gradient(135deg, #60C0E6 0%, #7F5AF0 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-    .chat-container {
-      width: 360px; max-width: 90%; height: 600px; max-height: 90%;
-      background: #fff; border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-      display: flex; flex-direction: column;
-      overflow: hidden;
-      position: relative;
-    }
-    /* Overlay de sélection de langue */
-    .language-selection {
-      position: absolute; inset: 0;
-      background: rgba(96, 192, 230, 0.95);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      z-index: 10; text-align: center; color: #fff;
-      padding: 20px;
-    }
-    .language-selection p {
-      font-size: 18px; margin-bottom: 16px;
-    }
-    .language-selection button {
-      margin: 4px; padding: 8px 16px;
-      font-size: 14px; border: none;
-      border-radius: 8px; cursor: pointer;
-      background: #7f5af0; color: #fff;
-      transition: background 0.2s;
-    }
+    body { width: 100%; height: 100vh; background: linear-gradient(135deg, #60C0E6 0%, #7F5AF0 100%); display: flex; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .chat-container { width: 360px; max-width: 90%; height: 600px; max-height: 90%; background: #fff; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); display: flex; flex-direction: column; overflow: hidden; position: relative; }
+    .language-selection { position: absolute; inset: 0; background: rgba(96, 192, 230, 0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; text-align: center; color: #fff; padding: 20px; }
+    .language-selection p { font-size: 18px; margin-bottom: 16px; }
+    .language-selection button { margin: 4px; padding: 8px 16px; font-size: 14px; border: none; border-radius: 8px; cursor: pointer; background: #7f5af0; color: #fff; transition: background 0.2s; }
     .language-selection button:hover { background: #6248c2; }
-
-    /* Header */
-    .chat-header {
-      background: #7f5af0; color: #fff;
-      padding: 16px; text-align: center;
-      font-size: 18px; font-weight: bold;
-    }
-    /* Messages scroll */
-    .chat-scroll {
-      flex: 1; overflow-y: auto;
-      background: #f2f2f7; padding: 12px;
-    }
+    .chat-header { background: #7f5af0; color: #fff; padding: 16px; text-align: center; font-size: 18px; font-weight: bold; }
+    .chat-scroll { flex: 1; overflow-y: auto; background: #f2f2f7; padding: 12px; }
     .message-wrapper { display: flex; align-items: flex-end; gap: 8px; margin-bottom: 10px; }
-    .message {
-      max-width: 75%; padding: 10px 14px;
-      border-radius: 18px; font-size: 14px; line-height: 1.4;
-      word-break: break-word;
-      animation: fadeIn 0.2s ease-in;
-    }
-    .user { background: #007aff; color: #fff; align-self: flex-end;
-      border-bottom-right-radius: 4px; border-top-left-radius: 18px;
-    }
-    .bot { background: #e5e5ea; color: #000; align-self: flex-start;
-      border-bottom-left-radius: 4px; border-top-right-radius: 18px;
-    }
-    .bot-pic {
-      width: 32px; height: 32px;
-      border-radius: 50%; object-fit: cover;
-    }
-    /* Input area */
-    .input-area {
-      background: #fff; padding: 10px;
-      border-top: 1px solid #ccc;
-      display: flex; align-items: center;
-    }
-    .input-area input {
-      flex: 1; padding: 10px 14px;
-      border: 1px solid #ccc; border-radius: 20px;
-      font-size: 16px; outline: none;
-    }
-    .input-area button {
-      background: #7f5af0; border: none;
-      border-radius: 50%; width: 40px; height: 40px;
-      margin-left: 8px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .message { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.4; word-break: break-word; animation: fadeIn 0.2s ease-in; }
+    .user { background: #007aff; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; border-top-left-radius: 18px; }
+    .bot { background: #e5e5ea; color: #000; align-self: flex-start; border-bottom-left-radius: 4px; border-top-right-radius: 18px; }
+    .bot-pic { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+    .input-area { background: #fff; padding: 10px; border-top: 1px solid #ccc; display: flex; align-items: center; }
+    .input-area input { flex: 1; padding: 10px 14px; border: 1px solid #ccc; border-radius: 20px; font-size: 16px; outline: none; }
+    .input-area button { background: #7f5af0; border: none; border-radius: 50%; width: 40px; height: 40px; margin-left: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .input-area button svg { fill: #fff; width: 24px; height: 24px; }
     .typing { font-style: italic; font-size: 13px; color: #999; margin-left: 8px; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -104,9 +40,7 @@
     <div class="chat-scroll"><div id="chat" class="chat-messages"></div></div>
     <div class="input-area">
       <input type="text" id="user-input" placeholder="Écris ton message ici...">
-      <button onclick="sendMessage()">
-        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/></svg>
-      </button>
+      <button onclick="sendMessage()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/></svg></button>
     </div>
   </div>
 
@@ -147,34 +81,60 @@
       const wrapper = document.createElement('div');
       wrapper.className = 'message-wrapper';
       if (sender === 'bot') {
-        const avatar = document.createElement('img');
-        avatar.src = 'image.png'; avatar.alt = 'Julie'; avatar.className = 'bot-pic';
-        wrapper.appendChild(avatar);
+        const avatar = document.createElement('img'); avatar.src = 'image.png'; avatar.alt = 'Julie'; avatar.className = 'bot-pic'; wrapper.appendChild(avatar);
       }
-      const msg = document.createElement('div');
-      msg.className = `message ${sender}`;  // Correction: backticks for dynamic class
-      msg.innerHTML = formattedContent;
+      const msg = document.createElement('div'); msg.className = `message ${sender}`; msg.innerHTML = formattedContent;
       wrapper.appendChild(msg);
       document.getElementById('chat').appendChild(wrapper);
-      const chatScroll = document.querySelector('.chat-scroll');
-      chatScroll.scrollTop = chatScroll.scrollHeight;
+      document.querySelector('.chat-scroll').scrollTop = document.querySelector('.chat-scroll').scrollHeight;
     }
 
-    function showTyping() { /* ... */ }
-    function removeTyping() { /* ... */ }
-    function sendMessage() { /* ... */ }
-    document.getElementById("user-input").addEventListener("keydown", e => { if (e.key === "Enter") sendMessage(); });
+    function showTyping() {
+      const t = document.createElement('div'); t.className='typing'; t.id='typing'; t.textContent=languageTexts[selectedLanguage].typing;
+      document.getElementById('chat').appendChild(t); document.querySelector('.chat-scroll').scrollTop = document.querySelector('.chat-scroll').scrollHeight;
+    }
+    function removeTyping() { const t=document.getElementById('typing'); if(t) t.remove(); }
 
-    const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
-    localStorage.setItem('chatSession', sessionId);
+    function sendMessage() {
+      const input = document.getElementById('user-input'); const message = input.value.trim(); if(!message) return;
+      addMessage(message, 'user'); input.value=''; showTyping();
+      fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ message, sessionId:localStorage.getItem('chatSession'), language:selectedLanguage })
+      }).then(res=>res.json()).then(data=>{
+        removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅", 'bot');
+      }).catch(err=>{ removeTyping(); addMessage('Erreur de connexion 😓','bot'); console.error(err); });
+    }
 
-    document.querySelectorAll('.lang-btn').forEach(btn => {
+    document.getElementById('user-input').addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });
+    const sessionId=localStorage.getItem('chatSession')||crypto.randomUUID(); localStorage.setItem('chatSession', sessionId);
+
+    document.querySelectorAll('.lang-btn').forEach(btn=>{
       btn.addEventListener('click', function() {
-        selectedLanguage = this.dataset.lang;
-        document.getElementById('language-selection').style.display = 'none';
-        updatePlaceholder();
-        addMessage(languageTexts[selectedLanguage].welcome, 'bot');
-        // Reste du code pour les options de menu...
+        selectedLanguage = this.dataset.lang; document.getElementById('language-selection').style.display='none'; updatePlaceholder(); addMessage(languageTexts[selectedLanguage].welcome,'bot');
+        setTimeout(()=>{
+          const buttonOptions = [
+            "Les services de mon hôtel",
+            "Le livret d'accueil de ma chambre",
+            "Une réclamation",
+            "Où chiller ?"
+          ];
+          const container = document.createElement('div');
+          container.style.display='flex'; container.style.flexDirection='column'; container.style.alignItems='flex-start'; container.style.marginTop='10px'; container.style.gap='8px';
+          buttonOptions.forEach(option=>{
+            const b=document.createElement('button'); b.textContent=option;
+            b.style.padding='10px 16px'; b.style.border='none'; b.style.borderRadius='20px'; b.style.background='#7f5af0'; b.style.color='#fff'; b.style.cursor='pointer'; b.style.fontSize='14px';
+            b.onclick=()=>{
+              container.remove(); document.getElementById('chat').appendChild(container);
+              addMessage(option,'user'); showTyping();
+              fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:option,sessionId:localStorage.getItem('chatSession'),language:selectedLanguage})})
+              .then(res=>res.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅", 'bot'); })
+              .catch(err=>{ removeTyping(); addMessage('Erreur de connexion 😓','bot'); console.error(err); });
+            };
+            container.appendChild(b);
+          });
+          document.getElementById('chat').appendChild(container); document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight;
+        }, 400);
       });
     });
   </script>
