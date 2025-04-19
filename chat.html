@@ -12,84 +12,52 @@
       overflow: hidden;
     }
     body { display: flex; flex-direction: column; }
-
-    /* Overlay de sélection de langue */
-    .language-selection {
+    /* Common onboarding overlay */
+    .onboard-step {
       position: fixed; inset: 0;
-      background: rgba(96, 192, 230, 0.95);
+      background: rgba(255,255,255,0.95);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      z-index: 10; text-align: center; color: #fff;
+      text-align: center;
+      z-index: 100;
       padding: 20px;
     }
+    .onboard-step img { width: 120px; margin-bottom: 16px; }
+    .onboard-step h2 { font-size: 24px; margin-bottom: 8px; color: #333; }
+    .onboard-step p { font-size: 16px; color: #555; line-height: 1.4; margin-bottom: 24px; }
+    .btn-primary { background: #7f5af0; color: #fff; padding: 12px 24px; border-radius: 24px; border: none; cursor: pointer; }
+
+    /* Language selection is also an onboard-step */
+    .language-selection { background: rgba(96, 192, 230, 0.95); color: #fff; }
     .language-selection p { font-size: 18px; margin-bottom: 16px; }
-    .language-selection button {
-      margin: 4px; padding: 8px 16px;
-      font-size: 14px; border: none; border-radius: 8px;
-      cursor: pointer; background: #7f5af0; color: #fff;
-      transition: background 0.2s;
-    }
+    .language-selection button { margin: 4px; padding: 8px 16px; font-size: 14px; border: none; border-radius: 8px; cursor: pointer; background: #7f5af0; color: #fff; transition: background 0.2s; }
     .language-selection button:hover { background: #6248c2; }
 
+    /* CTA selection */
+    .cta-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+    .cta-options button { padding: 12px; border: none; border-radius: 20px; background: #7f5af0; color: #fff; font-size: 14px; cursor: pointer; }
+    .cta-options button:hover { background: #6248c2; }
+    .skip-btn { background: transparent; color: #7f5af0; margin-top: 12px; font-size: 14px; cursor: pointer; }
+
     /* Chat UI */
-    .chat-header {
-      background: #7f5af0; color: #fff;
-      padding: 16px; text-align: center;
-      font-size: 18px; font-weight: bold;
-      flex-shrink: 0;
-    }
-    .chat-scroll {
-      flex: 1; overflow-y: auto;
-      padding: 12px; display: flex;
-      flex-direction: column; gap: 10px;
-    }
+    .chat-header { background: #7f5af0; color: #fff; padding: 16px; text-align: center; font-size: 18px; font-weight: bold; flex-shrink: 0; }
+    .chat-scroll { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
     .message-wrapper { display: flex; align-items: flex-end; gap: 8px; }
-    .message {
-      max-width: 75%; padding: 10px 14px;
-      border-radius: 18px; font-size: 14px; line-height: 1.4;
-      word-break: break-word; animation: fadeIn 0.2s ease-in;
-    }
-    .user {
-      background: #007aff; color: #fff;
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-      border-top-left-radius: 18px;
-    }
-    .bot {
-      background: #e5e5ea; color: #000;
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-      border-top-right-radius: 18px;
-    }
-    .bot-pic {
-      width: 32px; height: 32px;
-      border-radius: 50%; object-fit: cover;
-    }
-    .input-area {
-      background: #fff; padding: 10px;
-      border-top: 1px solid #ccc;
-      display: flex; align-items: center;
-      flex-shrink: 0;
-    }
-    .input-area input {
-      flex: 1; padding: 10px 14px;
-      border: 1px solid #ccc; border-radius: 20px;
-      font-size: 16px; outline: none;
-    }
-    .input-area button {
-      background: #7f5af0; border: none;
-      border-radius: 50%; width: 40px; height: 40px;
-      margin-left: 8px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .message { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.4; word-break: break-word; animation: fadeIn 0.2s ease-in; }
+    .user { background: #007aff; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; border-top-left-radius: 18px; }
+    .bot { background: #e5e5ea; color: #000; align-self: flex-start; border-bottom-left-radius: 4px; border-top-right-radius: 18px; }
+    .bot-pic { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+    .input-area { background: #fff; padding: 10px; border-top: 1px solid #ccc; display: flex; align-items: center; flex-shrink: 0; }
+    .input-area input { flex: 1; padding: 10px 14px; border: 1px solid #ccc; border-radius: 20px; font-size: 16px; outline: none; }
+    .input-area button { background: #7f5af0; border: none; border-radius: 50%; width: 40px; height: 40px; margin-left: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .input-area button svg { fill: #fff; width: 24px; height: 24px; }
     .typing { font-style: italic; font-size: 13px; color: #999; margin-left: 8px; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
-  <!-- Overlay de sélection de langue -->
-  <div class="language-selection" id="language-selection">
+  <!-- Step 1: Language Selection -->
+  <div class="onboard-step language-selection" id="step-language">
     <p>Choisissez votre langue</p>
     <button class="lang-btn" data-lang="fr">Français</button>
     <button class="lang-btn" data-lang="en">English</button>
@@ -97,105 +65,104 @@
     <button class="lang-btn" data-lang="de">Deutsch</button>
   </div>
 
-  <!-- Chat UI plein écran -->
+  <!-- Step 2: Introduction -->
+  <div class="onboard-step" id="step-intro" style="display:none;">
+    <img src="julie-avatar-animé.gif" alt="Julie qui vous sourit">
+    <h2>Bienvenue !</h2>
+    <p>Je suis <strong>Julie</strong>, votre concierge virtuelle pour l’hôtel.<br>
+       Services, livret, réclamations, bons plans : je m’occupe de tout.</p>
+    <button class="btn-primary" id="btn-intro-next">Compris !</button>
+  </div>
+
+  <!-- Step 3: CTA Selection -->
+  <div class="onboard-step" id="step-cta" style="display:none;">
+    <h2>Par où commencer ?</h2>
+    <div class="cta-options">
+      <button data-cta="Les services de mon hôtel">Les services de mon hôtel</button>
+      <button data-cta="Le livret d'accueil de ma chambre">Le livret d'accueil de ma chambre</button>
+      <button data-cta="Une réclamation">Une réclamation</button>
+      <button data-cta="Où chiller ?">Où chiller ?</button>
+    </div>
+    <button class="skip-btn" id="btn-cta-skip">Plus tard</button>
+  </div>
+
+  <!-- Chat UI -->
   <div class="chat-header">💬 Julie - Serial Chilleuse</div>
   <div class="chat-scroll" id="chat"></div>
   <div class="input-area">
     <input type="text" id="user-input" placeholder="Écris ton message ici...">
-    <button onclick="sendMessage()">
-      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/></svg>
-    </button>
+    <button onclick="sendMessage()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/></svg></button>
   </div>
 
   <script>
-    // Lien dynamique Google Maps
+    // Dynamic map link and linkify (unchanged)
     function generateMapLink(text) {
-      const regex = /situé(?:s)? au ([^\.]+)/i;
-      const match = regex.exec(text);
-      if (match && match[1]) {
-        const address = encodeURIComponent(match[1].trim());
-        return `<a href="https://maps.google.com/?q=${address}" target="_blank">c'est par ici</a>`;
-      }
+      const regex = /situé(?:s)? au ([^\.]+)/i; const match = regex.exec(text);
+      if (match && match[1]) { const address = encodeURIComponent(match[1].trim()); return `<a href="https://maps.google.com/?q=${address}" target="_blank">c'est par ici</a>`; }
       return `<a href="https://maps.google.com" target="_blank">c'est par ici</a>`;
     }
-
-    // Transformation des URLs et liens personnalisés
     function linkify(text) {
-      if (text.includes("c'est par ici")) {
-        text = text.replace("c'est par ici", generateMapLink(text));
-      }
+      if (text.includes("c'est par ici")) text = text.replace("c'est par ici", generateMapLink(text));
       const urlPattern = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
       return text.replace(urlPattern, '<a href="$1" target="_blank">$1</a>');
     }
 
-    // Gestion multilingue
+    // Chat functions
     let selectedLanguage = 'fr';
-    const languageTexts = {
-      fr: { welcome: "Salut, je m'appelle Julie, comment puis-je t'aider aujourd'hui ?", typing: "Julie est en train de répondre...", placeholder: "Écris ton message ici..." },
-      en: { welcome: "Hi, my name is Julie. How can I help you today?", typing: "Julie is typing...", placeholder: "Type your message here..." },
-      es: { welcome: "Hola, me llamo Julie. ¿Cómo puedo ayudarte hoy?", typing: "Julie está respondiendo...", placeholder: "Escribe tu mensaje aquí..." },
-      de: { welcome: "Hallo, ich heiße Julie. Wie kann ich dir heute helfen?", typing: "Julie antwortet gerade...", placeholder: "Schreib deine Nachricht hier..." }
-    };
-    function updatePlaceholder() {
-      document.getElementById('user-input').placeholder = languageTexts[selectedLanguage].placeholder;
-    }
-
-    // Ajout de message dans le chat
+    const languageTexts = { fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." },
+      en: { placeholder: "Type your message here...", typing: "Julie is typing..." },
+      es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." },
+      de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." } };
+    function updatePlaceholder() { document.getElementById('user-input').placeholder = languageTexts[selectedLanguage].placeholder; }
     function addMessage(content, sender) {
-      const cleanContent = content.replace(/\*\*/g, '').replace(/\n+/g, ' ');
-      const formatted = linkify(cleanContent);
-      const wrapper = document.createElement('div'); wrapper.className = 'message-wrapper';
-      if (sender === 'bot') {
-        const avatar = document.createElement('img'); avatar.src='image.png'; avatar.alt='Julie'; avatar.className='bot-pic'; wrapper.appendChild(avatar);
-      }
-      const msg = document.createElement('div'); msg.className = `message ${sender}`; msg.innerHTML = formatted;
-      wrapper.appendChild(msg); document.getElementById('chat').appendChild(wrapper);
-      document.querySelector('.chat-scroll').scrollTop = document.querySelector('.chat-scroll').scrollHeight;
+      const clean = content.replace(/\*\*/g,'').replace(/\n+/g,' ');
+      const msgHtml = linkify(clean);
+      const wrap = document.createElement('div'); wrap.className='message-wrapper';
+      if (sender==='bot') { const av=document.createElement('img'); av.src='image.png'; av.alt='Julie'; av.className='bot-pic'; wrap.appendChild(av); }
+      const msg = document.createElement('div'); msg.className=`message ${sender}`; msg.innerHTML=msgHtml;
+      wrap.appendChild(msg); document.getElementById('chat').appendChild(wrap);
+      const cs = document.querySelector('.chat-scroll'); cs.scrollTop = cs.scrollHeight;
     }
-
-    // Effet de saisie
-    function showTyping() {
-      const t = document.createElement('div'); t.className='typing'; t.id='typing'; t.textContent=languageTexts[selectedLanguage].typing;
-      document.getElementById('chat').appendChild(t);
-      document.querySelector('.chat-scroll').scrollTop = document.querySelector('.chat-scroll').scrollHeight;
-    }
-    function removeTyping() { const t=document.getElementById('typing'); if(t) t.remove(); }
-
-    // Envoi du message à l'API
-    function sendMessage() {
-      const input = document.getElementById('user-input'); const message = input.value.trim(); if(!message) return;
-      addMessage(message,'user'); input.value=''; showTyping();
-      fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ message, sessionId:localStorage.getItem('chatSession'), language:selectedLanguage })
-      })
-      .then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); })
-      .catch(err=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(err); });
-    }
-
-    // Initialisation session et écouteurs
-    const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID(); localStorage.setItem('chatSession', sessionId);
+    function showTyping(){ const t=document.createElement('div'); t.id='typing'; t.className='typing'; t.textContent=languageTexts[selectedLanguage].typing; document.getElementById('chat').appendChild(t); document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight; }
+    function removeTyping(){ const t=document.getElementById('typing'); if(t) t.remove(); }
+    function sendMessage(){ const inp=document.getElementById('user-input'); const msg=inp.value.trim(); if(!msg) return; addMessage(msg,'user'); inp.value=''; showTyping();
+      fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg,sessionId:localStorage.getItem('chatSession'),language:selectedLanguage})})
+      .then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); }).catch(err=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(err); }); }
     document.getElementById('user-input').addEventListener('keydown',e=>{ if(e.key==='Enter') sendMessage(); });
-    // Sélection de langue puis affichage des options
-    document.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click',function(){
-      selectedLanguage=this.dataset.lang;
-      document.getElementById('language-selection').style.display='none';
-      updatePlaceholder();
-      addMessage(languageTexts[selectedLanguage].welcome,'bot');
-      setTimeout(()=>{
-        const options=["Les services de mon hôtel","Le livret d'accueil de ma chambre","Où chiller ?"];
-        const container=document.createElement('div');
-        container.style.display='flex';container.style.flexDirection='column';container.style.alignItems='flex-start';container.style.marginTop='10px';container.style.gap='8px';
-        options.forEach(opt=>{
-          const b=document.createElement('button');b.textContent=opt;
-          Object.assign(b.style,{padding:'10px 16px',border:'none',borderRadius:'20px',background:'#7f5af0',color:'#fff',cursor:'pointer',fontSize:'14px'});
-          b.onclick=()=>{container.remove(); document.getElementById('chat').appendChild(container); addMessage(opt,'user'); showTyping(); fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:opt,sessionId:localStorage.getItem('chatSession'),language:selectedLanguage})}).then(r=>r.json()).then(data=>{removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot');}).catch(err=>{removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(err);});};
-          container.appendChild(b);
-        });
-        document.getElementById('chat').appendChild(container);
-        document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight;
-      },400);
-    }));
+    const sessionId = localStorage.getItem('chatSession')||crypto.randomUUID(); localStorage.setItem('chatSession',sessionId);
+
+    // Onboarding logic
+    const stepLang = document.getElementById('step-language');
+    const stepIntro = document.getElementById('step-intro');
+    const stepCta = document.getElementById('step-cta');
+    function finishOnboarding(){ localStorage.setItem('onboardSeen','true'); stepLang.style.display='none'; stepIntro.style.display='none'; stepCta.style.display='none'; updatePlaceholder(); }
+    if(localStorage.getItem('onboardSeen')){ finishOnboarding(); } else { stepLang.style.display='flex'; }
+
+    // Lang selection
+    document.querySelectorAll('.lang-btn').forEach(btn=> btn.onclick=()=>{
+      selectedLanguage = btn.dataset.lang;
+      stepLang.style.display='none';
+      stepIntro.style.display='flex';
+    });
+    // Intro next
+    document.getElementById('btn-intro-next').onclick = ()=>{
+      stepIntro.style.display='none';
+      stepCta.style.display='flex';
+    };
+    // CTA options
+    document.querySelectorAll('#step-cta .cta-options button').forEach(btn=> btn.onclick=()=>{
+      const opt = btn.dataset.cta;
+      stepCta.style.display='none';
+      finishOnboarding();
+      addMessage(opt,'user'); showTyping(); sendCTA(opt);
+    });
+    // Skip CTA
+    document.getElementById('btn-cta-skip').onclick = ()=>{
+      finishOnboarding();
+    };
+    // sendCTA helper (reuse sendMessage code)
+    function sendCTA(text){ fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,sessionId:localStorage.getItem('chatSession'),language:selectedLanguage})})
+      .then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); }).catch(err=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(err); }); }
   </script>
 </body>
 </html>
