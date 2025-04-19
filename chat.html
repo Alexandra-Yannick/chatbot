@@ -168,110 +168,184 @@
   </div>
 
   <script>
-    // Dynamic map link and linkify
-    function generateMapLink(text) {
-      const regex = /situé(?:s)? au ([^\.]+)/i;
-      const match = regex.exec(text);
-      return match && match[1]
-        ? `<a href="https://maps.google.com/?q=${encodeURIComponent(match[1].trim())}" target="_blank">c'est par ici</a>`
-        : `<a href="https://maps.google.com" target="_blank">c'est par ici</a>`;
+  // Générer le lien Google Maps
+  function generateMapLink(text) {
+    // Recherche "situé au ..." sans échappement compliqué
+    const regex = /situé(?:s)? au ([^.]+)/i;
+    const match = regex.exec(text);
+    return match && match[1]
+      ? `<a href="https://maps.google.com/?q=${encodeURIComponent(match[1].trim())}" target="_blank">c'est par ici</a>`
+      : `<a href="https://maps.google.com" target="_blank">c'est par ici</a>`;
+  }
+
+  // Transformer les URLs en liens
+  function linkify(text) {
+    if (text.includes("c'est par ici")) {
+      text = text.replace("c'est par ici", generateMapLink(text));
     }
-    function linkify(text) {
-      if (text.includes("c'est par ici")) text = text.replace("c'est par ici", generateMapLink(text));
-      return text.replace(/((https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" target="_blank">$1</a>');
+    // Pattern simplifié pour les URL commençant par http(s), ftp ou file
+    const urlPattern = /\b(?:https?|ftp|file):\/\/\S+/gi;
+    return text.replace(urlPattern, '<a href="$&" target="_blank">$&</a>');
+  }
+
+  // Variables globales
+  let selectedLanguage = 'fr';
+  const languageTexts = {
+    fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." },
+    en: { placeholder: "Type your message here...", typing: "Julie is typing..." },
+    es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." },
+    de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." }
+  };
+
+  // Éléments du DOM
+  const inputEl = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+  const headerBackBtn = document.getElementById('header-back-btn');
+  const ariaStatus = document.getElementById('aria-status');
+  const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
+  localStorage.setItem('chatSession', sessionId);
+
+  function updatePlaceholder() {
+    inputEl.placeholder = languageTexts[selectedLanguage].placeholder;
+  }
+  function scrollChat() {
+    const chat = document.querySelector('.chat-scroll');
+    chat.scrollTop = chat.scrollHeight;
+  }
+  function showTyping() {
+    const t = document.createElement('div');
+    t.id = 'typing';
+    t.className = 'typing';
+    t.textContent = languageTexts[selectedLanguage].typing;
+    document.getElementById('chat').appendChild(t);
+    scrollChat();
+  }
+  function removeTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+
+  function addMessage(content, sender) {
+    const clean = content.replace(/\*\*/g,'').replace(/\n+/g,' ');
+    const html = linkify(clean);
+    const wrap = document.createElement('div');
+    wrap.className = 'message-wrapper';
+    if (sender === 'bot') {
+      const av = document.createElement('img');
+      av.src = 'image.png';
+      av.alt = 'Julie';
+      av.className = 'bot-pic';
+      wrap.appendChild(av);
     }
+    const msg = document.createElement('div');
+    msg.className = `message ${sender}`;
+    msg.innerHTML = html;
+    wrap.appendChild(msg);
+    document.getElementById('chat').appendChild(wrap);
+    ariaStatus.textContent = clean;
+    scrollChat();
+  }
 
-    // Chat functions & feedback
-    let selectedLanguage = 'fr';
-    const languageTexts = {
-      fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." },
-      en: { placeholder: "Type your message here...", typing: "Julie is typing..." },
-      es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." },
-      de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." }
-    };
-    const inputEl = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const headerBackBtn = document.getElementById('header-back-btn');
-    const ariaStatus = document.getElementById('aria-status');
-    let sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
-    localStorage.setItem('chatSession', sessionId);
+  function showError(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 4000);
+  }
 
-    function updatePlaceholder() { inputEl.placeholder = languageTexts[selectedLanguage].placeholder; }
-    function scrollChat() { document.querySelector('.chat-scroll').scrollTop = document.querySelector('.chat-scroll').scrollHeight; }
-    function showTyping() {
-      const t = document.createElement('div'); t.id='typing'; t.className='typing'; t.textContent = languageTexts[selectedLanguage].typing;
-      document.getElementById('chat').appendChild(t);
-      scrollChat();
+  async function sendMessage() {
+    const txt = inputEl.value.trim();
+    if (!txt) return;
+    addMessage(txt, 'user');
+    inputEl.value = '';
+    showTyping();
+
+    // Désactivation + spinner
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+    sendBtn.classList.add('sending');
+
+    try {
+      const res = await fetch('https://.../webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: txt, sessionId, language: selectedLanguage })
+      });
+      const data = await res.json();
+      removeTyping();
+      addMessage(data.response || data.message || "Je n'ai pas compris 😅", 'bot');
+    } catch (e) {
+      removeTyping();
+      showError('Problème de connexion, réessayez');
+    } finally {
+      inputEl.disabled = false;
+      sendBtn.disabled = false;
+      sendBtn.classList.remove('sending');
+      inputEl.focus();
     }
-    function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+  }
 
-    function addMessage(content, sender) {
-      const clean = content.replace(/\*\*/g,'').replace(/
-+/g,' ');
-      const html = linkify(clean);
-      const wrap = document.createElement('div'); wrap.className='message-wrapper';
-      if (sender==='bot') { const av=document.createElement('img'); av.src='image.png'; av.alt='Julie'; av.className='bot-pic'; wrap.appendChild(av); }
-      const msg = document.createElement('div'); msg.className=`message ${sender}`; msg.innerHTML=html; wrap.appendChild(msg);
-      document.getElementById('chat').appendChild(wrap);
-      ariaStatus.textContent = clean;
-      scrollChat();
-    }
+  // Événements
+  sendBtn.addEventListener('click', sendMessage);
+  inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
 
-    function showError(msg) {
-      const t = document.createElement('div'); t.className='toast'; t.textContent = msg;
-      document.body.appendChild(t);
-      setTimeout(() => t.remove(), 4000);
-    }
+  // Onboarding & navigation
+  const stepLang = document.getElementById('step-language');
+  const stepIntro = document.getElementById('step-intro');
+  const stepCta = document.getElementById('step-cta');
+  function showBackBtn() { headerBackBtn.style.display = 'block'; }
+  function hideBackBtn() { headerBackBtn.style.display = 'none'; }
+  function finishOnboarding() {
+    localStorage.setItem('onboardSeen','true');
+    [stepLang, stepIntro, stepCta].forEach(s => s.style.display = 'none');
+    hideBackBtn();
+    updatePlaceholder();
+  }
+  if (localStorage.getItem('onboardSeen')) finishOnboarding();
+  else stepLang.style.display = 'flex';
+  document.querySelectorAll('.lang-btn').forEach(b => b.onclick = () => {
+    selectedLanguage = b.dataset.lang;
+    stepLang.style.display = 'none';
+    stepIntro.style.display = 'flex';
+  });
+  document.getElementById('btn-intro-next').onclick = () => {
+    stepIntro.style.display = 'none';
+    stepCta.style.display = 'flex';
+  };
+  document.querySelectorAll('#step-cta .cta-options button').forEach(b => b.onclick = () => {
+    const c = b.dataset.cta;
+    stepCta.style.display = 'none';
+    finishOnboarding();
+    showBackBtn();
+    if (c === 'show-services') showServices();
+    else { addMessage(c,'user'); sendMessage(); }
+  });
+  document.getElementById('btn-cta-skip').onclick = finishOnboarding;
 
-    async function sendMessage() {
-      const txt = inputEl.value.trim(); if (!txt) return;
-      addMessage(txt,'user'); inputEl.value='';
-      showTyping();
-      // disable
-      inputEl.disabled = true; sendBtn.disabled = true; sendBtn.classList.add('sending');
+  // Carousel controls
+  function showServices() {
+    document.getElementById('services-carousel').style.display = 'flex';
+  }
+  const cont = document.querySelector('.cards-container');
+  document.querySelector('.nav-arrow.left').onclick =
+    () => cont.scrollBy({ left: -150, behavior: 'smooth' });
+  document.querySelector('.nav-arrow.right').onclick =
+    () => cont.scrollBy({ left: 150, behavior: 'smooth' });
 
-      try {
-        const res = await fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ message: txt, sessionId, language: selectedLanguage })
-        });
-        const data = await res.json();
-        removeTyping();
-        addMessage(data.response || data.message || "Je n'ai pas compris 😅", 'bot');
-      } catch (e) {
-        removeTyping();
-        showError('Problème de connexion, réessayez');
-      } finally {
-        // re-enable
-        inputEl.disabled = false; sendBtn.disabled = false; sendBtn.classList.remove('sending');
-        inputEl.focus();
-      }
-    }
-
-    sendBtn.addEventListener('click', sendMessage);
-    inputEl.addEventListener('keydown', e => { if (e.key==='Enter') sendMessage(); });
-
-    // Onboarding & navigation
-    const stepLang = document.getElementById('step-language');
-    const stepIntro = document.getElementById('step-intro');
-    const stepCta = document.getElementById('step-cta');
-    function showBackBtn() { headerBackBtn.style.display = 'block'; }
-    function hideBackBtn() { headerBackBtn.style.display = 'none'; }
-    function finishOnboarding() { localStorage.setItem('onboardSeen','true'); [stepLang,stepIntro,stepCta].forEach(s=>s.style.display='none'); hideBackBtn(); updatePlaceholder(); }
-    if (localStorage.getItem('onboardSeen')) finishOnboarding(); else stepLang.style.display='flex';
-    document.querySelectorAll('.lang-btn').forEach(b=> b.onclick=()=>{ selectedLanguage=b.dataset.lang; stepLang.style.display='none'; stepIntro.style.display='flex'; });
-    document.getElementById('btn-intro-next').onclick=()=>{ stepIntro.style.display='none'; stepCta.style.display='flex'; };
-    document.querySelectorAll('#step-cta .cta-options button').forEach(b=> b.onclick=()=>{ const c=b.dataset.cta; stepCta.style.display='none'; finishOnboarding(); showBackBtn(); if (c==='show-services') showServices(); else { addMessage(c,'user'); sendMessage(); } });
-    document.getElementById('btn-cta-skip').onclick=finishOnboarding;
-
-    // Carousel controls
-    function showServices(){ document.getElementById('services-carousel').style.display='flex'; }
-    const cont = document.querySelector('.cards-container');
-    document.querySelector('.nav-arrow.left').onclick = ()=>cont.scrollBy({ left:-150, behavior:'smooth' });
-    document.querySelector('.nav-arrow.right').onclick = ()=>cont.scrollBy({ left:150, behavior:'smooth' });
-
-    headerBackBtn.onclick = ()=>{ document.getElementById('services-carousel').style.display='none'; hideBackBtn(); stepCta.style.display='flex'; };
-    document.querySelectorAll('.service-card').forEach(card=> card.onclick=()=>{ const svc = card.dataset.service; document.getElementById('services-carousel').style.display='none'; hideBackBtn(); addMessage(svc,'user'); showTyping(); sendMessage(); });
-  </script>
+  headerBackBtn.onclick = () => {
+    document.getElementById('services-carousel').style.display = 'none';
+    hideBackBtn();
+    stepCta.style.display = 'flex';
+  };
+  document.querySelectorAll('.service-card').forEach(card => card.onclick = () => {
+    const svc = card.dataset.service;
+    document.getElementById('services-carousel').style.display = 'none';
+    hideBackBtn();
+    addMessage(svc,'user');
+    showTyping();
+    sendMessage();
+  });
+</script>
 </body>
 </html>
