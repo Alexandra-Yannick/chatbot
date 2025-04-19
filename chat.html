@@ -11,138 +11,146 @@
       --color-bg: #F2F2F7;
       --color-text-dark: #333333;
       --color-text: #555555;
+      --font-base: 1rem;
       --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --radius: 12px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; background: var(--color-bg); font-family: var(--font-family); overflow: hidden; }
+    html, body { height: 100%; background: var(--color-bg); font-family: var(--font-family); font-size: var(--font-base); overflow: hidden; }
     body { display: flex; flex-direction: column; }
 
-    /* Skip link */
+    /* Skip link for accessibility */
     .skip-link { position: absolute; top: -40px; left: 0; background: #000; color: #fff; padding: 8px; z-index: 200; text-decoration: none; }
     .skip-link:focus { top: 0; }
-    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
-    :focus-visible { outline: 3px solid var(--color-primary-hover); outline-offset: 2px; }
-    @media (prefers-reduced-motion: reduce) { * { animation-duration: 0 !important; transition-duration: 0 !important; } }
 
-    /* Onboarding */
-    .onboard-step { position: fixed; inset: 0; background: rgba(255,255,255,0.95); display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 100; padding: 20px; }
-    .onboard-step.active { display: flex; }
+    /* Screen reader only */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    :focus-visible { outline: 3px solid var(--color-primary-hover); outline-offset: 2px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation-duration: 0s !important; transition-duration: 0s !important; }
+    }
+
+    /* Onboarding overlays */
+    .onboard-step { position: fixed; inset: 0; background: rgba(255,255,255,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 100; padding: 20px; }
     .onboard-step img { width: 120px; margin-bottom: 16px; }
-    .onboard-step h2 { font-size: 1.5rem; color: var(--color-text-dark); margin-bottom: 8px; }
-    .onboard-step p { font-size: 1rem; color: var(--color-text); margin-bottom: 24px; }
-    .btn-primary { background: var(--color-primary); color: #fff; padding: 0.75rem 1.5rem; border: none; border-radius: 24px; cursor: pointer; }
+    .onboard-step h2 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-text-dark); }
+    .onboard-step p { font-size: 1rem; color: var(--color-text); line-height: 1.4; margin-bottom: 1.5rem; }
+    .btn-primary { background: var(--color-primary); color: #fff; padding: 0.75rem 1.5rem; border-radius: 24px; border: none; cursor: pointer; }
     .btn-primary:hover { background: var(--color-primary-hover); }
 
-    /* Language selection */
-    #step-language { background: rgba(96,192,230,0.95); color: #fff; }
-    #step-language p { font-size: 1.125rem; margin-bottom: 16px; }
-    #step-language .lang-btn { margin: 4px; padding: 8px 16px; font-size: 0.875rem; border: none; border-radius: var(--radius); background: var(--color-primary); cursor: pointer; }
-    #step-language .lang-btn:hover { background: var(--color-primary-hover); }
+    .language-selection { background: rgba(96,192,230,0.95); color: #fff; }
+    .language-selection p { font-size: 1.125rem; margin-bottom: 1rem; }
+    .language-selection button { margin: 0.25rem; padding: 0.5rem 1rem; font-size: 0.875rem; border: none; border-radius: var(--radius); cursor: pointer; background: var(--color-primary); color: #fff; transition: background 0.2s; }
+    .language-selection button:hover { background: var(--color-primary-hover); }
 
-    /* CTA selection */
-    #step-cta .cta-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
-    #step-cta .cta-options button { padding: 12px; border: none; border-radius: 20px; background: var(--color-primary); color: #fff; cursor: pointer; }
-    #step-cta .cta-options button:hover { background: var(--color-primary-hover); }
-    #step-cta .skip-btn { background: none; color: var(--color-primary); margin-top: 12px; font-size: 0.875rem; cursor: pointer; }
+    .cta-options { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
+    .cta-options button { padding: 0.75rem; border: none; border-radius: 20px; background: var(--color-primary); color: #fff; font-size: 0.875rem; cursor: pointer; }
+    .cta-options button:hover { background: var(--color-primary-hover); }
+    .skip-btn { background: transparent; color: var(--color-primary); margin-top: 0.75rem; font-size: 0.875rem; cursor: pointer; }
 
-    /* Header and back button */
+    /* Header with back button */
     .chat-header { display: flex; align-items: center; justify-content: center; position: relative; background: var(--color-primary); color: #fff; padding: 1rem; font-size: 1.125rem; font-weight: bold; flex-shrink: 0; }
     #header-back-btn { position: absolute; left: 1rem; background: none; border: none; font-size: 1.5rem; color: #fff; cursor: pointer; display: none; }
 
-    /* Carousel */
-    .services-carousel { position: relative; display: none; background: #fff; padding: 0.5rem 0; align-items: center; width: 100%; box-sizing: border-box; }
-    .services-carousel.active { display: flex; flex-direction: row; width: 100%; box-sizing: border-box; }
-    .nav-arrow { background: rgba(255,255,255,0.8); border: none; font-size: 1.25rem; width: 2rem; height: 2rem; border-radius: 50%; cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%); }
+    /* Services carousel */
+    .services-carousel { position: relative; display: none; background: #fff; padding: 0.5rem 0; flex-direction: row; align-items: center; }
+    .nav-arrow { background: rgba(255,255,255,0.8); border: none; font-size: 1.25rem; width: 2rem; height: 2rem; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; }
     .nav-arrow.left { left: 1rem; }
     .nav-arrow.right { right: 1rem; }
     .cards-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 0.75rem; padding: 0 2.5rem; }
-    .service-card { flex: 0 0 8rem; background: #fff; border-radius: var(--radius); box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 0.75rem; text-align: center; scroll-snap-align: start; cursor: pointer; }
-    .service-card:focus, .service-card:hover { transform: translateY(-0.125rem); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .service-card { flex: 0 0 8rem; background: #fff; border-radius: var(--radius); box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 0.75rem; text-align: center; scroll-snap-align: start; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; }
+    .service-card:hover, .service-card:focus { transform: translateY(-0.125rem); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .service-card[tabindex] { outline: none; }
+    .service-icon { width: 3rem; height: 3rem; margin-bottom: 0.5rem; }
+    .service-title { display: block; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem; color: var(--color-text-dark); }
+    .service-sub { display: block; font-size: 0.75rem; color: var(--color-text); }
 
-    /* Chat area */
+    /* Chat UI */
     .chat-scroll { flex: 1; overflow-y: auto; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.625rem; }
     .message-wrapper { display: flex; align-items: flex-end; gap: 0.5rem; }
-    .message { max-width: 75%; padding: 0.625rem 0.875rem; border-radius: var(--radius); font-size: 0.875rem; line-height: 1.4; animation: fadeIn 0.2s ease-in; }
-    .user { background: #007aff; color: #fff; align-self: flex-end; border-top-left-radius: 18px; border-bottom-right-radius: 4px; }
-    .bot  { background: #e5e5ea; color: #000; align-self: flex-start; border-top-right-radius: 18px; border-bottom-left-radius: 4px; }
-    .bot-pic { width: 2rem; height: 2rem; border-radius: 50%; }
-
-    /* Input area */
+    .message { max-width: 75%; padding: 0.625rem 0.875rem; border-radius: var(--radius); font-size: 0.875rem; line-height: 1.4; word-break: break-word; animation: fadeIn 0.2s ease-in; }
+    .user { background: #007aff; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; border-top-left-radius: 18px; }
+    .bot { background: #e5e5ea; color: #000; align-self: flex-start; border-bottom-left-radius: 4px; border-top-right-radius: 18px; }
+    .bot-pic { width: 2rem; height: 2rem; border-radius: 50%; object-fit: cover; }
     .input-area { background: #fff; padding: 0.625rem; border-top: 1px solid #ccc; display: flex; align-items: center; flex-shrink: 0; }
-    .input-area input { flex: 1; padding: 0.625rem 0.875rem; border: 1px solid #ccc; border-radius: 20px; font-size: 1rem; }
-    .input-area button { background: var(--color-primary); border: none; border-radius: 50%; width: 2.5rem; height: 2.5rem; margin-left: 0.5rem; display: flex; align-items: center; justify-content: center; }
+    .input-area input { flex: 1; padding: 0.625rem 0.875rem; border: 1px solid #ccc; border-radius: 20px; font-size: 1rem; outline: none; }
+    .input-area button { background: var(--color-primary); border: none; border-radius: 50%; width: 2.5rem; height: 2.5rem; margin-left: 0.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
     .input-area button svg { fill: #fff; width: 1.5rem; height: 1.5rem; }
     .typing { font-style: italic; font-size: 0.75rem; color: #999; margin-left: 0.5rem; }
 
-    /* Spinner */
-    @keyframes ellipsis { 0%{content:'';}33%{content:'.';}66%{content:'..';}100%{content:'...';} }
-    button.sending::after { content:''; display:inline-block; margin-left:0.25rem; animation:ellipsis 1s steps(4) infinite; }
-    button:disabled { opacity:0.6; cursor:default; }
-    input:disabled { background:#e5e5ea; }
+    /* Sending spinner */
+    @keyframes ellipsis { 0%{content: '';} 33%{content: '.';} 66%{content: '..';} 100%{content: '...';} }
+    button.sending::after { display: inline-block; margin-left: 0.25rem; animation: ellipsis 1s steps(4) infinite; content: ''; }
+    button:disabled { opacity: 0.6; cursor: default; }
+    input:disabled { background: #e5e5ea; }
 
-    /* Toast */
-    .toast { position: fixed; bottom: 1.5rem; left:50%; transform: translateX(-50%); background:rgba(255,0,0,0.9); color:#fff; padding:0.5rem 1rem; border-radius:var(--radius); font-size:0.8125rem; animation:fadeIn 0.3s forwards, fadeOut 0.3s 3s forwards; }
-    @keyframes fadeOut { to { opacity:0; transform: translate(-50%,1.25rem); } }
-    @keyframes fadeIn  { from { opacity:0; transform: translateY(0.25rem); } to { opacity:1; transform: translateY(0); } }
+    /* Error toast */
+    .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: rgba(255,0,0,0.9); color: #fff; padding: 0.5rem 1rem; border-radius: var(--radius); font-size: 0.8125rem; opacity: 0; animation: fadeIn 0.3s forwards, fadeOut 0.3s 3s forwards; }
+    @keyframes fadeOut { to { opacity: 0; transform: translate(-50%, 1.25rem); } }
+
+    /* Accessibility status */
+    #aria-status { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(0.25rem); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
   <a href="#chat" class="skip-link">Aller au chat</a>
-  <div id="aria-status" aria-live="polite" class="sr-only"></div>
+  <!-- ARIA live region -->
+  <div id="aria-status" aria-live="polite"></div>
 
-  <!-- Step 1: Language -->
-  <div class="onboard-step active" id="step-language">
+  <!-- Onboarding Steps -->
+  <div class="onboard-step language-selection" id="step-language">
     <p>Choisissez votre langue</p>
     <button class="lang-btn" data-lang="fr">Français</button>
     <button class="lang-btn" data-lang="en">English</button>
     <button class="lang-btn" data-lang="es">Español</button>
     <button class="lang-btn" data-lang="de">Deutsch</button>
   </div>
-  <!-- Step 2: Intro -->
-  <div class="onboard-step" id="step-intro">
+  <div class="onboard-step" id="step-intro" style="display:none;">
     <img src="image2.png" alt="Julie qui vous sourit">
-    <h2>Bienvenue !</h2>
-    <p>Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.<br>Services, livret et bons plans locaux : je m’occupe de tout.</p>
-    <button class="btn-primary" id="btn-intro-next">Cool !</button>
+    <h2>Bienvenue !</h2>
+    <p>Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.<br>Services, livret, bons plans locaux : je m’occupe de tout.</p>
+    <button class="btn-primary" id="btn-intro-next">Cool !</button>
   </div>
-  <!-- Step 3: CTA -->
-  <div class="onboard-step" id="step-cta">
-    <h2>Par où commencer ?</h2>
+  <div class="onboard-step" id="step-cta" style="display:none;">
+    <h2>Par où commencer ?</h2>
     <div class="cta-options">
       <button data-cta="show-services">Les services de mon hôtel</button>
       <button data-cta="Le livret d'accueil de ma chambre">Le livret d'accueil de ma chambre</button>
-      <button data-cta="Où chiller local ?">Où chiller local ?</button>
+      <button data-cta="Où chiller local ?">Où chiller local ?</button>
     </div>
     <button class="skip-btn" id="btn-cta-skip">Viens chatter</button>
   </div>
 
-  <!-- Header -->
+  <!-- Chat header with back button -->
   <div class="chat-header">
     <button id="header-back-btn" aria-label="Retour">‹</button>
     💬 Julie
   </div>
 
-  <!-- Carousel -->
+  <!-- Services carousel -->
   <div class="services-carousel" id="services-carousel">
     <button class="nav-arrow left" aria-label="Précédent">‹</button>
     <div class="cards-container">
-      <div class="service-card" data-service="Room Service" tabindex="0" role="button" aria-label="Room Service">
+      <div class="service-card" data-service="Room Service" tabindex="0" role="button" aria-label="Sélectionner Room Service">
         <img src="room.png" class="service-icon" alt="Room Service">
         <span class="service-title">Room Service</span>
         <small class="service-sub">Commander un repas</small>
       </div>
-      <div class="service-card" data-service="Ménage" tabindex="0" role="button" aria-label="Ménage">
+      <div class="service-card" data-service="Ménage" tabindex="0" role="button" aria-label="Sélectionner Ménage">
         <img src="menage.png" class="service-icon" alt="Ménage">
         <span class="service-title">Ménage</span>
         <small class="service-sub">Demande de nettoyage</small>
       </div>
-      <div class="service-card" data-service="Petit-déjeuner" tabindex="0" role="button" aria-label="Petit-déjeuner">
+      <div class="service-card" data-service="Petit-déjeuner" tabindex="0" role="button" aria-label="Sélectionner Petit-déjeuner">
         <img src="petit-dejeuner.png" class="service-icon" alt="Petit-déjeuner">
         <span class="service-title">Petit-déjeuner</span>
         <small class="service-sub">Le Petit-déjeuner</small>
       </div>
-      <div class="service-card" data-service="Spa & Bien-être" tabindex="0" role="button" aria-label="Spa & Bien-être">
+      <div class="service-card" data-service="Spa & Bien-être" tabindex="0" role="button" aria-label="Sélectionner Spa & Bien-être">
         <img src="spa.png" class="service-icon" alt="Spa & Bien-être">
         <span class="service-title">Spa & Bien-être</span>
         <small class="service-sub">Réserver un soin</small>
@@ -151,171 +159,193 @@
     <button class="nav-arrow right" aria-label="Suivant">›</button>
   </div>
 
-  <!-- Chat -->
+  <!-- Chat messages -->
   <div class="chat-scroll" id="chat"></div>
   <div class="input-area">
     <label for="user-input" class="sr-only">Message</label>
-    <input type="text" id="user-input" placeholder="Écris ton message ici…" />
+    <input type="text" id="user-input" placeholder="Écris ton message ici..." />
     <button id="send-btn"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/></svg></button>
   </div>
 
   <script>
-    // Regex & linkify
-    function generateMapLink(text) {
-      const regex = /situé(?:s)? au ([^.]+)/i;
-      const match = regex.exec(text);
-      if (match && match[1]) {
-        const addr = encodeURIComponent(match[1].trim());
-        return `<a href="https://maps.google.com/?q=${addr}" target="_blank">c'est par ici</a>`;
-      }
-      return `<a href="https://maps.google.com" target="_blank">c'est par ici</a>`;
-    }
-    function linkify(text) {
-      text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
-      if (text.includes("c'est par ici")) {
-        text = text.replace("c'est par ici", generateMapLink(text));
-      }
-      return text;
-    }
+  // Générer le lien Google Maps
+  function generateMapLink(text) {
+    // Recherche "situé au ..." sans échappement compliqué
+    const regex = /situé(?:s)? au ([^.]+)/i;
+    const match = regex.exec(text);
+    return match && match[1]
+      ? `<a href="https://maps.google.com/?q=${encodeURIComponent(match[1].trim())}" target="_blank">c'est par ici</a>`
+      : `<a href="https://maps.google.com" target="_blank">c'est par ici</a>`;
+  }
 
-    // DOM refs
-    const inputEl = document.getElementById('user-input');
-    const sendBtn  = document.getElementById('send-btn');
-    const backBtn  = document.getElementById('header-back-btn');
-    const ariaStatus = document.getElementById('aria-status');
-    let selectedLanguage = 'fr';
-    let sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
-    localStorage.setItem('chatSession', sessionId);
-    const langTexts = {
-      fr: { placeholder: "Écris ton message ici…",   typing: "Julie est en train de répondre…" },
-      en: { placeholder: "Type your message here…",  typing: "Julie is typing…"          },
-      es: { placeholder: "Escribe tu mensaje aquí…", typing: "Julie está respondiendo…" },
-      de: { placeholder: "Schreib deine Nachricht…", typing: "Julie antwortet gerade…" }
-    };
-
-    function updatePlaceholder() { inputEl.placeholder = langTexts[selectedLanguage].placeholder; }
-    function scrollChat() { const c=document.querySelector('.chat-scroll'); c.scrollTop=c.scrollHeight; }
-    function showTyping() {
-      const t=document.createElement('div');
-      t.id='typing'; t.className='typing';
-      t.textContent=langTexts[selectedLanguage].typing;
-      document.getElementById('chat').appendChild(t);
-      scrollChat();
+  // Transformer les URLs en liens
+  function linkify(text) {
+    if (text.includes("c'est par ici")) {
+      text = text.replace("c'est par ici", generateMapLink(text));
     }
-    function removeTyping() { const t=document.getElementById('typing'); if(t) t.remove(); }
-    function addMessage(content,sender) {
-      const clean = content.replace(/\*\*/g,'').replace(/\n+/g,' ');
-      const html  = linkify(clean);
-      const w     = document.createElement('div'); w.className='message-wrapper';
-      if(sender==='bot') {
-        const av=document.createElement('img');
-        av.src='image.png'; av.alt='Julie'; av.className='bot-pic';
-        w.appendChild(av);
-      }
-      const m=document.createElement('div');
-      m.className=`message ${sender}`; m.innerHTML=html; w.appendChild(m);
-      document.getElementById('chat').appendChild(w);
-      ariaStatus.textContent=clean;
-      scrollChat();
-    }
-    function showError(msg){
-      const t=document.createElement('div');
-      t.className='toast'; t.textContent=msg;
-      document.body.appendChild(t);
-      setTimeout(()=>t.remove(),4000);
-    }
+    // Pattern simplifié pour les URL commençant par http(s), ftp ou file
+    const urlPattern = /\b(?:https?|ftp|file):\/\/\S+/gi;
+    return text.replace(urlPattern, '<a href="$&" target="_blank">$&</a>');
+  }
 
-    async function sendMessage(){
-      const txt=inputEl.value.trim(); if(!txt)return;
-      addMessage(txt,'user'); inputEl.value='';
-      showTyping();
-      // lock
-      inputEl.disabled=true; sendBtn.disabled=true; sendBtn.classList.add('sending');
-      try {
-        const res=await fetch('https://c842-.../webhook/...',{
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({message:txt,sessionId,language:selectedLanguage})
-        });
-        const data=await res.json();
-        removeTyping();
-        addMessage(data.response||data.message||"Je n'ai pas compris 😅",'bot');
-      } catch(e){
-        removeTyping(); showError('Problème de connexion, réessayez');
-      } finally {
-        // unlock
-        inputEl.disabled=false; sendBtn.disabled=false; sendBtn.classList.remove('sending');
-        inputEl.focus();
-      }
+  // Variables globales
+  let selectedLanguage = 'fr';
+  const languageTexts = {
+    fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." },
+    en: { placeholder: "Type your message here...", typing: "Julie is typing..." },
+    es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." },
+    de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." }
+  };
+
+  // Éléments du DOM
+  const inputEl = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
+  const headerBackBtn = document.getElementById('header-back-btn');
+  const ariaStatus = document.getElementById('aria-status');
+  const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
+  localStorage.setItem('chatSession', sessionId);
+
+  function updatePlaceholder() {
+    inputEl.placeholder = languageTexts[selectedLanguage].placeholder;
+  }
+  function scrollChat() {
+    const chat = document.querySelector('.chat-scroll');
+    chat.scrollTop = chat.scrollHeight;
+  }
+  function showTyping() {
+    const t = document.createElement('div');
+    t.id = 'typing';
+    t.className = 'typing';
+    t.textContent = languageTexts[selectedLanguage].typing;
+    document.getElementById('chat').appendChild(t);
+    scrollChat();
+  }
+  function removeTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+
+  function addMessage(content, sender) {
+    const clean = content.replace(/\*\*/g,'').replace(/\n+/g,' ');
+    const html = linkify(clean);
+    const wrap = document.createElement('div');
+    wrap.className = 'message-wrapper';
+    if (sender === 'bot') {
+      const av = document.createElement('img');
+      av.src = 'image.png';
+      av.alt = 'Julie';
+      av.className = 'bot-pic';
+      wrap.appendChild(av);
     }
-    sendBtn.addEventListener('click', sendMessage);
-    inputEl.addEventListener('keydown',e=>{ if(e.key==='Enter')sendMessage(); });
+    const msg = document.createElement('div');
+    msg.className = `message ${sender}`;
+    msg.innerHTML = html;
+    wrap.appendChild(msg);
+    document.getElementById('chat').appendChild(wrap);
+    ariaStatus.textContent = clean;
+    scrollChat();
+  }
 
-    // Onboarding & navigation
-    const stepLang=document.getElementById('step-language');
-    const stepIntro=document.getElementById('step-intro');
-    const stepCta =document.getElementById('step-cta');
-    function showBack(){ backBtn.style.display='block'; }
-    function hideBack(){ backBtn.style.display='none'; }
-    function finishOnboard(){
-      localStorage.setItem('onboardSeen','true');
-      [stepLang,stepIntro,stepCta].forEach(s=>s.classList.remove('active'));
-      hideBack();
-      updatePlaceholder();
+  function showError(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 4000);
+  }
+
+  async function sendMessage() {
+    const txt = inputEl.value.trim();
+    if (!txt) return;
+    addMessage(txt, 'user');
+    inputEl.value = '';
+    showTyping();
+
+    // Désactivation + spinner
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+    sendBtn.classList.add('sending');
+
+    try {
+      const res = await fetch('https://.../webhook/30e22add-d5d7-461e-ac07-fc95a3843338', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: txt, sessionId, language: selectedLanguage })
+      });
+      const data = await res.json();
+      removeTyping();
+      addMessage(data.response || data.message || "Je n'ai pas compris 😅", 'bot');
+    } catch (e) {
+      removeTyping();
+      showError('Problème de connexion, réessayez');
+    } finally {
+      inputEl.disabled = false;
+      sendBtn.disabled = false;
+      sendBtn.classList.remove('sending');
+      inputEl.focus();
     }
-    if(localStorage.getItem('onboardSeen')) finishOnboard();
-    else stepLang.classList.add('active');
+  }
 
-    document.querySelectorAll('.lang-btn').forEach(b=>
-      b.addEventListener('click',()=>{
-        selectedLanguage=b.dataset.lang;
-        stepLang.classList.remove('active');
-        stepIntro.classList.add('active');
-      })
-    );
-    document.getElementById('btn-intro-next').onclick=()=>{
-      stepIntro.classList.remove('active');
-      stepCta.classList.add('active');
-    };
-    document.querySelectorAll('#step-cta .cta-options button').forEach(b=>
-      b.addEventListener('click',()=>{
-        const c=b.dataset.cta;
-        stepCta.classList.remove('active');
-        finishOnboard();
-        showBack();
-        if(c==='show-services'){
-          document.getElementById('services-carousel').classList.add('active');
-          document.querySelector('.chat-scroll').style.display='none';
-          document.querySelector('.input-area').style.display='none';
-        } else {
-          addMessage(c,'user');
-          sendMessage();
-        }
-      })
-    );
-    document.getElementById('btn-cta-skip').onclick=finishOnboard;
+  // Événements
+  sendBtn.addEventListener('click', sendMessage);
+  inputEl.addEventListener('keydown', e => { if (e.key === 'Enter') sendMessage(); });
 
-    // Carousel & back
-    const cont=document.querySelector('.cards-container');
-    document.querySelector('.nav-arrow.left').onclick=()=>cont.scrollBy({left:-150,behavior:'smooth'});
-    document.querySelector('.nav-arrow.right').onclick=()=>cont.scrollBy({left:150,behavior:'smooth'});
-    backBtn.onclick=()=>{
-      document.getElementById('services-carousel').classList.remove('active');
-      document.querySelector('.chat-scroll').style.display='flex';
-      document.querySelector('.input-area').style.display='flex';
-      hideBack();
-      stepCta.classList.add('active');
-    };
-    document.querySelectorAll('.service-card').forEach(card=>
-      card.addEventListener('click',()=>{
-        const svc=card.dataset.service;
-        document.getElementById('services-carousel').classList.remove('active');
-        document.querySelector('.chat-scroll').style.display='flex';
-        document.querySelector('.input-area').style.display='flex';
-        hideBack();
-        addMessage(svc,'user');
-        sendMessage();
-      })
-    );
-  </script>
+  // Onboarding & navigation
+  const stepLang = document.getElementById('step-language');
+  const stepIntro = document.getElementById('step-intro');
+  const stepCta = document.getElementById('step-cta');
+  function showBackBtn() { headerBackBtn.style.display = 'block'; }
+  function hideBackBtn() { headerBackBtn.style.display = 'none'; }
+  function finishOnboarding() {
+    localStorage.setItem('onboardSeen','true');
+    [stepLang, stepIntro, stepCta].forEach(s => s.style.display = 'none');
+    hideBackBtn();
+    updatePlaceholder();
+  }
+  if (localStorage.getItem('onboardSeen')) finishOnboarding();
+  else stepLang.style.display = 'flex';
+  document.querySelectorAll('.lang-btn').forEach(b => b.onclick = () => {
+    selectedLanguage = b.dataset.lang;
+    stepLang.style.display = 'none';
+    stepIntro.style.display = 'flex';
+  });
+  document.getElementById('btn-intro-next').onclick = () => {
+    stepIntro.style.display = 'none';
+    stepCta.style.display = 'flex';
+  };
+  document.querySelectorAll('#step-cta .cta-options button').forEach(b => b.onclick = () => {
+    const c = b.dataset.cta;
+    stepCta.style.display = 'none';
+    finishOnboarding();
+    showBackBtn();
+    if (c === 'show-services') showServices();
+    else { addMessage(c,'user'); sendMessage(); }
+  });
+  document.getElementById('btn-cta-skip').onclick = finishOnboarding;
+
+  // Carousel controls
+  function showServices() {
+    document.getElementById('services-carousel').style.display = 'flex';
+  }
+  const cont = document.querySelector('.cards-container');
+  document.querySelector('.nav-arrow.left').onclick =
+    () => cont.scrollBy({ left: -150, behavior: 'smooth' });
+  document.querySelector('.nav-arrow.right').onclick =
+    () => cont.scrollBy({ left: 150, behavior: 'smooth' });
+
+  headerBackBtn.onclick = () => {
+    document.getElementById('services-carousel').style.display = 'none';
+    hideBackBtn();
+    stepCta.style.display = 'flex';
+  };
+  document.querySelectorAll('.service-card').forEach(card => card.onclick = () => {
+    const svc = card.dataset.service;
+    document.getElementById('services-carousel').style.display = 'none';
+    hideBackBtn();
+    addMessage(svc,'user');
+    showTyping();
+    sendMessage();
+  });
+</script>
 </body>
 </html>
