@@ -115,6 +115,60 @@
     }
     function linkify(text) {
       if (text.includes("c'est par ici")) text = text.replace("c'est par ici", generateMapLink(text));
+      return text.replace(/((https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" target="_blank">$1</a>');
+    }
+
+    // Chat functions
+    let selectedLanguage = 'fr';
+    const languageTexts = { fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." }, en: { placeholder: "Type your message here...", typing: "Julie is typing..." }, es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." }, de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." } };
+
+    // Back button reference and helpers
+    const headerBackBtn = document.getElementById('header-back-btn');
+    function showBackBtn() { headerBackBtn.style.display = 'block'; }
+    function hideBackBtn() { headerBackBtn.style.display = 'none'; }
+
+    function updatePlaceholder() { document.getElementById('user-input').placeholder = languageTexts[selectedLanguage].placeholder; }
+    function addMessage(content, sender) {
+      const clean = content.replace(/\*\*/g,'').replace(/
++/g,' ');
+      const html = linkify(clean);
+      const wrap = document.createElement('div'); wrap.className='message-wrapper';
+      if (sender==='bot') { const av=document.createElement('img'); av.src='image.png'; av.alt='Julie'; av.className='bot-pic'; wrap.appendChild(av); }
+      const msg = document.createElement('div'); msg.className=`message ${sender}`; msg.innerHTML=html; wrap.appendChild(msg);
+      document.getElementById('chat').appendChild(wrap);
+      document.querySelector('.chat-scroll').scrollTop = document.querySelector('.chat-scroll').scrollHeight;
+    }
+    function showTyping(){ const t=document.createElement('div'); t.id='typing'; t.className='typing'; t.textContent=languageTexts[selectedLanguage].typing; document.getElementById('chat').appendChild(t); document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight; }
+    function removeTyping(){ const t=document.getElementById('typing'); if(t) t.remove(); }
+    function sendMessage(){ const inp=document.getElementById('user-input'), txt=inp.value.trim(); if(!txt) return; addMessage(txt,'user'); inp.value=''; showTyping(); fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt,sessionId:localStorage.getItem('chatSession'),language:selectedLanguage})}).then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot');}).catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e);}); }
+    document.getElementById('user-input').addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });
+    const sessionId = localStorage.getItem('chatSession')||crypto.randomUUID(); localStorage.setItem('chatSession',sessionId);
+
+    // Onboarding logic
+    const stepLang=document.getElementById('step-language'), stepIntro=document.getElementById('step-intro'), stepCta=document.getElementById('step-cta');
+    function finishOnboarding(){ localStorage.setItem('onboardSeen','true'); [stepLang,stepIntro,stepCta].forEach(s=>s.style.display='none'); hideBackBtn(); updatePlaceholder(); }
+    if(localStorage.getItem('onboardSeen')) finishOnboarding(); else stepLang.style.display='flex';
+    document.querySelectorAll('.lang-btn').forEach(b=>b.onclick=()=>{ selectedLanguage=b.dataset.lang; stepLang.style.display='none'; stepIntro.style.display='flex'; });
+    document.getElementById('btn-intro-next').onclick=()=>{ stepIntro.style.display='none'; stepCta.style.display='flex'; };
+    document.querySelectorAll('#step-cta .cta-options button').forEach(b=>b.onclick=()=>{ const c=b.dataset.cta; stepCta.style.display='none'; finishOnboarding(); showBackBtn(); if(c==='show-services') showServices(); else { addMessage(c,'user'); showTyping(); sendCTA(c); } });
+    document.getElementById('btn-cta-skip').onclick=finishOnboarding;
+
+    // Carousel controls
+    function showServices(){ document.getElementById('services-carousel').style.display='flex'; showBackBtn(); }
+    const cont=document.querySelector('.cards-container'); document.querySelector('.nav-arrow.left').onclick=()=>cont.scrollBy({ left:-150, behavior:'smooth' }); document.querySelector('.nav-arrow.right').onclick=()=>cont.scrollBy({ left:150, behavior:'smooth' });
+    document.getElementById('header-back-btn').onclick=()=>{ document.getElementById('services-carousel').style.display='none'; stepCta.style.display='flex'; hideBackBtn(); };
+    document.querySelectorAll('.service-card').forEach(card=>card.onclick=()=>{ const svc=card.dataset.service; document.getElementById('services-carousel').style.display='none'; hideBackBtn(); addMessage(svc,'user'); showTyping(); sendCTA(svc); });
+    function sendCTA(text){ fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,sessionId:sessionId,language:selectedLanguage})}).then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); }).catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e); }); }
+  </script>
+    // Map link & linkify
+    function generateMapLink(text) {
+      const regex = /situé(?:s)? au ([^\.]+)/i;
+      const match = regex.exec(text);
+      if (match && match[1]) return `<a href=\"https://maps.google.com/?q=${encodeURIComponent(match[1].trim())}\" target=\"_blank\">c'est par ici</a>`;
+      return `<a href=\"https://maps.google.com\" target=\"_blank\">c'est par ici</a>`;
+    }
+    function linkify(text) {
+      if (text.includes("c'est par ici")) text = text.replace("c'est par ici", generateMapLink(text));
       return text.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" target="_blank">$1</a>');
     }
 
@@ -153,5 +207,8 @@
     document.querySelectorAll('.service-card').forEach(card=>card.onclick=()=>{ const svc=card.dataset.service; document.getElementById('services-carousel').style.display='none'; document.getElementById('header-back-btn').style.display='none'; addMessage(svc,'user'); showTyping(); sendCTA(svc); });
     function sendCTA(text){ fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,sessionId:sessionId,language:selectedLanguage})}).then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); }).catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e); }); }
   </script>
+</body>
+</html>
+
 </body>
 </html>
