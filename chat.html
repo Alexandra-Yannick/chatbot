@@ -12,64 +12,42 @@
       overflow: hidden;
     }
     body { display: flex; flex-direction: column; }
-    /* Common onboarding overlay */
+    /* Onboarding overlays */
     .onboard-step {
       position: fixed; inset: 0;
       background: rgba(255,255,255,0.95);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      text-align: center;
-      z-index: 100;
-      padding: 20px;
+      text-align: center; z-index: 100; padding: 20px;
     }
     .onboard-step img { width: 120px; margin-bottom: 16px; }
     .onboard-step h2 { font-size: 24px; margin-bottom: 8px; color: #333; }
     .onboard-step p { font-size: 16px; color: #555; line-height: 1.4; margin-bottom: 24px; }
     .btn-primary { background: #7f5af0; color: #fff; padding: 12px 24px; border-radius: 24px; border: none; cursor: pointer; }
-
-    /* Language selection is also an onboard-step */
     .language-selection { background: rgba(96, 192, 230, 0.95); color: #fff; }
     .language-selection p { font-size: 18px; margin-bottom: 16px; }
     .language-selection button { margin: 4px; padding: 8px 16px; font-size: 14px; border: none; border-radius: 8px; cursor: pointer; background: #7f5af0; color: #fff; transition: background 0.2s; }
     .language-selection button:hover { background: #6248c2; }
-
-    /* CTA selection */
     .cta-options { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
     .cta-options button { padding: 12px; border: none; border-radius: 20px; background: #7f5af0; color: #fff; font-size: 14px; cursor: pointer; }
     .cta-options button:hover { background: #6248c2; }
     .skip-btn { background: transparent; color: #7f5af0; margin-top: 12px; font-size: 14px; cursor: pointer; }
-
     /* Services carousel */
-    .services-carousel { position: relative; display: none; align-items: center; padding: 8px 0; background: #fff; }
+    .services-carousel { position: relative; display: none; align-items: center; background: #fff; flex-direction: row; padding: 8px 0; }
+    .back-btn {
+      position: absolute; top: 12px; left: 16px;
+      background: none; border: none;
+      font-size: 16px; color: #7f5af0; cursor: pointer; z-index: 10;
+    }
     .cards-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding: 0 40px; }
-    .service-card {
-      flex: 0 0 120px;
-      background: #fff; border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 12px; text-align: center;
-      scroll-snap-align: start;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .service-card:hover, .service-card:focus {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
+    .service-card { flex: 0 0 120px; background: #fff; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 12px; text-align: center; scroll-snap-align: start; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; }
+    .service-card:hover, .service-card:focus { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
     .service-icon { width: 48px; height: 48px; margin-bottom: 8px; }
     .service-title { display: block; font-size: 14px; font-weight: 600; margin-bottom: 4px; }
     .service-sub { display: block; font-size: 12px; color: #666; }
-    .nav-arrow {
-      background: rgba(255,255,255,0.8); border: none;
-      font-size: 24px; width: 32px; height: 32px;
-      border-radius: 50%; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      position: absolute;
-      top: 50%; transform: translateY(-50%);
-      z-index: 10;
-    }
+    .nav-arrow { background: rgba(255,255,255,0.8); border: none; font-size: 24px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; }
     .nav-arrow.left { left: 8px; }
     .nav-arrow.right { right: 8px; }
-
     /* Chat UI */
     .chat-header { background: #7f5af0; color: #fff; padding: 16px; text-align: center; font-size: 18px; font-weight: bold; flex-shrink: 0; }
     .chat-scroll { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
@@ -96,11 +74,11 @@
     <button class="lang-btn" data-lang="de">Deutsch</button>
   </div>
   <div class="onboard-step" id="step-intro" style="display:none;">
-    <img src="image1.png" alt="Julie qui vous sourit">
+    <img src="julie-avatar-animé.gif" alt="Julie qui vous sourit">
     <h2>Bienvenue !</h2>
     <p>Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.<br>
        Services, livret, bons plans locaux : je m’occupe de tout.</p>
-    <button class="btn-primary" id="btn-intro-next">Cool !</button>
+    <button class="btn-primary" id="btn-intro-next">Cool !</button>
   </div>
   <div class="onboard-step" id="step-cta" style="display:none;">
     <h2>Par où commencer ?</h2>
@@ -111,10 +89,10 @@
     </div>
     <button class="skip-btn" id="btn-cta-skip">Viens chatter</button>
   </div>
-
   <!-- Chat and Services -->
   <div class="chat-header">💬 Julie - Serial Chilleuse</div>
   <div class="services-carousel" id="services-carousel">
+    <button class="back-btn" id="services-back-btn" aria-label="Retour">← Retour</button>
     <button class="nav-arrow left" aria-label="Précédent">‹</button>
     <div class="cards-container">
       <div class="service-card" data-service="Room Service">
@@ -140,28 +118,23 @@
     </div>
     <button class="nav-arrow right" aria-label="Suivant">›</button>
   </div>
-
   <div class="chat-scroll" id="chat"></div>
   <div class="input-area">
     <input type="text" id="user-input" placeholder="Écris ton message ici...">
     <button onclick="sendMessage()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/></svg></button>
   </div>
-
   <script>
-    // Map link & linkify
+    // Dynamic map link and linkify
     function generateMapLink(text) {
       const regex = /situé(?:s)? au ([^\.]+)/i;
       const match = regex.exec(text);
-      if (match && match[1]) {
-        return `<a href="https://maps.google.com/?q=${encodeURIComponent(match[1].trim())}" target="_blank">c'est par ici</a>`;
-      }
-      return `<a href="https://maps.google.com" target="_blank">c'est par ici</a>`;
+      if (match && match[1]) return `<a href=\"https://maps.google.com/?q=${encodeURIComponent(match[1].trim())}\" target=\"_blank\">c'est par ici</a>`;
+      return `<a href=\"https://maps.google.com\" target=\"_blank\">c'est par ici</a>`;
     }
     function linkify(text) {
       if (text.includes("c'est par ici")) text = text.replace("c'est par ici", generateMapLink(text));
       return text.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" target="_blank">$1</a>');
     }
-
     // Chat functions
     let selectedLanguage = 'fr';
     const languageTexts = {
@@ -175,48 +148,35 @@
       const clean = content.replace(/\*\*/g,'').replace(/\n+/g,' ');
       const html = linkify(clean);
       const wrap = document.createElement('div'); wrap.className='message-wrapper';
-      if (sender==='bot') {
-        const av = document.createElement('img'); av.src='image.png'; av.alt='Julie'; av.className='bot-pic'; wrap.appendChild(av);
-      }
-      const msg = document.createElement('div'); msg.className=`message ${sender}`; msg.innerHTML=html;
-      wrap.appendChild(msg); document.getElementById('chat').appendChild(wrap);
-      document.querySelector('.chat-scroll').scrollTop = document.querySelector('.chat-scroll').scrollHeight;
+      if (sender==='bot') { const av=document.createElement('img'); av.src='image.png'; av.alt='Julie'; av.className='bot-pic'; wrap.appendChild(av); }
+      const msg=document.createElement('div'); msg.className=`message ${sender}`; msg.innerHTML=html; wrap.appendChild(msg);
+      document.getElementById('chat').appendChild(wrap);
+      document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight;
     }
-    function showTyping(){ const t=document.createElement('div'); t.id='typing'; t.className='typing'; t.textContent=languageTexts[selectedLanguage].typing; document.getElementById('chat').appendChild(t); document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight; }
-    function removeTyping(){ const t=document.getElementById('typing'); if(t) t.remove(); }
-    function sendMessage(){ const inp=document.getElementById('user-input'), txt=inp.value.trim(); if(!txt) return; addMessage(txt,'user'); inp.value=''; showTyping();
+    function showTyping() { const t=document.createElement('div'); t.id='typing'; t.className='typing'; t.textContent=languageTexts[selectedLanguage].typing; document.getElementById('chat').appendChild(t); document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight; }
+    function removeTyping() { const t=document.getElementById('typing'); if(t) t.remove(); }
+    function sendMessage() {
+      const inp=document.getElementById('user-input'), txt=inp.value.trim(); if(!txt) return; addMessage(txt,'user'); inp.value=''; showTyping();
       fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt,sessionId:localStorage.getItem('chatSession'),language:selectedLanguage})})
         .then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); })
         .catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e); }); }
-    document.getElementById('user-input').addEventListener('keydown',e=>{ if(e.key==='Enter') sendMessage(); });
+    document.getElementById('user-input').addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });
     const sessionId = localStorage.getItem('chatSession')||crypto.randomUUID(); localStorage.setItem('chatSession',sessionId);
-
-    // Onboarding
-    const stepLang = document.getElementById('step-language'), stepIntro = document.getElementById('step-intro'), stepCta = document.getElementById('step-cta');
+    // Onboarding logic
+    const stepLang=document.getElementById('step-language'), stepIntro=document.getElementById('step-intro'), stepCta=document.getElementById('step-cta');
     function finishOnboarding(){ localStorage.setItem('onboardSeen','true'); [stepLang,stepIntro,stepCta].forEach(s=>s.style.display='none'); updatePlaceholder(); }
     if(localStorage.getItem('onboardSeen')) finishOnboarding(); else stepLang.style.display='flex';
-    document.querySelectorAll('.lang-btn').forEach(b=> b.onclick=()=>{ selectedLanguage=b.dataset.lang; stepLang.style.display='none'; stepIntro.style.display='flex'; });
+    document.querySelectorAll('.lang-btn').forEach(b=>b.onclick=()=>{ selectedLanguage=b.dataset.lang; stepLang.style.display='none'; stepIntro.style.display='flex'; });
     document.getElementById('btn-intro-next').onclick=()=>{ stepIntro.style.display='none'; stepCta.style.display='flex'; };
-    document.querySelectorAll('#step-cta .cta-options button').forEach(b=> b.onclick=()=>{
-      const c=b.dataset.cta;
-      stepCta.style.display='none';
-      finishOnboarding();
-      if(c==='show-services') showServices(); else { addMessage(c,'user'); showTyping(); sendCTA(c); }
-    });
+    document.querySelectorAll('#step-cta .cta-options button').forEach(b=>b.onclick=()=>{ const c=b.dataset.cta; stepCta.style.display='none'; finishOnboarding(); if(c==='show-services') showServices(); else { addMessage(c,'user'); showTyping(); sendCTA(c); }});
     document.getElementById('btn-cta-skip').onclick=finishOnboarding;
-
-    // Show services carousel
+    // Carousel controls
     function showServices(){ document.getElementById('services-carousel').style.display='flex'; }
-    // Carousel navigation
     const cont=document.querySelector('.cards-container');
-    document.querySelector('.nav-arrow.left').onclick=()=>cont.scrollBy({ left: -150, behavior: 'smooth' });
-    document.querySelector('.nav-arrow.right').onclick=()=>cont.scrollBy({ left: 150, behavior: 'smooth' });
-    // Card click
-    document.querySelectorAll('.service-card').forEach(card=> card.onclick=()=>{
-      const svc=card.dataset.service;
-      document.getElementById('services-carousel').style.display='none';
-      addMessage(svc,'user'); showTyping(); sendCTA(svc);
-    });
+    document.querySelector('.nav-arrow.left').onclick=()=>cont.scrollBy({ left:-150, behavior:'smooth' });
+    document.querySelector('.nav-arrow.right').onclick=()=>cont.scrollBy({ left:150, behavior:'smooth' });
+    document.getElementById('services-back-btn').onclick=()=>{ document.getElementById('services-carousel').style.display='none'; stepCta.style.display='flex'; };
+    document.querySelectorAll('.service-card').forEach(card=>card.onclick=()=>{ const svc=card.dataset.service; document.getElementById('services-carousel').style.display='none'; addMessage(svc,'user'); showTyping(); sendCTA(svc); });
     function sendCTA(text){ fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,sessionId:sessionId,language:selectedLanguage})}) .then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); }).catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e); }); }
   </script>
 </body>
