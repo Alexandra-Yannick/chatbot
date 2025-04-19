@@ -19,13 +19,9 @@
     html, body { height: 100%; background: var(--color-bg); font-family: var(--font-family); font-size: var(--font-base); overflow: hidden; }
     body { display: flex; flex-direction: column; }
 
-    /* Accessibility */
-    .skip-link { position: absolute; top: -40px; left: 0; background: #000; color: #fff; padding: 8px; z-index: 200; text-decoration: none; }
-    .skip-link:focus { top: 0; }
-    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
-    :focus-visible { outline: 3px solid var(--color-primary-hover); outline-offset: 2px; }
-
-    @media (prefers-reduced-motion: reduce) { * { animation-duration: 0s !important; transition-duration: 0s !important; } }
+    /* Common header */
+    .chat-header { display: flex; align-items: center; justify-content: center; position: relative; background: var(--color-primary); color: #fff; padding: 1rem; font-size: 1.125rem; font-weight: bold; }
+    #header-back-btn { position: absolute; left: 1rem; background: none; border: none; font-size: 1.5rem; color: #fff; cursor: pointer; display: none; }
 
     /* Onboarding */
     .onboard-step { position: fixed; inset: 0; background: rgba(255,255,255,0.95); display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 100; padding: 20px; }
@@ -35,26 +31,28 @@
     .onboard-step p { font-size: 1rem; color: var(--color-text); margin-bottom: 16px; }
     .btn-primary { background: var(--color-primary); color: #fff; padding: 0.75rem 1.5rem; border: none; border-radius: 24px; cursor: pointer; }
     .btn-primary:hover { background: var(--color-primary-hover); }
-
     #step-language { background: rgba(96,192,230,0.95); color: #fff; }
     #step-language p { font-size: 1.125rem; margin-bottom: 1rem; }
-    #step-language .lang-btn { margin: 0.25rem; padding: 0.5rem 1rem; font-size: 0.875rem; border: none; border-radius: var(--radius); background: var(--color-primary); color: #fff; cursor: pointer; }
-    #step-language .lang-btn:hover { background: var(--color-primary-hover); }
-
-    /* CTA selection */
+    .language-selection button { margin: 0.25rem; padding: 0.5rem 1rem; font-size: 0.875rem; border: none; border-radius: var(--radius); background: var(--color-primary); color: #fff; cursor: pointer; }
+    .language-selection button:hover { background: var(--color-primary-hover); }
     #step-cta .cta-options { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
     #step-cta .cta-options button { padding: 0.75rem; border: none; border-radius: 20px; background: var(--color-primary); color: #fff; font-size: 0.875rem; cursor: pointer; }
     #step-cta .cta-options button:hover { background: var(--color-primary-hover); }
 
-    /* Sections */
-    .section { display: none; padding: 1rem; overflow-y: auto; flex: 1; }
+    /* Static & chat sections */
+    .section { display: none; flex: 1; overflow-y: auto; padding: 1rem; }
     .section.active { display: block; }
     .static-section h3 { margin-bottom: 0.5rem; color: var(--color-text-dark); }
     .static-section p { margin-bottom: 1rem; color: var(--color-text); }
     .btn-chat-start { background: var(--color-primary); color: #fff; padding: 0.5rem 1rem; border: none; border-radius: 20px; cursor: pointer; }
 
+    /* Services list styling */
+    .service-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .service-list button { text-align: left; padding: 0.75rem; border: none; border-radius: var(--radius); background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); cursor: pointer; }
+    .service-list button:hover { background: #f0f0f0; }
+
     /* Chat UI */
-    .chat-scroll { flex: 1; overflow-y: auto; padding: 0.75rem; display: none; flex-direction: column; gap: 0.625rem; }
+    .chat-scroll { display: none; flex: 1; overflow-y: auto; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.625rem; }
     .chat-scroll.active { display: flex; }
     .message-wrapper { display: flex; align-items: flex-end; gap: 0.5rem; }
     .message { max-width: 75%; padding: 0.5rem; border-radius: var(--radius); font-size: 0.875rem; line-height: 1.4; }
@@ -76,13 +74,15 @@
     💬 Julie
   </div>
 
-  <!-- Onboarding steps -->
+  <!-- Onboarding -->
   <div class="onboard-step active" id="step-language">
     <p>Choisissez votre langue / Choose your language / Elige tu idioma / Wähle deine Sprache</p>
-    <button class="lang-btn" data-lang="fr">Français</button>
-    <button class="lang-btn" data-lang="en">English</button>
-    <button class="lang-btn" data-lang="es">Español</button>
-    <button class="lang-btn" data-lang="de">Deutsch</button>
+    <div class="language-selection">
+      <button class="lang-btn" data-lang="fr">Français</button>
+      <button class="lang-btn" data-lang="en">English</button>
+      <button class="lang-btn" data-lang="es">Español</button>
+      <button class="lang-btn" data-lang="de">Deutsch</button>
+    </div>
   </div>
   <div class="onboard-step" id="step-intro">
     <img src="image2.png" alt="Julie souriante">
@@ -99,15 +99,35 @@
     </div>
   </div>
 
-  <!-- Static sections -->
+  <!-- Section: Services List -->
   <div class="section static-section" id="section-services">
-    <h3>Services de l'hôtel (test)</h3>
-    <p>- Room Service<br>- Blanchisserie<br>- Réception 24h/24</p>
+    <h3>Services de l'hôtel</h3>
+    <div class="service-list">
+      <button data-detail="detail-roomservice">Room Service</button>
+      <button data-detail="detail-blanchisserie">Blanchisserie</button>
+      <button data-detail="detail-reception">Réception 24h/24</button>
+    </div>
+  </div>
+  <!-- Section: Livret -->
+  <div class="section static-section" id="section-livret">
+    <h3>Livret d'accueil</h3>
+    <p>Bienvenue dans votre chambre ! Informations pratiques et règles de l'hôtel.</p>
     <button class="btn-chat-start">Lancer le chat</button>
   </div>
-  <div class="section static-section" id="section-livret">
-    <h3>Livret d'accueil (test)</h3>
-    <p>Bienvenue dans votre chambre ! Informations pratiques et règles de l'hôtel.</p>
+  <!-- Detail pages for each service -->
+  <div class="section static-section" id="detail-roomservice">
+    <h3>Room Service</h3>
+    <p>Menu du room service (test) : Pizza, Salade, Boissons.</p>
+    <button class="btn-chat-start">Lancer le chat</button>
+  </div>
+  <div class="section static-section" id="detail-blanchisserie">
+    <h3>Blanchisserie</h3>
+    <p>Procédure de blanchisserie : Remplissez le formulaire, déposez vos vêtements.</p>
+    <button class="btn-chat-start">Lancer le chat</button>
+  </div>
+  <div class="section static-section" id="detail-reception">
+    <h3>Réception 24h/24</h3>
+    <p>Contactez la réception pour tout besoin, disponible 24h/24.</p>
     <button class="btn-chat-start">Lancer le chat</button>
   </div>
 
@@ -120,7 +140,17 @@
   </div>
 
   <script>
-    // Variables & DOM refs
+    // DOM refs
+    const headerBackBtn = document.getElementById('header-back-btn');
+    const stepLang = document.getElementById('step-language');
+    const stepIntro = document.getElementById('step-intro');
+    const stepCta  = document.getElementById('step-cta');
+    const sections = document.querySelectorAll('.section, .chat-scroll, .onboard-step');
+    const chatScroll = document.getElementById('chat');
+    const chatInputArea = document.getElementById('chat-input-area');
+    const inputEl = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+
     let selectedLanguage = 'fr';
     const languageTexts = {
       fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." },
@@ -128,20 +158,32 @@
       es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." },
       de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." }
     };
-    const headerBackBtn = document.getElementById('header-back-btn');
-    const stepLang = document.getElementById('step-language');
-    const stepIntro = document.getElementById('step-intro');
-    const stepCta  = document.getElementById('step-cta');
-    const sections = document.querySelectorAll('.section');
-    const chatScroll = document.getElementById('chat');
-    const chatInputArea = document.getElementById('chat-input-area');
-    const inputEl = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const ariaStatus = document.getElementById('aria-status');
     const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
     localStorage.setItem('chatSession', sessionId);
+    const ariaStatus = document.getElementById('aria-status');
 
-    // Onboarding handlers
+    // Hide all views
+    function hideAll() {
+      document.querySelectorAll('.static-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.chat-scroll').forEach(el => el.classList.remove('active'));
+      chatInputArea.classList.remove('active');
+      document.querySelectorAll('.onboard-step').forEach(el => el.classList.remove('active'));
+    }
+    // Show specific section by id
+    function showSection(id) {
+      hideAll();
+      document.getElementById(id).classList.add('active');
+      headerBackBtn.style.display = 'block';
+    }
+    // Show chat
+    function showChat() {
+      hideAll();
+      chatScroll.classList.add('active');
+      chatInputArea.classList.add('active');
+      headerBackBtn.style.display = 'none';
+    }
+
+    // Onboarding: language selection
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         selectedLanguage = btn.dataset.lang;
@@ -156,28 +198,35 @@
     });
     document.querySelectorAll('#step-cta [data-cta]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const action = btn.dataset.cta;
-        stepCta.classList.remove('active');
-        if (action === 'chat') return showChat();
-        sections.forEach(sec => sec.classList.remove('active'));
-        document.getElementById(action).classList.add('active');
-        headerBackBtn.style.display = 'block';
+        const target = btn.dataset.cta;
+        if (target === 'chat') return showChat();
+        showSection(target);
       });
     });
+    // Static-section service list
+    document.querySelectorAll('.service-list button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        showSection(btn.dataset.detail);
+      });
+    });
+    // Lancer chat from static
     document.querySelectorAll('.btn-chat-start').forEach(btn => {
       btn.addEventListener('click', showChat);
     });
-    headerBackBtn.addEventListener('click', showChat);
-
-    // Show chat
-    function showChat() {
-      sections.forEach(sec => sec.classList.remove('active'));
-      chatScroll.classList.add('active');
-      chatInputArea.classList.add('active');
+    // Back button
+    headerBackBtn.addEventListener('click', () => {
+      // if in detail, go back to services
+      const active = document.querySelector('.section.active');
+      if (active && active.id.startsWith('detail-')) {
+        return showSection('section-services');
+      }
+      // else back to CTA
+      hideAll();
+      stepCta.classList.add('active');
       headerBackBtn.style.display = 'none';
-    }
+    });
 
-    // Chat functions (linkify, sendMessage, etc.) omitted for brevity
+    // Chat functions (omitted for brevity)
   </script>
 </body>
 </html>
