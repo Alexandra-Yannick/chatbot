@@ -16,160 +16,186 @@
       --radius: 12px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; background: var(--color-bg); font-family: var(--font-family); font-size: var(--font-base); overflow: hidden; }
+    body, html { height: 100%; font-family: var(--font-family); background: var(--color-bg); }
     body { display: flex; flex-direction: column; }
 
     /* Common header */
-    .chat-header { display: flex; align-items: center; justify-content: center; position: relative; background: var(--color-primary); color: #fff; padding: 1rem; font-size: 1.125rem; font-weight: bold; }
-    #header-back-btn { position: absolute; left: 1rem; background: none; border: none; font-size: 1.5rem; color: #fff; cursor: pointer; display: none; }
+    .chat-header {
+      background: var(--color-primary);
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.125rem;
+      font-weight: bold;
+      position: relative;
+    }
+    #header-back-btn {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+      display: none;
+    }
 
-    /* Onboarding */
-    .onboard-step { position: fixed; inset: 0; background: rgba(255,255,255,0.95); display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 100; padding: 20px; }
-    .onboard-step.active { display: flex; }
-    .onboard-step img { width: 120px; margin-bottom: 16px; }
-    .onboard-step h2 { font-size: 1.5rem; color: var(--color-text-dark); margin-bottom: 8px; }
-    .onboard-step p { font-size: 1rem; color: var(--color-text); margin-bottom: 16px; }
-    .btn-primary { background: var(--color-primary); color: #fff; padding: 0.75rem 1.5rem; border: none; border-radius: 24px; cursor: pointer; }
-    .btn-primary:hover { background: var(--color-primary-hover); }
-    #step-language { background: rgba(96,192,230,0.95); color: #fff; }
-    #step-language p { font-size: 1.125rem; margin-bottom: 1rem; }
-    .language-selection button { margin: 0.25rem; padding: 0.5rem 1rem; font-size: 0.875rem; border: none; border-radius: var(--radius); background: var(--color-primary); color: #fff; cursor: pointer; }
-    .language-selection button:hover { background: var(--color-primary-hover); }
-    #step-cta .cta-options { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1rem; }
-    #step-cta .cta-options button { padding: 0.75rem; border: none; border-radius: 20px; background: var(--color-primary); color: #fff; font-size: 0.875rem; cursor: pointer; }
-    #step-cta .cta-options button:hover { background: var(--color-primary-hover); }
+    /* Container for chat and static */
+    .chat-container {
+      flex: 1;
+      margin: 1rem;
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
 
-    /* Static & chat sections */
+    /* Sections */
     .section { display: none; flex: 1; overflow-y: auto; padding: 1rem; }
     .section.active { display: block; }
     .static-section h3 { margin-bottom: 0.5rem; color: var(--color-text-dark); }
     .static-section p { margin-bottom: 1rem; color: var(--color-text); }
-    .btn-chat-start { background: var(--color-primary); color: #fff; padding: 0.5rem 1rem; border: none; border-radius: 20px; cursor: pointer; }
+    .btn-chat-start {
+      background: var(--color-primary);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
 
-    /* Services list styling */
+    /* Service list */
     .service-list { display: flex; flex-direction: column; gap: 0.5rem; }
-    .service-list button { text-align: left; padding: 0.75rem; border: none; border-radius: var(--radius); background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1); cursor: pointer; }
+    .service-list button {
+      text-align: left;
+      padding: 0.75rem;
+      border: none;
+      border-radius: var(--radius);
+      background: #f9f9f9;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
     .service-list button:hover { background: #f0f0f0; }
 
     /* Chat UI */
-    .chat-scroll { display: none; flex: 1; overflow-y: auto; padding: 0.75rem; display: flex; flex-direction: column; gap: 0.625rem; }
-    .chat-scroll.active { display: flex; }
-    .message-wrapper { display: flex; align-items: flex-end; gap: 0.5rem; }
-    .message { max-width: 75%; padding: 0.5rem; border-radius: var(--radius); font-size: 0.875rem; line-height: 1.4; }
-    .message.bot { background: #e5e5ea; color: #000; align-self: flex-start; }
-    .message.user { background: #007aff; color: #fff; align-self: flex-end; }
+    .chat-scroll { flex: 1; overflow-y: auto; padding: 1rem; display: none; background: #fff; }
+    .chat-scroll.active { display: flex; flex-direction: column; gap: 0.75rem; }
+    .message-wrapper {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+    .message {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.875rem;
+      line-height: 1.4;
+      max-width: 70%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .message.bot { background: #f2f2f7; color: #000; align-self: flex-start; }
+    .message.user { background: var(--color-primary); color: #fff; align-self: flex-end; }
 
-    .input-area { display: none; background: #fff; padding: 0.5rem; border-top: 1px solid #ccc; align-items: center; }
+    /* Input area */
+    .input-area {
+      display: none;
+      padding: 0.75rem;
+      border-top: 1px solid #eee;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
     .input-area.active { display: flex; }
-    .input-area input { flex: 1; padding: 0.5rem; border: 1px solid #ccc; border-radius: 20px; }
-    .input-area button { background: var(--color-primary); border: none; border-radius: 50%; width: 2.5rem; height: 2.5rem; margin-left: 0.5rem; display: flex; align-items: center; justify-content: center; }
+    .input-area input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      font-size: 0.9rem;
+    }
+    .input-area button {
+      background: var(--color-primary);
+      border: none;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .input-area button:hover { background: var(--color-primary-hover); }
   </style>
 </head>
 <body>
-  <a href="#chat" class="skip-link">Aller au chat</a>
-  <div id="aria-status" aria-live="polite" class="sr-only"></div>
-
   <div class="chat-header">
     <button id="header-back-btn" aria-label="Retour">‹</button>
     💬 Julie
   </div>
 
-  <!-- Onboarding -->
-  <div class="onboard-step active" id="step-language">
-    <p>Choisissez votre langue / Choose your language / Elige tu idioma / Wähle deine Sprache</p>
-    <div class="language-selection">
-      <button class="lang-btn" data-lang="fr">Français</button>
-      <button class="lang-btn" data-lang="en">English</button>
-      <button class="lang-btn" data-lang="es">Español</button>
-      <button class="lang-btn" data-lang="de">Deutsch</button>
+  <div class="chat-container">
+    <!-- Static and Chat Sections -->
+    <div id="section-services" class="section static-section">
+      <h3>Services de l'hôtel</h3>
+      <div class="service-list">
+        <button data-detail="detail-roomservice">Room Service</button>
+        <button data-detail="detail-blanchisserie">Blanchisserie</button>
+        <button data-detail="detail-reception">Réception 24h/24</button>
+      </div>
     </div>
-  </div>
-  <div class="onboard-step" id="step-intro">
-    <img src="image2.png" alt="Julie souriante">
-    <h2>Bienvenue !</h2>
-    <p>Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.</p>
-    <button class="btn-primary" id="btn-intro-next">Cool !</button>
-  </div>
-  <div class="onboard-step" id="step-cta">
-    <h2>Par où commencer ?</h2>
-    <div class="cta-options">
-      <button data-cta="section-services">Les services de mon hôtel</button>
-      <button data-cta="section-livret">Le livret d'accueil</button>
-      <button data-cta="chat">Revenir au chat</button>
+    <div id="section-livret" class="section static-section">
+      <h3>Livret d'accueil</h3>
+      <p>Bienvenue ! Informations et règles de l'hôtel.</p>
+      <button class="btn-chat-start">Lancer le chat</button>
     </div>
-  </div>
+    <div id="detail-roomservice" class="section static-section">
+      <h3>Room Service</h3>
+      <p>Menu test : Pizza, Salade, Boissons.</p>
+      <button class="btn-chat-start">Lancer le chat</button>
+    </div>
+    <div id="detail-blanchisserie" class="section static-section">
+      <h3>Blanchisserie</h3>
+      <p>Procédure test : Formulaire et dépôt.</p>
+      <button class="btn-chat-start">Lancer le chat</button>
+    </div>
+    <div id="detail-reception" class="section static-section">
+      <h3>Réception 24h/24</h3>
+      <p>Contactez la réception pour tout besoin.</p>
+      <button class="btn-chat-start">Lancer le chat</button>
+    </div>
 
-  <!-- Section: Services List -->
-  <div class="section static-section" id="section-services">
-    <h3>Services de l'hôtel</h3>
-    <div class="service-list">
-      <button data-detail="detail-roomservice">Room Service</button>
-      <button data-detail="detail-blanchisserie">Blanchisserie</button>
-      <button data-detail="detail-reception">Réception 24h/24</button>
+    <!-- Chat Interface -->
+    <div id="chat" class="chat-scroll"></div>
+    <div id="chat-input-area" class="input-area">
+      <input type="text" id="user-input" placeholder="Écris ton message ici..." />
+      <button id="send-btn">➤</button>
     </div>
-  </div>
-  <!-- Section: Livret -->
-  <div class="section static-section" id="section-livret">
-    <h3>Livret d'accueil</h3>
-    <p>Bienvenue dans votre chambre ! Informations pratiques et règles de l'hôtel.</p>
-    <button class="btn-chat-start">Lancer le chat</button>
-  </div>
-  <!-- Detail pages for each service -->
-  <div class="section static-section" id="detail-roomservice">
-    <h3>Room Service</h3>
-    <p>Menu du room service (test) : Pizza, Salade, Boissons.</p>
-    <button class="btn-chat-start">Lancer le chat</button>
-  </div>
-  <div class="section static-section" id="detail-blanchisserie">
-    <h3>Blanchisserie</h3>
-    <p>Procédure de blanchisserie : Remplissez le formulaire, déposez vos vêtements.</p>
-    <button class="btn-chat-start">Lancer le chat</button>
-  </div>
-  <div class="section static-section" id="detail-reception">
-    <h3>Réception 24h/24</h3>
-    <p>Contactez la réception pour tout besoin, disponible 24h/24.</p>
-    <button class="btn-chat-start">Lancer le chat</button>
-  </div>
-
-  <!-- Chat UI -->
-  <div class="chat-scroll" id="chat"></div>
-  <div class="input-area" id="chat-input-area">
-    <label for="user-input" class="sr-only">Message</label>
-    <input type="text" id="user-input" placeholder="Écris ton message ici..." />
-    <button id="send-btn">➤</button>
   </div>
 
   <script>
-    // DOM refs
+    // DOM references
     const headerBackBtn = document.getElementById('header-back-btn');
-    const stepLang = document.getElementById('step-language');
-    const stepIntro = document.getElementById('step-intro');
-    const stepCta  = document.getElementById('step-cta');
-    const sections = document.querySelectorAll('.section, .chat-scroll, .onboard-step');
+    const sections = document.querySelectorAll('.section');
     const chatScroll = document.getElementById('chat');
     const chatInputArea = document.getElementById('chat-input-area');
-    const inputEl = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
 
-    let selectedLanguage = 'fr';
-    const languageTexts = {
-      fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." },
-      en: { placeholder: "Type your message here...", typing: "Julie is typing..." },
-      es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." },
-      de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." }
-    };
-    const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
-    localStorage.setItem('chatSession', sessionId);
-    const ariaStatus = document.getElementById('aria-status');
-
-    // Hide all views
+    // Helper to hide all
     function hideAll() {
-      document.querySelectorAll('.static-section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.chat-scroll').forEach(el => el.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      chatScroll.classList.remove('active');
       chatInputArea.classList.remove('active');
-      document.querySelectorAll('.onboard-step').forEach(el => el.classList.remove('active'));
+      headerBackBtn.style.display = 'none';
     }
-    // Show specific section by id
+    // Show a section by id
     function showSection(id) {
       hideAll();
       document.getElementById(id).classList.add('active');
@@ -180,53 +206,27 @@
       hideAll();
       chatScroll.classList.add('active');
       chatInputArea.classList.add('active');
-      headerBackBtn.style.display = 'none';
     }
 
-    // Onboarding: language selection
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectedLanguage = btn.dataset.lang;
-        stepLang.classList.remove('active');
-        stepIntro.classList.add('active');
-        inputEl.placeholder = languageTexts[selectedLanguage].placeholder;
-      });
-    });
-    document.getElementById('btn-intro-next').addEventListener('click', () => {
-      stepIntro.classList.remove('active');
-      stepCta.classList.add('active');
-    });
-    document.querySelectorAll('#step-cta [data-cta]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.dataset.cta;
-        if (target === 'chat') return showChat();
-        showSection(target);
-      });
-    });
-    // Static-section service list
-    document.querySelectorAll('.service-list button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        showSection(btn.dataset.detail);
-      });
-    });
-    // Lancer chat from static
-    document.querySelectorAll('.btn-chat-start').forEach(btn => {
-      btn.addEventListener('click', showChat);
-    });
-    // Back button
+    // Back button logic
     headerBackBtn.addEventListener('click', () => {
-      // if in detail, go back to services
       const active = document.querySelector('.section.active');
       if (active && active.id.startsWith('detail-')) {
         return showSection('section-services');
       }
-      // else back to CTA
-      hideAll();
-      stepCta.classList.add('active');
-      headerBackBtn.style.display = 'none';
+      showChat();
     });
 
-    // Chat functions (omitted for brevity)
+    // Section navigation
+    document.querySelectorAll('.service-list button').forEach(btn => {
+      btn.addEventListener('click', () => showSection(btn.dataset.detail));
+    });
+    document.querySelectorAll('.btn-chat-start').forEach(btn => {
+      btn.addEventListener('click', showChat);
+    });
+
+    // Optional: Initialize at services list
+    showSection('section-services');
   </script>
 </body>
 </html>
