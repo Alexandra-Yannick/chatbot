@@ -6,20 +6,11 @@
   <title>Julie - Serial Chilleuse</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      height: 100%; background: #f2f2f7;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      overflow: hidden;
-    }
+    html, body { height: 100%; background: #f2f2f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overflow: hidden; }
     body { display: flex; flex-direction: column; }
+
     /* Onboarding overlays */
-    .onboard-step {
-      position: fixed; inset: 0;
-      background: rgba(255,255,255,0.95);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; z-index: 100; padding: 20px;
-    }
+    .onboard-step { position: fixed; inset: 0; background: rgba(255,255,255,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; z-index: 100; padding: 20px; }
     .onboard-step img { width: 120px; margin-bottom: 16px; }
     .onboard-step h2 { font-size: 24px; margin-bottom: 8px; color: #333; }
     .onboard-step p { font-size: 16px; color: #555; line-height: 1.4; margin-bottom: 24px; }
@@ -32,13 +23,9 @@
     .cta-options button { padding: 12px; border: none; border-radius: 20px; background: #7f5af0; color: #fff; font-size: 14px; cursor: pointer; }
     .cta-options button:hover { background: #6248c2; }
     .skip-btn { background: transparent; color: #7f5af0; margin-top: 12px; font-size: 14px; cursor: pointer; }
+
     /* Services carousel */
     .services-carousel { position: relative; display: none; align-items: center; background: #fff; flex-direction: row; padding: 8px 0; }
-    .back-btn {
-      position: absolute; top: 12px; left: 16px;
-      background: none; border: none;
-      font-size: 16px; color: #7f5af0; cursor: pointer; z-index: 10;
-    }
     .cards-container { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding: 0 40px; }
     .service-card { flex: 0 0 120px; background: #fff; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); padding: 12px; text-align: center; scroll-snap-align: start; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s; }
     .service-card:hover, .service-card:focus { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
@@ -48,8 +35,12 @@
     .nav-arrow { background: rgba(255,255,255,0.8); border: none; font-size: 24px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; }
     .nav-arrow.left { left: 8px; }
     .nav-arrow.right { right: 8px; }
+
+    /* Header with back button */
+    .chat-header { display: flex; align-items: center; justify-content: center; position: relative; background: #7f5af0; color: #fff; padding: 16px; font-size: 18px; font-weight: bold; flex-shrink: 0; }
+    #header-back-btn { position: absolute; left: 16px; background: none; border: none; font-size: 16px; color: #fff; cursor: pointer; display: none; }
+
     /* Chat UI */
-    .chat-header { background: #7f5af0; color: #fff; padding: 16px; text-align: center; font-size: 18px; font-weight: bold; flex-shrink: 0; }
     .chat-scroll { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
     .message-wrapper { display: flex; align-items: flex-end; gap: 8px; }
     .message { max-width: 75%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.4; word-break: break-word; animation: fadeIn 0.2s ease-in; }
@@ -76,8 +67,7 @@
   <div class="onboard-step" id="step-intro" style="display:none;">
     <img src="julie-avatar-animé.gif" alt="Julie qui vous sourit">
     <h2>Bienvenue !</h2>
-    <p>Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.<br>
-       Services, livret, bons plans locaux : je m’occupe de tout.</p>
+    <p>Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.<br>Services, livret, bons plans locaux : je m’occupe de tout.</p>
     <button class="btn-primary" id="btn-intro-next">Cool !</button>
   </div>
   <div class="onboard-step" id="step-cta" style="display:none;">
@@ -89,42 +79,34 @@
     </div>
     <button class="skip-btn" id="btn-cta-skip">Viens chatter</button>
   </div>
-  <!-- Chat and Services -->
-  <div class="chat-header">💬 Julie - Serial Chilleuse</div>
+
+  <!-- Chat header with back button -->
+  <div class="chat-header">
+    <button id="header-back-btn" aria-label="Retour">← Retour</button>
+    💬 Julie - Serial Chilleuse
+  </div>
+
+  <!-- Services carousel -->
   <div class="services-carousel" id="services-carousel">
-    <button class="back-btn" id="services-back-btn" aria-label="Retour">← Retour</button>
     <button class="nav-arrow left" aria-label="Précédent">‹</button>
     <div class="cards-container">
-      <div class="service-card" data-service="Room Service">
-        <img src="icons/room-service.svg" alt="Room Service" class="service-icon">
-        <span class="service-title">Room Service</span>
-        <small class="service-sub">Commander un repas</small>
-      </div>
-      <div class="service-card" data-service="Ménage">
-        <img src="icons/housekeeping.svg" alt="Ménage" class="service-icon">
-        <span class="service-title">Ménage</span>
-        <small class="service-sub">Demande de nettoyage</small>
-      </div>
-      <div class="service-card" data-service="Blanchisserie">
-        <img src="icons/laundry.svg" alt="Blanchisserie" class="service-icon">
-        <span class="service-title">Blanchisserie</span>
-        <small class="service-sub">Envoyer du linge</small>
-      </div>
-      <div class="service-card" data-service="Spa & Bien-être">
-        <img src="icons/spa.svg" alt="Spa & Bien-être" class="service-icon">
-        <span class="service-title">Spa & Bien-être</span>
-        <small class="service-sub">Réserver un soin</small>
-      </div>
+      <div class="service-card" data-service="Room Service"><img src="icons/room-service.svg" alt="Room Service" class="service-icon"><span class="service-title">Room Service</span><small class="service-sub">Commander un repas</small></div>
+      <div class="service-card" data-service="Ménage"><img src="icons/housekeeping.svg" alt="Ménage" class="service-icon"><span class="service-title">Ménage</span><small class="service-sub">Demande de nettoyage</small></div>
+      <div class="service-card" data-service="Blanchisserie"><img src="icons/laundry.svg" alt="Blanchisserie" class="service-icon"><span class="service-title">Blanchisserie</span><small class="service-sub">Envoyer du linge</small></div>
+      <div class="service-card" data-service="Spa & Bien-être"><img src="icons/spa.svg" alt="Spa & Bien-être" class="service-icon"><span class="service-title">Spa & Bien-être</span><small class="service-sub">Réserver un soin</small></div>
     </div>
     <button class="nav-arrow right" aria-label="Suivant">›</button>
   </div>
+
+  <!-- Chat messages -->
   <div class="chat-scroll" id="chat"></div>
   <div class="input-area">
     <input type="text" id="user-input" placeholder="Écris ton message ici...">
     <button onclick="sendMessage()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3v7l15 2-15 2z"/></svg></button>
   </div>
+
   <script>
-    // Dynamic map link and linkify
+    // Map link & linkify
     function generateMapLink(text) {
       const regex = /situé(?:s)? au ([^\.]+)/i;
       const match = regex.exec(text);
@@ -135,14 +117,10 @@
       if (text.includes("c'est par ici")) text = text.replace("c'est par ici", generateMapLink(text));
       return text.replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$1" target="_blank">$1</a>');
     }
+
     // Chat functions
     let selectedLanguage = 'fr';
-    const languageTexts = {
-      fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." },
-      en: { placeholder: "Type your message here...", typing: "Julie is typing..." },
-      es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." },
-      de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." }
-    };
+    const languageTexts = { fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." }, en: { placeholder: "Type your message here...", typing: "Julie is typing..." }, es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." }, de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." } };
     function updatePlaceholder() { document.getElementById('user-input').placeholder = languageTexts[selectedLanguage].placeholder; }
     function addMessage(content, sender) {
       const clean = content.replace(/\*\*/g,'').replace(/\n+/g,' ');
@@ -153,15 +131,12 @@
       document.getElementById('chat').appendChild(wrap);
       document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight;
     }
-    function showTyping() { const t=document.createElement('div'); t.id='typing'; t.className='typing'; t.textContent=languageTexts[selectedLanguage].typing; document.getElementById('chat').appendChild(t); document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight; }
-    function removeTyping() { const t=document.getElementById('typing'); if(t) t.remove(); }
-    function sendMessage() {
-      const inp=document.getElementById('user-input'), txt=inp.value.trim(); if(!txt) return; addMessage(txt,'user'); inp.value=''; showTyping();
-      fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt,sessionId:localStorage.getItem('chatSession'),language:selectedLanguage})})
-        .then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); })
-        .catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e); }); }
-    document.getElementById('user-input').addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(); });
+    function showTyping(){ const t=document.createElement('div'); t.id='typing'; t.className='typing'; t.textContent=languageTexts[selectedLanguage].typing; document.getElementById('chat').appendChild(t); document.querySelector('.chat-scroll').scrollTop=document.querySelector('.chat-scroll').scrollHeight; }
+    function removeTyping(){ const t=document.getElementById('typing'); if(t) t.remove(); }
+    function sendMessage(){ const inp=document.getElementById('user-input'), txt=inp.value.trim(); if(!txt) return; addMessage(txt,'user'); inp.value=''; showTyping(); fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:txt,sessionId:localStorage.getItem('chatSession'),language:selectedLanguage})}).then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot');}).catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e);}); }
+    document.getElementById('user-input').addEventListener('keydown',e=>{ if(e.key==='Enter') sendMessage(); });
     const sessionId = localStorage.getItem('chatSession')||crypto.randomUUID(); localStorage.setItem('chatSession',sessionId);
+
     // Onboarding logic
     const stepLang=document.getElementById('step-language'), stepIntro=document.getElementById('step-intro'), stepCta=document.getElementById('step-cta');
     function finishOnboarding(){ localStorage.setItem('onboardSeen','true'); [stepLang,stepIntro,stepCta].forEach(s=>s.style.display='none'); updatePlaceholder(); }
@@ -170,14 +145,13 @@
     document.getElementById('btn-intro-next').onclick=()=>{ stepIntro.style.display='none'; stepCta.style.display='flex'; };
     document.querySelectorAll('#step-cta .cta-options button').forEach(b=>b.onclick=()=>{ const c=b.dataset.cta; stepCta.style.display='none'; finishOnboarding(); if(c==='show-services') showServices(); else { addMessage(c,'user'); showTyping(); sendCTA(c); }});
     document.getElementById('btn-cta-skip').onclick=finishOnboarding;
+
     // Carousel controls
-    function showServices(){ document.getElementById('services-carousel').style.display='flex'; }
-    const cont=document.querySelector('.cards-container');
-    document.querySelector('.nav-arrow.left').onclick=()=>cont.scrollBy({ left:-150, behavior:'smooth' });
-    document.querySelector('.nav-arrow.right').onclick=()=>cont.scrollBy({ left:150, behavior:'smooth' });
-    document.getElementById('services-back-btn').onclick=()=>{ document.getElementById('services-carousel').style.display='none'; stepCta.style.display='flex'; };
-    document.querySelectorAll('.service-card').forEach(card=>card.onclick=()=>{ const svc=card.dataset.service; document.getElementById('services-carousel').style.display='none'; addMessage(svc,'user'); showTyping(); sendCTA(svc); });
-    function sendCTA(text){ fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,sessionId:sessionId,language:selectedLanguage})}) .then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); }).catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e); }); }
+    function showServices(){ document.getElementById('services-carousel').style.display='flex'; document.getElementById('header-back-btn').style.display='block'; }
+    const cont=document.querySelector('.cards-container'); document.querySelector('.nav-arrow.left').onclick=()=>cont.scrollBy({ left:-150, behavior:'smooth' }); document.querySelector('.nav-arrow.right').onclick=()=>cont.scrollBy({ left:150, behavior:'smooth' });
+    document.getElementById('header-back-btn').onclick=()=>{ document.getElementById('services-carousel').style.display='none'; document.getElementById('header-back-btn').style.display='none'; stepCta.style.display='flex'; };
+    document.querySelectorAll('.service-card').forEach(card=>card.onclick=()=>{ const svc=card.dataset.service; document.getElementById('services-carousel').style.display='none'; document.getElementById('header-back-btn').style.display='none'; addMessage(svc,'user'); showTyping(); sendCTA(svc); });
+    function sendCTA(text){ fetch('https://c842-2001-861-2cab-2ce0-70c5-b21f-76d2-20c5.ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,sessionId:sessionId,language:selectedLanguage})}).then(r=>r.json()).then(data=>{ removeTyping(); addMessage(data.response||(data[0]&&data[0].output)||data.message||"Je n'ai pas compris 😅",'bot'); }).catch(e=>{ removeTyping(); addMessage("Erreur de connexion 😓",'bot'); console.error(e); }); }
   </script>
 </body>
 </html>
