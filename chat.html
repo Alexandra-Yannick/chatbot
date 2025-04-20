@@ -28,6 +28,7 @@
       height: 4rem;
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 0 1rem;
       background: var(--color-primary);
       color: #fff;
@@ -37,12 +38,15 @@
       z-index: 200;
     }
     #header-back-btn {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
       background: none;
       border: none;
       color: #fff;
       font-size: 1.5rem;
       cursor: pointer;
-      margin-right: 1rem;
     }
     .header-title { flex: 1; text-align: center; }
 
@@ -105,7 +109,7 @@
 
     /* Messages */
     .message-wrapper { display: flex; width: 100%; align-items: flex-end; gap: .75rem; }
-    .message-wrapper.bot { justify-content: center; }
+    .message-wrapper.bot { justify-content: flex-start; }
     .message-wrapper.user { justify-content: flex-end; }
     .message {
       max-width: 70%;
@@ -219,56 +223,19 @@
         de: { introTitle:'Willkommen!', introText:"Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle:'Wo anfangen?', services:'Hoteldienstleistungen', livret:'Gästebuch', chat:'Chat', placeholder:'Nachricht eingeben…' }
       };
       let lang = 'fr';
+
       function hideAll() {
         [stepLang, stepIntro, stepCta, secServices, secLivret].forEach(el => el.classList.remove('active'));
         chatScroll.classList.remove('active');
         chatForm.classList.remove('active');
       }
-      function show(el) { hideAll(); el.classList.add('active'); headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible'; }
-      function showChat() {
-        hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.placeholder = texts[lang].placeholder; inputEl.focus(); headerBackBtn.style.visibility = 'visible';
+      function show(el) {
+        hideAll();
+        el.classList.add('active');
+        headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
       }
-      // init
-      show(stepLang);
-      // language selection
-      document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => {
-        lang = btn.dataset.lang;
-        document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
-        document.getElementById('intro-text').innerHTML = texts[lang].introText;
-        document.getElementById('cta-title').textContent = texts[lang].ctaTitle;
-        btnServices.textContent = texts[lang].services;
-        btnLivret.textContent = texts[lang].livret;
-        btnChat.textContent = texts[lang].chat;
-        show(stepIntro);
-      }));
-      // intro next
-      document.getElementById('btn-intro-next').addEventListener('click', () => show(stepCta));
-      // CTA buttons
-      btnServices.addEventListener('click', () => show(secServices));
-      btnLivret.addEventListener('click', () => show(secLivret));
-      btnChat.addEventListener('click', showChat);
-      // back button
-      headerBackBtn.addEventListener('click', () => {
-        if (secServices.classList.contains('active') || secLivret.classList.contains('active')) return show(stepCta);
-        if (chatScroll.classList.contains('active')) return show(stepCta);
-        if (stepIntro.classList.contains('active')) return show(stepLang);
-        if (stepCta.classList.contains('active')) return show(stepIntro);
-      });
-      // chat logic
-      function addMessage(txt, sender) { const w = document.createElement('div'); w.className = 'message-wrapper ' + sender; const m = document.createElement('div'); m.className = 'message ' + sender; m.innerHTML = txt; w.appendChild(m); chatScroll.appendChild(w); chatScroll.scrollTop = chatScroll.scrollHeight; }
-      chatForm.addEventListener('submit', async e => {
-        e.preventDefault(); const t = inputEl.value.trim(); if (!t) return;
-        addMessage(t, 'user'); inputEl.value = '';
-        addMessage('Julie réfléchit…', 'bot');
-        try {
-          const res = await fetch('https://YOUR_WEBHOOK_URL', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: t, language: lang }) });
-          const data = await res.json();
-          const tip = document.querySelector('.message-wrapper.bot:last-child .message'); if (tip) tip.innerHTML = data.response || data.message;
-        } catch {
-          addMessage('Erreur de connexion 😓', 'bot');
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+      function showChat() {
+        hideAll();
+        chatScroll.classList.add('active');
+        chatForm.classList.add('active');
+        inputEl.placeholder Weiterlesen.Indent?**
