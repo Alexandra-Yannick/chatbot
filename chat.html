@@ -55,7 +55,7 @@
     }
 
     /* Onboarding */
-    .onboard-step { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1rem; }
+    .onboard-step { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 100; flex: 1; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1rem; }
     .onboard-step.active { display: flex; }
     .onboard-step p, .onboard-step h2 { margin-bottom: 1rem; }
     .onboard-step img { width: 120px; margin-bottom: 1rem; }
@@ -92,7 +92,7 @@
     /* Input area */
     form#chat-form { display: none; }
     form#chat-form.active { display: flex; }
-    .input-area { display: flex; width: 100%; align-items: center; gap: 0.75rem; }
+    .input-area { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #fff; border-top: 1px solid #eee; }
     .input-area input { flex: 1; padding: 0.75rem 1rem; border: 1px solid #ccc; border-radius: 30px; outline: none; }
     .input-area button { background: var(--color-primary); border: none; border-radius: 50%; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; cursor: pointer; }
     .input-area button:hover { background: var(--color-primary-hover); }
@@ -105,7 +105,7 @@
   </div>
 
   <!-- Onboarding -->
-  <div id="step-language" class="onboard-step active">
+  <div id="step-language" class="onboard-step">
     <p>Choisissez votre langue / Choose your language / Elige tu idioma / Wähle deine Sprache</p>
     <button class="lang-btn" data-lang="fr">Français</button>
     <button class="lang-btn" data-lang="en">English</button>
@@ -138,26 +138,10 @@
         <button data-detail="detail-reception">Réception 24h/24</button>
       </div>
     </div>
-    <div id="section-livret" class="section static-section">
-      <h3>Livret d'accueil</h3>
-      <p>Bienvenue ! Informations et règles de l'hôtel.</p>
-      <button class="btn-chat-start">Lancer le chat</button>
-    </div>
-    <div id="detail-roomservice" class="section static-section">
-      <h3>Room Service</h3>
-      <p>Menu test : Pizza, Salade, Boissons.</p>
-      <button class="btn-chat-start">Lancer le chat</button>
-    </div>
-    <div id="detail-blanchisserie" class="section static-section">
-      <h3>Blanchisserie</h3>
-      <p>Procédure test : Formulaire et dépôt.</p>
-      <button class="btn-chat-start">Lancer le chat</button>
-    </div>
-    <div id="detail-reception" class="section static-section">
-      <h3>Réception 24h/24</h3>
-      <p>Contactez la réception pour tout besoin.</p>
-      <button class="btn-chat-start">Lancer le chat</button>
-    </div>
+    <div id="section-livret" class="section static-section"></div>
+    <div id="detail-roomservice" class="section static-section"></div>
+    <div id="detail-blanchisserie" class="section static-section"></div>
+    <div id="detail-reception" class="section static-section"></div>
 
     <!-- Chat Interface -->
     <div id="chat" class="chat-scroll"></div>
@@ -170,84 +154,115 @@
   </div>
 
   <script>
-    const headerBackBtn = document.getElementById('header-back-btn');
-    const stepLang = document.getElementById('step-language');
-    const stepIntro = document.getElementById('step-intro');
-    const stepCta = document.getElementById('step-cta');
-    const sections = document.querySelectorAll('.section');
-    const chatScroll = document.getElementById('chat');
-    const chatForm = document.getElementById('chat-form');
-    const chatInputArea = document.querySelector('.input-area');
-    const inputEl = document.getElementById('user-input');
+    document.addEventListener('DOMContentLoaded', () => {
+      const headerBackBtn = document.getElementById('header-back-btn');
+      const stepLang = document.getElementById('step-language');
+      const stepIntro = document.getElementById('step-intro');
+      const stepCta = document.getElementById('step-cta');
+      const sections = document.querySelectorAll('.section');
+      const chatScroll = document.getElementById('chat');
+      const chatForm = document.getElementById('chat-form');
+      const chatInputArea = document.querySelector('.input-area');
+      const inputEl = document.getElementById('user-input');
 
-    let selectedLanguage = 'fr';
-    const languageTexts = {
-      fr: { placeholder: "Écris ton message ici...", typing: "Julie est en train de répondre..." },
-      en: { placeholder: "Type your message here...", typing: "Julie is typing..." },
-      es: { placeholder: "Escribe tu mensaje aquí...", typing: "Julie está respondiendo..." },
-      de: { placeholder: "Schreib deine Nachricht hier...", typing: "Julie antwortet gerade..." }
-    };
+      let selectedLanguage = 'fr';
+      const languageTexts = {
+        fr: { placeholder: "Écris ton message ici..." },
+        en: { placeholder: "Type your message here..." },
+        es: { placeholder: "Escribe tu mensaje aquí..." },
+        de: { placeholder: "Schreib deine Nachricht hier..." }
+      };
 
-    function hideAll() {
-      [stepLang, stepIntro, stepCta, ...sections].forEach(el => el.classList.remove('active'));
-      chatScroll.classList.remove('active');
-      chatForm.classList.remove('active');
-      headerBackBtn.style.display = 'none';
-    }
+      function hideAll() {
+        [stepLang, stepIntro, stepCta, ...sections].forEach(el => el.classList.remove('active'));
+        chatScroll.classList.remove('active');
+        chatForm.classList.remove('active');
+        headerBackBtn.style.display = 'none';
+      }
 
-    function showChat() {
+      function showChat() {
+        hideAll();
+        chatScroll.classList.add('active');
+        chatForm.classList.add('active');
+        inputEl.focus();
+      }
+
+      function showSection(id) {
+        hideAll();
+        document.getElementById(id).classList.add('active');
+        headerBackBtn.style.display = 'block';
+      }
+
+      // Initialize on language step
       hideAll();
-      chatScroll.classList.add('active');
-      chatForm.classList.add('active');
-      inputEl.focus();
-    }
+      stepLang.classList.add('active');
 
-    function showSection(id) {
-      hideAll();
-      document.getElementById(id).classList.add('active');
-      headerBackBtn.style.display = 'block';
-    }
+      // Onboarding handlers
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          selectedLanguage = btn.dataset.lang;
+          inputEl.placeholder = languageTexts[selectedLanguage].placeholder;
+          hideAll();
+          stepIntro.classList.add('active');
+        });
+      });
 
-    // Onboarding
-    hideAll(); stepLang.classList.add('active');
-    document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => {
-      selectedLanguage = btn.dataset.lang;
-      inputEl.placeholder = languageTexts[selectedLanguage].placeholder;
-      hideAll(); stepIntro.classList.add('active');
-    }));
+      document.getElementById('btn-intro-next').addEventListener('click', () => {
+        hideAll();
+        stepCta.classList.add('active');
+      });
 
-    document.getElementById('btn-intro-next').addEventListener('click', () => {
-      hideAll(); stepCta.classList.add('active');
-    });
-    document.getElementById('btn-cta-skip').addEventListener('click', showChat);
-    document.querySelectorAll('#step-cta button[data-cta]').forEach(btn => btn.addEventListener('click', () => {
-      const action = btn.dataset.cta;
-      if (action === 'chat') return showChat();
-      showSection(action);
-    }));
+      document.getElementById('btn-cta-skip').addEventListener('click', showChat);
 
-    // Sections navigation
-    document.querySelectorAll('.service-list button').forEach(btn => btn.addEventListener('click', () => showSection(btn.dataset.detail)));
-    document.querySelectorAll('.btn-chat-start').forEach(btn => btn.addEventListener('click', showChat));
+      document.querySelectorAll('#step-cta button[data-cta]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const action = btn.dataset.cta;
+          if (action === 'chat') return showChat();
+          // load static content dynamically if empty
+          const sect = document.getElementById(action);
+          if (sect.innerHTML.trim() === '') {
+            if (action === 'section-livret') {
+              sect.innerHTML = '<h3>Livret d\'accueil</h3><p>Infos et règles de l\'hôtel.</p><button class="btn-chat-start">Lancer le chat</button>';
+            }
+          }
+          showSection(action);
+          document.querySelectorAll('.btn-chat-start').forEach(b => b.addEventListener('click', showChat));
+        });
+      });
 
-    // Back button
-    headerBackBtn.addEventListener('click', () => {
-      const active = document.querySelector('.section.active');
-      if (active && active.id.startsWith('detail-')) return showSection('section-services');
-      hideAll(); stepCta.classList.add('active');
-    });
+      // Section navigation for services
+      document.querySelectorAll('.service-list button').forEach(btn => {
+        btn.addEventListener('click', () => showSection(btn.dataset.detail));
+      });
 
-    // Chat message handling
-    function addMessage(text, sender) {
-      const w = document.createElement('div'); w.className = 'message-wrapper';
-      const m = document.createElement('div'); m.className = 'message ' + sender; m.textContent = text;
-      w.appendChild(m); chatScroll.appendChild(w); chatScroll.scrollTop = chatScroll.scrollHeight;
-    }
-    chatForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const txt = inputEl.value.trim(); if (!txt) return;
-      addMessage(txt, 'user'); inputEl.value = '';
-      setTimeout(() => addMessage('Réponse test...', 'bot'), 800);
+      document.querySelectorAll('.btn-chat-start').forEach(btn => {
+        btn.addEventListener('click', showChat);
+      });
+
+      // Back button
+      headerBackBtn.addEventListener('click', () => {
+        const active = document.querySelector('.section.active');
+        if (active && active.id.startsWith('detail-')) return showSection('section-services');
+        hideAll();
+        stepCta.classList.add('active');
+      });
+
+      // Chat handling
+      function addMessage(text, sender) {
+        const w = document.createElement('div'); w.className = 'message-wrapper';
+        const m = document.createElement('div'); m.className = 'message ' + sender; m.textContent = text;
+        w.appendChild(m);
+        chatScroll.appendChild(w);
+        chatScroll.scrollTop = chatScroll.scrollHeight;
+      }
+
+      chatForm.addEventListener('submit', e => {
+        e.preventDefault();
+        const txt = inputEl.value.trim(); if (!txt) return;
+        addMessage(txt, 'user');
+        inputEl.value = '';
+        setTimeout(() => addMessage('Réponse test...', 'bot'), 800);
+      });
     });
   </script>
 </body>
