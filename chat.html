@@ -188,6 +188,8 @@
       }
       function show(el) { hideAll(); el.classList.add('active'); headerBackBtn.style.visibility = el===stepLang?'hidden':'visible'; }
       function showChat() { hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.focus(); }
+      
+      addMessage("Salut ! Comment puis-je vous aider aujourd'hui ?", 'bot');
 
       show(stepLang);
       document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => show(stepIntro)));
