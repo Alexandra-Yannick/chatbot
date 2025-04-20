@@ -18,12 +18,6 @@
     html, body { height: 100%; background: var(--color-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { display: flex; flex-direction: column; padding-top: 4rem; }
 
-    /* Center section headings */
-.section h2 {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
     /* Header */
     .chat-header {
       position: fixed; top: 0; left: 0; right: 0; height: 4rem;
@@ -90,6 +84,11 @@
       gap: 1rem;
       margin-top: 1rem;
     }
+    /* Center section headings */
+    .section h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
     .service-tile {
       display: flex; flex-direction: column; align-items: center;
       padding: .75rem; background: #fff;
@@ -140,17 +139,13 @@
           <img src="room.png" alt="Room Service">
           <span>Room Service</span>
         </div>
-        <div class="service-tile" data-detail="detail-petitdejeuner">
-          <img src="petit-dejeuner.png" alt="Petit-déjeuner">
-          <span>Petit-déjeuner</span>
+        <div class="service-tile" data-detail="detail-blanchisserie">
+          <img src="laundry.png" alt="Blanchisserie">
+          <span>Blanchisserie</span>
         </div>
-        <div class="service-tile" data-detail="detail-menage">
-          <img src="menage.png" alt="Ménage">
-          <span>Service de ménage</span>
-        </div>
-        <div class="service-tile" data-detail="detail-spa">
-          <img src="spa.png" alt="Spa">
-          <span>Spa et bien-être</span>
+        <div class="service-tile" data-detail="detail-reception">
+          <img src="reception.png" alt="Réception">
+          <span>Réception 24h/24</span>
         </div>
       </div>
     </div>
@@ -182,23 +177,57 @@
       const btnChat = document.getElementById('btn-chat');
       const btnStartChat = document.getElementById('btn-start-chat');
 
+      // Fonction d'ajout de message
+      function addMessage(text, sender) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'message-wrapper ' + sender;
+        const msg = document.createElement('div');
+        msg.className = 'message ' + sender;
+        msg.innerHTML = text;
+        wrapper.appendChild(msg);
+        chatScroll.appendChild(wrapper);
+        chatScroll.scrollTop = chatScroll.scrollHeight;
+      }
+
       function hideAll() {
         [stepLang, stepIntro, stepCta, secServices, secLivret].forEach(el => el.classList.remove('active'));
-        chatScroll.classList.remove('active'); chatForm.classList.remove('active');
+        chatScroll.classList.remove('active');
+        chatForm.classList.remove('active');
       }
-      function show(el) { hideAll(); el.classList.add('active'); headerBackBtn.style.visibility = el===stepLang?'hidden':'visible'; }
-      function showChat() { hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.focus(); }
 
+      function show(el) {
+        hideAll();
+        el.classList.add('active');
+        headerBackBtn.style.visibility = (el === stepLang) ? 'hidden' : 'visible';
+      }
+
+      function showChat() {
+        hideAll();
+        chatScroll.classList.add('active');
+        chatForm.classList.add('active');
+        inputEl.focus();
+        // Premier message de Julie
+        
+      }
+
+      // Initialisation sur la page langue
       show(stepLang);
-      document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => show(stepIntro)));
+
+      // Sélection de la langue
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => show(stepIntro));
+      });
+
+      // Bouton Cool
       document.getElementById('btn-intro-next').addEventListener('click', () => show(stepCta));
+
+      // Boutons CTA
       btnServices.addEventListener('click', () => show(secServices));
       btnLivret.addEventListener('click', () => show(secLivret));
       btnChat.addEventListener('click', showChat);
       btnStartChat.addEventListener('click', showChat);
-      addMessage("Salut ! Comment puis-je vous aider aujourd'hui ?", 'bot');
-     
-      // Back button navigation
+
+      // Navigation retour
       headerBackBtn.addEventListener('click', () => {
         if (secServices.classList.contains('active') || secLivret.classList.contains('active')) {
           show(stepCta);
