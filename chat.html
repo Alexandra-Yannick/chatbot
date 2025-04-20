@@ -175,8 +175,7 @@
       function showChat() { hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.focus(); }
 
       show(stepLang);
-      document.querySelectorAll('.lang-btn')
-        .forEach(btn => btn.addEventListener('click', () => { stepLang.classList.remove('active'); stepIntro.classList.add('active'); }));
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => show(stepIntro)));
       document.getElementById('btn-intro-next').addEventListener('click', () => show(stepCta));
       btnServices.addEventListener('click', () => show(secServices));
       btnLivret.addEventListener('click', () => show(secLivret));
