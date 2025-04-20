@@ -196,7 +196,8 @@
       btnLivret.addEventListener('click', () => show(secLivret));
       btnChat.addEventListener('click', showChat);
       btnStartChat.addEventListener('click', showChat);
-      
+      addMessage("Salut ! Comment puis-je vous aider aujourd'hui ?", 'bot');
+     
       // Back button navigation
       headerBackBtn.addEventListener('click', () => {
         if (secServices.classList.contains('active') || secLivret.classList.contains('active')) {
@@ -206,8 +207,6 @@
         } else if (stepIntro.classList.contains('active')) {
           show(stepLang);
         }
-        
-      addMessage("Salut ! Comment puis-je vous aider aujourd'hui ?", 'bot');
       });
     });
   </script>
