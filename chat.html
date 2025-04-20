@@ -5,169 +5,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Julie - Serial Chilleuse</title>
   <style>
-    /* Styles inchangés */
-    :root { --color-primary: #60C0E6; --color-primary-hover: #468FCF; --color-bg: #F2F7FA; --radius:12px; }
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body, html { height:100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:var(--color-bg); }
-    body { display:flex; flex-direction:column; }
-    .chat-header{background:var(--color-primary);color:#fff;display:flex;align-items:center;position:relative;padding:1rem;font-size:1.25rem;font-weight:bold;}
-    #header-back-btn{position:absolute;left:1rem;top:50%;transform:translateY(-50%);background:none;border:none;font-size:1.5rem;color:#fff;cursor:pointer;display:none;padding:0.25rem;transition:background .2s;}
-    #header-back-btn:hover{background:rgba(255,255,255,0.2);border-radius:50%;}
-    .header-title{flex:1;text-align:center;}
-    .onboard-step{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.95);z-index:100;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem;}
-    .onboard-step.active{display:flex;}
-    .onboard-step img {
-  width: 150px;           /* largeur fixe */
-  height: auto;           /* conserve les proportions */
-  max-height: 200px;      /* ne dépasse jamais 200px de haut */
-  object-fit: contain;    /* pour éviter tout recadrage brutal */
-  margin-bottom: 1rem;
-}
-    .lang-btn, .btn-primary, .cta-options button{background:var(--color-primary);color:#fff;border:none;border-radius:var(--radius);padding:.75rem 1.5rem;cursor:pointer;margin:.5rem 0;width:70%;}
-    .lang-btn:hover, .btn-primary:hover, .cta-options button:hover{background:var(--color-primary-hover);}
-    .skip-btn{background:none;color:var(--color-primary);margin-top:1rem;cursor:pointer;}
-    .chat-container{flex:1;margin:1rem;background:#fff;border-radius:var(--radius);box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;}
-    .section{display:none;flex:1;overflow-y:auto;padding:1rem;background:#f9f9f9;}
-    .section.active{display:block;}
-    .service-list{display:flex;flex-direction:column;gap:.75rem;}
-    .service-list button{padding:1rem;background:#fff;border-radius:var(--radius);border:none;box-shadow:0 2px 6px rgba(0,0,0,0.05);text-align:left;cursor:pointer;}
-    .service-list button:hover{background:#f0f0f0;}
-    .btn-chat-start{background:var(--color-primary);color:#fff;padding:.6rem 1.2rem;border:none;border-radius:20px;cursor:pointer;}
-    .btn-chat-start:hover{background:var(--color-primary-hover);}
-    .chat-scroll{flex:1;overflow-y:auto;padding:1rem;display:none;flex-direction:column;gap:1rem;background:#f9f9f9;}
-    .chat-scroll.active{display:flex;}
-    .message-wrapper{display:flex;align-items:flex-end;gap:.75rem;}
-    .message{padding:.75rem 1rem;border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,0.1);max-width:70%;}
-    .message.bot{background:#fff;color:#333;}
-    .message.user{background:var(--color-primary);color:#fff;align-self:flex-end;}
-    form#chat-form{display:none;width:100%;}
-    form#chat-form.active{display:flex;}
-    .input-area{width:100%;display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:#fff;border-top:1px solid #eee;}
-    .input-area input{flex:1;padding:.75rem 1rem;border:1px solid #ccc;border-radius:30px;outline:none;}
-    .input-area button{background:var(--color-primary);border:none;border-radius:50%;width:2.5rem;height:2.5rem;color:#fff;font-size:1.2rem;cursor:pointer;}
-    .input-area button:hover{background:var(--color-primary-hover);}
+    :root {
+      --color-primary: #60C0E6;
+      --color-primary-hover: #468FCF;
+      --color-bg: #F2F7FA;
+      --bubble-user: #D0E8FF;
+      --bubble-bot: #FFFFFF;
+      --input-bg: #FFFFFF;
+      --radius: 20px;
+      --shadow: rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: var(--color-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { display: flex; flex-direction: column; }
+    .chat-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem; background: var(--color-primary);
+      color: #fff; font-size: 1.25rem; font-weight: bold;
+      box-shadow: 0 2px 4px var(--shadow);
+    }
+    .chat-header button {
+      background: none; border: none; color: #fff;
+      font-size: 1.5rem; cursor: pointer;
+    }
+    .header-title { flex: 1; text-align: center; }
+    .chat-container {
+      flex: 1; display: flex; flex-direction: column;
+      margin: 0.5rem; background: #fff;
+      border-radius: var(--radius); overflow: hidden;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+    .chat-scroll {
+      flex: 1; overflow-y: auto;
+      padding: 1rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      background: var(--color-bg);
+    }
+    .message-wrapper {
+      display: flex; width: 100%; align-items: flex-end; gap: 0.75rem;
+    }
+    .message-wrapper.bot { justify-content: flex-start; }
+    .message-wrapper.user { justify-content: flex-end; }
+    .message {
+      max-width: 70%; padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      box-shadow: 0 1px 3px var(--shadow);
+      position: relative;
+      line-height: 1.4;
+    }
+    .message.bot {
+      background: var(--bubble-bot);
+      color: #333;
+      border-top-left-radius: 4px;
+    }
+    .message.user {
+      background: var(--bubble-user);
+      color: #000;
+      border-top-right-radius: 4px;
+    }
+    .input-area {
+      display: flex; align-items: center;
+      padding: 0.75rem; background: var(--input-bg);
+      box-shadow: 0 -2px 4px var(--shadow);
+    }
+    .input-area .emoji-btn {
+      background: none; border: none; font-size: 1.5rem; margin-right: 0.5rem; cursor: pointer;
+    }
+    .input-area input {
+      flex: 1; padding: 0.75rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 30px;
+      outline: none;
+      margin-right: 0.5rem;
+    }
+    .input-area button.send-btn {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+      border: none; width: 2.5rem; height: 2.5rem;
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      color: #fff; font-size: 1.25rem; cursor: pointer;
+      box-shadow: 0 2px 4px var(--shadow);
+      transition: background 0.2s;
+    }
+    .input-area button.send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   </style>
 </head>
 <body>
   <div class="chat-header">
-    <button id="header-back-btn" aria-label="Retour">‹</button>
-    <div class="header-title">💬 Julie</div>
-  </div>
-  <!-- Onboarding -->
-  <div id="step-language" class="onboard-step">
-    <p>Choisissez votre langue / Choose your language / Elige tu idioma / Wähle deine Sprache</p>
-    <button class="lang-btn" data-lang="fr">Français</button>
-    <button class="lang-btn" data-lang="en">English</button>
-    <button class="lang-btn" data-lang="es">Español</button>
-    <button class="lang-btn" data-lang="de">Deutsch</button>
-  </div>
-  <div id="step-intro" class="onboard-step">
-    <img src="image2.png" alt="Julie souriante">
-    <h2>Bienvenue !</h2>
-    <p>Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.</p>
-    <button class="btn-primary" id="btn-intro-next">Cool !</button>
-  </div>
-  <div id="step-cta" class="onboard-step">
-    <h2>Comment puis-je vous aider ?</h2>
-    <div class="cta-options">
-      <button data-cta="section-services">Les services de mon hôtel</button>
-      <button data-cta="section-livret">Le livret d'accueil</button>
-      <button data-cta="chat">Bon plan local</button>
-    </div>
-    <button class="skip-btn" id="btn-cta-skip">Passer</button>
+    <button id="header-back-btn" aria-label="Retour">←</button>
+    <div class="header-title">Julie</div>
+    <button aria-label="Plus">⋯</button>
   </div>
   <div class="chat-container">
-    <div id="section-services" class="section static-section">
-      <h3>Services de l'hôtel</h3>
-      <div class="service-list">
-        <button data-detail="detail-roomservice">Room Service</button>
-        <button data-detail="detail-blanchisserie">Blanchisserie</button>
-        <button data-detail="detail-reception">Réception 24h/24</button>
-      </div>
-    </div>
-    <div id="section-livret" class="section static-section"></div>
-    <div id="detail-roomservice" class="section static-section"></div>
-    <div id="detail-blanchisserie" class="section static-section"></div>
-    <div id="detail-reception" class="section static-section"></div>
     <div id="chat" class="chat-scroll"></div>
-    <form id="chat-form">
-      <div class="input-area">
-        <input type="text" id="user-input" placeholder="Écris ton message ici..." autocomplete="off" />
-        <button type="submit">➤</button>
-      </div>
+    <form id="chat-form" class="input-area">
+      <button type="button" class="emoji-btn" aria-label="Emoji">😊</button>
+      <input type="text" id="user-input" placeholder="Message…" autocomplete="off" />
+      <button type="submit" class="send-btn" aria-label="Envoyer">➤</button>
     </form>
   </div>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const headerBackBtn = document.getElementById('header-back-btn');
-      const stepLang = document.getElementById('step-language');
-      const stepIntro = document.getElementById('step-intro');
-      const stepCta = document.getElementById('step-cta');
-      const sections = document.querySelectorAll('.section');
-      const chatScroll = document.getElementById('chat');
       const chatForm = document.getElementById('chat-form');
+      const chatScroll = document.getElementById('chat');
       const inputEl = document.getElementById('user-input');
 
-      const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
-      localStorage.setItem('chatSession', sessionId);
-      let selectedLanguage = 'fr';
-      const languageTexts = { fr:{},en:{},es:{},de:{} };
-
-      function hideAll() {
-        [stepLang,stepIntro,stepCta,...sections].forEach(el=>el.classList.remove('active'));
-        chatScroll.classList.remove('active'); chatForm.classList.remove('active');
-        headerBackBtn.style.display='none';
+      function addMessage(text, sender) {
+        const w = document.createElement('div');
+        w.className = 'message-wrapper ' + sender;
+        const m = document.createElement('div');
+        m.className = 'message ' + sender;
+        m.textContent = text;
+        w.appendChild(m);
+        chatScroll.appendChild(w);
+        chatScroll.scrollTop = chatScroll.scrollHeight;
       }
-      function showChat() {
-        hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.focus();
-      }
-      function showSection(id) { hideAll(); document.getElementById(id).classList.add('active'); headerBackBtn.style.display='block'; }
-
-      // init
-      hideAll(); stepLang.classList.add('active');
-
-      // onboarding
-      document.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click',()=>{
-        selectedLanguage=btn.dataset.lang;
-        hideAll(); stepIntro.classList.add('active');
-      }));
-      document.getElementById('btn-intro-next').addEventListener('click',()=>{hideAll();stepCta.classList.add('active');});
-      document.getElementById('btn-cta-skip').addEventListener('click',showChat);
-      document.querySelectorAll('#step-cta button[data-cta]').forEach(btn=>btn.addEventListener('click',()=>{
-        const action=btn.dataset.cta;
-        if(action==='chat')return showChat();
-        showSection(action);
-      }));
-      document.querySelectorAll('.service-list button').forEach(btn=>btn.addEventListener('click',()=>showSection(btn.dataset.detail)));
-      document.querySelectorAll('.btn-chat-start').forEach(btn=>btn.addEventListener('click',showChat));
-      headerBackBtn.addEventListener('click',()=>{
-        const active=document.querySelector('.section.active');
-        if(active&&active.id.startsWith('detail-'))return showSection('section-services');
-        hideAll(); stepCta.classList.add('active');
-      });
-
-      // chat requests
-      function addMessage(text,sender){
-        const w=document.createElement('div');w.className='message-wrapper';
-        const m=document.createElement('div');m.className='message '+sender;m.textContent=text;
-        w.appendChild(m);chatScroll.appendChild(w);chatScroll.scrollTop=chatScroll.scrollHeight;
-      }
-      chatForm.addEventListener('submit',async e=>{
-        e.preventDefault();const txt=inputEl.value.trim();if(!txt)return;
-        addMessage(txt,'user');inputEl.value='';
-        try{
-          const res=await fetch('https://c842-2001-861-2cab-2ce0-70c5-ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{
-            method:'POST',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({message:txt,sessionId,language:selectedLanguage})
+      chatForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const txt = inputEl.value.trim();
+        if (!txt) return;
+        addMessage(txt, 'user');
+        inputEl.value = '';
+        addMessage('Julie réfléchit…', 'bot');
+        try {
+          const res = await fetch('https://YOUR_WEBHOOK_URL', {
+            method: 'POST', headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ message: txt })
           });
-          const data=await res.json();
-          addMessage(data.response||data.message||'Je n\'ai pas compris 😅','bot');
-        }catch(err){
-          addMessage('Erreur de connexion 😓','bot');
+          const data = await res.json();
+          const typing = document.querySelector('.message-wrapper.bot:last-child');
+          if (typing) typing.querySelector('.message').textContent = data.response || data.message;
+        } catch {
+          addMessage('Erreur de connexion 😓', 'bot');
         }
       });
+      inputEl.focus();
     });
   </script>
 </body>
 </html>
-
