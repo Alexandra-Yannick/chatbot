@@ -79,117 +79,51 @@
   <div id="step-cta" class="onboard-step">
     <h2 id="cta-title">Par où commencer ?</h2>
     <div class="cta-options">
-      <button data-cta="section-services" id="btn-services">Services de l'hôtel</button>
-      <button data-cta="section-livret" id="btn-livret">Le livret d'accueil</button>
-      <button data-cta="chat" id="btn-chat">Viens discuter</button>
+      <button class="cta-btn" data-cta="section-services" id="btn-services">Services de l'hôtel</button>
+      <button class="cta-btn" data-cta="section-livret" id="btn-livret">Le livret d'accueil</button>
+      <button class="cta-btn" data-cta="chat" id="btn-chat">Viens discuter</button>
     </div>
   </div>
 
   <div class="chat-container">
-    <div id="section-services" class="section">
-      <h2>Services de l'hôtel</h2>
-      <div class="service-list">
-        <button data-detail="detail-roomservice">Room Service</button>
-        <button data-detail="detail-blanchisserie">Blanchisserie</button>
-        <button data-detail="detail-reception">Réception 24h/24</button>
-      </div>
-    </div>
-    <div id="section-livret" class="section">
-      <h2>Livret d'accueil</h2>
-      <p>Informations et règles de l'hôtel.</p>
-      <button class="btn-chat-start">Lancer le chat</button>
-    </div>
+    <div id="section-services" class="section"><h2>Services de l'hôtel</h2><div class="service-list"><button data-detail="detail-roomservice">Room Service</button><button data-detail="detail-blanchisserie">Blanchisserie</button><button data-detail="detail-reception">Réception 24h/24</button></div></div>
+    <div id="section-livret" class="section"><h2>Livret d'accueil</h2><p>Infos et règles.</p><button class="btn-chat-start">Lancer chat</button></div>
     <div id="chat" class="chat-scroll"></div>
-    <form id="chat-form" class="input-area">
-      <button type="button" class="emoji-btn">😊</button>
-      <input type="text" id="user-input" placeholder="Message…" autocomplete="off" />
-      <button type="submit" class="send-btn">➤</button>
-    </form>
+    <form id="chat-form" class="input-area"><button type="button" class="emoji-btn">😊</button><input type="text" id="user-input" placeholder="Message…" autocomplete="off"/><button type="submit" class="send-btn">➤</button></form>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const headerBackBtn = document.getElementById('header-back-btn');
-      const stepLang = document.getElementById('step-language');
-      const stepIntro = document.getElementById('step-intro');
-      const stepCta = document.getElementById('step-cta');
-      const secServices = document.getElementById('section-services');
-      const secLivret = document.getElementById('section-livret');
-      const chatScroll = document.getElementById('chat');
-      const chatForm = document.getElementById('chat-form');
-      const inputEl = document.getElementById('user-input');
-      const btnServices = document.getElementById('btn-services');
-      const btnLivret = document.getElementById('btn-livret');
-      const btnChat = document.getElementById('btn-chat');
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const headerBackBtn=document.getElementById('header-back-btn');
+      const stepLang=document.getElementById('step-language');
+      const stepIntro=document.getElementById('step-intro');
+      const stepCta=document.getElementById('step-cta');
+      const secServices=document.getElementById('section-services');
+      const secLivret=document.getElementById('section-livret');
+      const chatScroll=document.getElementById('chat');
+      const chatForm=document.getElementById('chat-form');
+      const inputEl=document.getElementById('user-input');
+      const btnServices=document.getElementById('btn-services');
+      const btnLivret=document.getElementById('btn-livret');
+      const btnChat=document.getElementById('btn-chat');
 
-      // Textes multilangues
-      const texts = {
-        fr: { introTitle: 'Bienvenue !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle: 'Par où commencer ?', services: 'Services de l'hôtel', livret: "Le livret d'accueil", chat: 'Viens discuter', placeholder: 'Écris votre message…' },
-        en: { introTitle: 'Welcome!', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle: 'Where to start?', services: 'Hotel services', livret: 'Guest booklet', chat: 'Chat', placeholder: 'Type your message…' },
-        es: { introTitle: '¡Bienvenido!', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar?', services: 'Servicios del hotel', livret: 'Folleto de bienvenida', chat: 'Chat', placeholder: 'Escribe tu mensaje…' },
-        de: { introTitle: 'Willkommen!', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen?', services: 'Hoteldienstleistungen', livret: 'Gästebuch', chat: 'Chat', placeholder: 'Nachricht eingeben…' }
-      };
-      let lang = 'fr';
+      const texts={fr:{introTitle:'Bienvenue !',introText:"Je suis <strong>Julie</strong>, concierge virtuelle.",ctaTitle:'Par où commencer ?',services:"Services de l'hôtel",livret:'Le livret d'accueil',chat:'Viens discuter',placeholder:'Écris votre message…'},en:{introTitle:'Welcome!',introText:"I'm <strong>Julie</strong>, your virtual concierge.",ctaTitle:'Where to start?',services:'Hotel services',livret:'Guest booklet',chat:'Chat',placeholder:'Type your message…'},es:{introTitle:'¡Bienvenido!',introText:"Soy <strong>Julie</strong>, tu conserje virtual.",ctaTitle:'¿Por dónde empezar?',services:'Servicios del hotel',livret:'Folleto de bienvenida',chat:'Chat',placeholder:'Escribe tu mensaje…'},de:{introTitle:'Willkommen!',introText:"Ich bin <strong>Julie</strong>, Ihre Concierge.",ctaTitle:'Wo anfangen?',services:'Hoteldienstleistungen',livret:'Gästebuch',chat:'Chat',placeholder:'Nachricht eingeben…'}};
+      let lang='fr';
+      function hideAll(){[stepLang,stepIntro,stepCta,secServices,secLivret].forEach(e=>e.classList.remove('active'));chatScroll.classList.remove('active');chatForm.classList.remove('active');}
+      function show(el){hideAll();el.classList.add('active');headerBackBtn.style.visibility=el===stepLang?'hidden':'visible';}
+      function showChat(){hideAll();chatScroll.classList.add('active');chatForm.classList.add('active');inputEl.placeholder=texts[lang].placeholder;inputEl.focus();headerBackBtn.style.visibility='visible';}
 
-      function hideAll() {
-        [stepLang, stepIntro, stepCta, secServices, secLivret].forEach(el => el.classList.remove('active'));
-        chatScroll.classList.remove('active'); chatForm.classList.remove('active');
-      }
-      function show(el) {
-        hideAll(); el.classList.add('active');
-        headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
-      }
-      function showChat() {
-        hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active');
-        inputEl.placeholder = texts[lang].placeholder; inputEl.focus();
-        headerBackBtn.style.visibility = 'visible';
-      }
-
-      // initialisation onboarding
       show(stepLang);
+      document.querySelectorAll('.lang-btn').forEach(b=>b.onclick=()=>{lang=b.dataset.lang;document.getElementById('intro-title').innerHTML=texts[lang].introTitle;document.getElementById('intro-text').innerHTML=texts[lang].introText;document.getElementById('cta-title').textContent=texts[lang].ctaTitle;btnServices.textContent=texts[lang].services;btnLivret.textContent=texts[lang].livret;btnChat.textContent=texts[lang].chat;show(stepIntro);});
+      document.getElementById('btn-intro-next').onclick=()=>show(stepCta);
+      btnServices.onclick=()=>show(secServices);btnLivret.onclick=()=>show(secLivret);btnChat.onclick=showChat;
+      headerBackBtn.onclick=()=>{if(secServices.classList.contains('active')||secLivret.classList.contains('active')||chatScroll.classList.contains('active'))return show(stepCta);if(stepIntro.classList.contains('active'))return show(stepLang);if(stepCta.classList.contains('active'))return show(stepIntro);};
 
-      // gestion du choix de langue
-      stepLang.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          lang = btn.dataset.lang;
-          document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
-          document.getElementById('intro-text').innerHTML = texts[lang].introText;
-          document.getElementById('cta-title').textContent = texts[lang].ctaTitle;
-          btnServices.textContent = texts[lang].services;
-          btnLivret.textContent = texts[lang].livret;
-          btnChat.textContent = texts[lang].chat;
-          show(stepIntro);
-        });
-      });
-
-      document.getElementById('btn-intro-next').addEventListener('click', () => show(stepCta));
-      btnServices.addEventListener('click', () => show(secServices));
-      btnLivret.addEventListener('click', () => show(secLivret));
-      btnChat.addEventListener('click', showChat);
-      headerBackBtn.addEventListener('click', () => {
-        if (secServices.classList.contains('active') || secLivret.classList.contains('active') || chatScroll.classList.contains('active')) return show(stepCta);
-        if (stepIntro.classList.contains('active')) return show(stepLang);
-        if (stepCta.classList.contains('active')) return show(stepIntro);
-      });
-
-      // chat
-      function addMessage(txt, sender) {
-        const w = document.createElement('div'); w.className = 'message-wrapper ' + sender;
-        const m = document.createElement('div'); m.className = 'message ' + sender; m.innerHTML = txt;
-        w.appendChild(m); chatScroll.appendChild(w); chatScroll.scrollTop = chatScroll.scrollHeight;
-      }
-      function showTypingIndicator() {
-        const w = document.createElement('div'); w.className = 'message-wrapper bot';
-        const ind = document.createElement('div'); ind.className = 'typing-indicator';
-        for (let i = 0; i < 3; i++) { const d = document.createElement('div'); d.className = 'dot'; ind.appendChild(d); }
-        w.appendChild(ind); chatScroll.appendChild(w); chatScroll.scrollTop = chatScroll.scrollHeight;
-      }
-      function removeTypingIndicator() {
-        const ind = document.querySelector('.typing-indicator'); if (ind) ind.parentNode.remove();
-      }
-      chatForm.addEventListener('submit', async e => {
-        e.preventDefault(); const t = inputEl.value.trim(); if (!t) return;
-        addMessage(t, 'user'); inputEl.value = '';
-        removeTypingIndicator(); showTypingIndicator();
-        try {
-          const res = await fetch('https://YOUR_WEB
+      function addMessage(txt,cls){const w=document.createElement('div');w.className='message-wrapper '+cls;const m=document.createElement('div');m.className='message '+cls;m.innerHTML=txt;w.appendChild(m);chatScroll.appendChild(w);chatScroll.scrollTop=chatScroll.scrollHeight;}
+      function showTyping(){const w=document.createElement('div');w.className='message-wrapper bot';const ind=document.createElement('div');ind.className='typing-indicator';for(let i=0;i<3;i++){const d=document.createElement('div');d.className='dot';ind.appendChild(d);}w.appendChild(ind);chatScroll.appendChild(w);chatScroll.scrollTop=chatScroll.scrollHeight;}
+      function removeTyping(){const ind=document.querySelector('.typing-indicator');if(ind)ind.parentNode.remove();}
+      chatForm.addEventListener('submit',async e=>{e.preventDefault();const t=inputEl.value.trim();if(!t)return;addMessage(t,'user');inputEl.value='';removeTyping();showTyping();try{const res=await fetch('https://YOUR_WEBHOOK_URL',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,language:lang})});const d=await res.json();removeTyping();addMessage(d.response||d.message,'bot');}catch{removeTyping();addMessage('Erreur de connexion 😓','bot');}});
+    });
+  </script>
+</body>
+</html>
