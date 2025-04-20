@@ -9,8 +9,8 @@
     * { box-sizing:border-box;margin:0;padding:0; }
     html,body { height:100%;background:var(--color-bg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
     body { display:flex;flex-direction:column; }
-    .chat-header { display:flex;align-items:center;justify-content:space-between;padding:1rem;background:var(--color-primary);color:#fff;font-size:1.25rem;font-weight:bold;box-shadow:0 2px 4px var(--shadow); }
-    .chat-header button { background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer; }
+    .chat-header { display:flex;align-items:center;justify-content:flex-start;padding:1rem;background:var(--color-primary);color:#fff;font-size:1.25rem;font-weight:bold;box-shadow:0 2px 4px var(--shadow); }
+    #header-back-btn { background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer;margin-right:1rem; }
     .header-title { flex:1;text-align:center; }
     .onboard-step { display:none;position:fixed;inset:0;background:rgba(255,255,255,0.95);z-index:100;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem; }
     .onboard-step.active { display:flex; }
@@ -40,7 +40,6 @@
   <div class="chat-header">
     <button id="header-back-btn" aria-label="Retour">←</button>
     <div class="header-title">Julie</div>
-    <button aria-label="Plus">⋯</button>
   </div>
   <div id="step-language" class="onboard-step active">
     <p id="lang-p">Choisissez votre langue / Choose your language / Elige tu idioma / Wähle deine Sprache</p>
@@ -66,11 +65,7 @@
   <div class="chat-container">
     <div id="section-services" class="onboard-step section">
       <h2>Services de l'hôtel</h2>
-      <div class="service-list">
-        <button data-detail="detail-roomservice">Room Service</button>
-        <button data-detail="detail-blanchisserie">Blanchisserie</button>
-        <button data-detail="detail-reception">Réception 24h/24</button>
-      </div>
+      <div class="service-list"><button data-detail="detail-roomservice">Room Service</button><button data-detail="detail-blanchisserie">Blanchisserie</button><button data-detail="detail-reception">Réception 24h/24</button></div>
     </div>
     <div id="section-livret" class="onboard-step section">
       <h2>Livret d'accueil</h2>
@@ -98,40 +93,20 @@
       const btnServices = document.getElementById('btn-services');
       const btnLivret = document.getElementById('btn-livret');
       const btnChat = document.getElementById('btn-chat');
-      // Localization
-      const texts = {
-        fr: { introTitle:'Bienvenue !', introText:"Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle:'Par où commencer ?', services:'Services de l\'hôtel', livret:"Le livret d'accueil", chat:'Viens discuter', placeholder:'Écris votre message…' },
-        en: { introTitle:'Welcome!', introText:"I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle:'Where to start?', services:'Hotel services', livret:'Guest booklet', chat:'Chat', placeholder:'Type your message…' },
-        es: { introTitle:'¡Bienvenido!', introText:"Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle:'¿Por dónde empezar?', services:'Servicios del hotel', livret:'Folleto de bienvenida', chat:'Chat', placeholder:'Escribe tu mensaje…' },
-        de: { introTitle:'Willkommen!', introText:"Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle:'Wo anfangen?', services:'Hoteldienstleistungen', livret:'Gästebuch', chat:'Chat', placeholder:'Nachricht eingeben…' }
-      };
+      const texts = { fr:{introTitle:'Bienvenue !',introText:"Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.",ctaTitle:'Par où commencer ?',services:'Services de l\'hôtel',livret:"Le livret d'accueil",chat:'Viens discuter',placeholder:'Écris votre message…'},en:{introTitle:'Welcome!',introText:"I'm <strong>Julie</strong>, your virtual concierge for your stay.",ctaTitle:'Where to start?',services:'Hotel services',livret:'Guest booklet',chat:'Chat',placeholder:'Type your message…'},es:{introTitle:'¡Bienvenido!',introText:"Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.",ctaTitle:'¿Por dónde empezar?',services:'Servicios del hotel',livret:'Folleto de bienvenida',chat:'Chat',placeholder:'Escribe tu mensaje…'},de:{introTitle:'Willkommen!',introText:"Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.",ctaTitle:'Wo anfangen?',services:'Hoteldienstleistungen',livret:'Gästebuch',chat:'Chat',placeholder:'Nachricht eingeben…'}};
       let lang='fr';
-      function hideAll(){ [stepLang,stepIntro,stepCta,secServices,secLivret].forEach(e=>e.classList.remove('active')); chatScroll.classList.remove('active'); chatForm.classList.remove('active'); headerBackBtn.style.display='none'; }
+      function hideAll(){ [stepLang,stepIntro,stepCta,secServices,secLivret].forEach(e=>e.classList.remove('active')); chatScroll.classList.remove('active'); chatForm.classList.remove('active'); }
       function show(el){ hideAll(); el.classList.add('active'); }
       function showChat(){ hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.placeholder=texts[lang].placeholder; inputEl.focus(); }
-      // Onboarding flow
       show(stepLang);
-      document.querySelectorAll('.lang-btn').forEach(btn=> btn.addEventListener('click', ()=>{
-        lang=btn.dataset.lang;
-        document.getElementById('intro-title').innerHTML=texts[lang].introTitle;
-        document.getElementById('intro-text').innerHTML=texts[lang].introText;
-        document.getElementById('cta-title').textContent=texts[lang].ctaTitle;
-        btnServices.textContent=texts[lang].services;
-        btnLivret.textContent=texts[lang].livret;
-        btnChat.textContent=texts[lang].chat;
-        show(stepIntro);
-      }));
-      document.getElementById('btn-intro-next').addEventListener('click', ()=> show(stepCta) );
-      btnServices.addEventListener('click', ()=> show(secServices));
-      btnLivret.addEventListener('click', ()=> show(secLivret));
-      btnChat.addEventListener('click', ()=> showChat());
-      headerBackBtn.addEventListener('click', ()=>{
-        if(secServices.classList.contains('active')||secLivret.classList.contains('active')) show(stepCta);
-        else if(stepIntro.classList.contains('active')) show(stepLang);
-        else if(stepCta.classList.contains('active')) show(stepIntro);
-      });
+      document.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click',()=>{ lang=btn.dataset.lang; document.getElementById('intro-title').innerHTML=texts[lang].introTitle; document.getElementById('intro-text').innerHTML=texts[lang].introText; document.getElementById('cta-title').textContent=texts[lang].ctaTitle; btnServices.textContent=texts[lang].services; btnLivret.textContent=texts[lang].livret; btnChat.textContent=texts[lang].chat; show(stepIntro);}));
+      document.getElementById('btn-intro-next').addEventListener('click',()=>show(stepCta));
+      btnServices.addEventListener('click',()=>show(secServices));
+      btnLivret.addEventListener('click',()=>show(secLivret));
+      btnChat.addEventListener('click',()=>showChat());
+      headerBackBtn.addEventListener('click',()=>{ if(secServices.classList.contains('active')||secLivret.classList.contains('active')) show(stepCta); else if(stepIntro.classList.contains('active')) show(stepLang); else if(stepCta.classList.contains('active')) show(stepIntro); });
       function addMessage(txt,s){ const w=document.createElement('div'); w.className='message-wrapper '+s; const m=document.createElement('div'); m.className='message '+s; m.innerHTML=txt; w.appendChild(m); chatScroll.appendChild(w); chatScroll.scrollTop=chatScroll.scrollHeight; }
-      chatForm.addEventListener('submit',async e=>{ e.preventDefault(); const t=inputEl.value.trim(); if(!t) return; addMessage(t,'user'); inputEl.value=''; addMessage('Julie réfléchit…','bot'); try{ const r=await fetch('https://YOUR_WEBHOOK_URL',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,language:lang})}); const d=await r.json(); const tip=document.querySelector('.message-wrapper.bot:last-child .message'); if(tip) tip.innerHTML=d.response||d.message;}catch{addMessage('Erreur de connexion 😓','bot');}});
+      chatForm.addEventListener('submit',async e=>{ e.preventDefault(); const t=inputEl.value.trim(); if(!t)return; addMessage(t,'user'); inputEl.value=''; addMessage('Julie réfléchit…','bot'); try{ const r=await fetch('https://YOUR_WEBHOOK_URL',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,language:lang})}); const d=await r.json(); const tip=document.querySelector('.message-wrapper.bot:last-child .message'); if(tip) tip.innerHTML=d.response||d.message;}catch{addMessage('Erreur de connexion 😓','bot');}});
     });
   </script>
 </body>
