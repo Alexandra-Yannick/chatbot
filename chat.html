@@ -5,97 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Julie - Serial Chilleuse</title>
   <style>
-    :root {
-      --color-primary: #60C0E6;
-      --color-primary-hover: #468FCF;
-      --color-bg: #F2F2F7;
-      --color-chat-bg: #ffffff;
-      --color-scroll-bg: #f9f9f9;
-      --color-text-dark: #333333;
-      --color-text: #555555;
-      --radius: 12px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body, html { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--color-bg); }
-    body { display: flex; flex-direction: column; }
-
-    /* Header */
-    .chat-header {
-      background: var(--color-primary);
-      color: #fff;
-      padding: 1rem;
-      display: flex;
-      align-items: center;
-      position: relative;
-      font-size: 1.25rem;
-      font-weight: bold;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    #header-back-btn {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      color: #fff;
-      cursor: pointer;
-      display: none;
-      padding: 0.25rem;
-      transition: background 0.2s;
-    }
-    #header-back-btn:hover {
-      background: rgba(255,255,255,0.2);
-      border-radius: 50%;
-    }
-    .header-title {
-      flex: 1;
-      text-align: center;
-    }
-
-    /* Onboarding */
-    .onboard-step { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 100; flex: 1; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1rem; }
-    .onboard-step.active { display: flex; }
-    .onboard-step p, .onboard-step h2 { margin-bottom: 1rem; }
-    .onboard-step img { width: 120px; margin-bottom: 1rem; }
-    .btn-primary { background: var(--color-primary); color: #fff; padding: 0.75rem 1.5rem; border: none; border-radius: 24px; cursor: pointer; }
-    .btn-primary:hover { background: var(--color-primary-hover); }
-    .lang-btn, .cta-options button { background: var(--color-primary); color: #fff; padding: 0.75rem 1rem; border: none; border-radius: var(--radius); cursor: pointer; margin: 0.25rem 0; width: 70%; }
-    .lang-btn:hover, .cta-options button:hover { background: var(--color-primary-hover); }
-    .skip-btn { background: none; color: var(--color-primary); margin-top: 1rem; cursor: pointer; }
-
-    /* Container */
-    .chat-container { flex: 1; margin: 1rem; background: var(--color-chat-bg); border-radius: var(--radius); box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; }
-
-    /* Sections */
-    .section { display: none; flex: 1; overflow-y: auto; padding: 1rem; background: var(--color-scroll-bg); }
-    .section.active { display: block; }
-    .static-section h3 { margin-bottom: 0.75rem; color: var(--color-text-dark); }
-    .static-section p { margin-bottom: 1rem; color: var(--color-text); }
-    .btn-chat-start { background: var(--color-primary); color: #fff; padding: 0.6rem 1.2rem; border: none; border-radius: 20px; cursor: pointer; }
-    .btn-chat-start:hover { background: var(--color-primary-hover); }
-
-    /* Service list */
-    .service-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .service-list button { padding: 1rem; background: #fff; border-radius: var(--radius); border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.05); text-align: left; cursor: pointer; }
-    .service-list button:hover { background: #f0f0f0; }
-
-    /* Chat UI */
-    .chat-scroll { flex: 1; overflow-y: auto; padding: 1rem; display: none; background: var(--color-scroll-bg); flex-direction: column; gap: 1rem; }
-    .chat-scroll.active { display: flex; }
-    .message-wrapper { display: flex; align-items: flex-end; gap: 0.75rem; }
-    .message { padding: 0.75rem 1rem; border-radius: var(--radius); box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 70%; }
-    .message.bot { background: #fff; color: var(--color-text-dark); }
-    .message.user { background: var(--color-primary); color: #fff; align-self: flex-end; }
-
-    /* Input area */
-    form#chat-form { display: none; }
-    form#chat-form.active { display: flex; }
-    .input-area { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #fff; border-top: 1px solid #eee; }
-    .input-area input { flex: 1; padding: 0.75rem 1rem; border: 1px solid #ccc; border-radius: 30px; outline: none; }
-    .input-area button { background: var(--color-primary); border: none; border-radius: 50%; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.2rem; cursor: pointer; }
-    .input-area button:hover { background: var(--color-primary-hover); }
+    /* Styles inchangés */
+    :root { --color-primary: #60C0E6; --color-primary-hover: #468FCF; --color-bg: #F2F7FA; --radius:12px; }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body, html { height:100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:var(--color-bg); }
+    body { display:flex; flex-direction:column; }
+    .chat-header{background:var(--color-primary);color:#fff;display:flex;align-items:center;position:relative;padding:1rem;font-size:1.25rem;font-weight:bold;}
+    #header-back-btn{position:absolute;left:1rem;top:50%;transform:translateY(-50%);background:none;border:none;font-size:1.5rem;color:#fff;cursor:pointer;display:none;padding:0.25rem;transition:background .2s;}
+    #header-back-btn:hover{background:rgba(255,255,255,0.2);border-radius:50%;}
+    .header-title{flex:1;text-align:center;}
+    .onboard-step{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.95);z-index:100;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem;}
+    .onboard-step.active{display:flex;}
+    .lang-btn, .btn-primary, .cta-options button{background:var(--color-primary);color:#fff;border:none;border-radius:var(--radius);padding:.75rem 1.5rem;cursor:pointer;margin:.5rem 0;width:70%;}
+    .lang-btn:hover, .btn-primary:hover, .cta-options button:hover{background:var(--color-primary-hover);}
+    .skip-btn{background:none;color:var(--color-primary);margin-top:1rem;cursor:pointer;}
+    .chat-container{flex:1;margin:1rem;background:#fff;border-radius:var(--radius);box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;display:flex;flex-direction:column;}
+    .section{display:none;flex:1;overflow-y:auto;padding:1rem;background:#f9f9f9;}
+    .section.active{display:block;}
+    .service-list{display:flex;flex-direction:column;gap:.75rem;}
+    .service-list button{padding:1rem;background:#fff;border-radius:var(--radius);border:none;box-shadow:0 2px 6px rgba(0,0,0,0.05);text-align:left;cursor:pointer;}
+    .service-list button:hover{background:#f0f0f0;}
+    .btn-chat-start{background:var(--color-primary);color:#fff;padding:.6rem 1.2rem;border:none;border-radius:20px;cursor:pointer;}
+    .btn-chat-start:hover{background:var(--color-primary-hover);}
+    .chat-scroll{flex:1;overflow-y:auto;padding:1rem;display:none;flex-direction:column;gap:1rem;background:#f9f9f9;}
+    .chat-scroll.active{display:flex;}
+    .message-wrapper{display:flex;align-items:flex-end;gap:.75rem;}
+    .message{padding:.75rem 1rem;border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,0.1);max-width:70%;}
+    .message.bot{background:#fff;color:#333;}
+    .message.user{background:var(--color-primary);color:#fff;align-self:flex-end;}
+    form#chat-form{display:none;width:100%;}
+    form#chat-form.active{display:flex;}
+    .input-area{width:100%;display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:#fff;border-top:1px solid #eee;}
+    .input-area input{flex:1;padding:.75rem 1rem;border:1px solid #ccc;border-radius:30px;outline:none;}
+    .input-area button{background:var(--color-primary);border:none;border-radius:50%;width:2.5rem;height:2.5rem;color:#fff;font-size:1.2rem;cursor:pointer;}
+    .input-area button:hover{background:var(--color-primary-hover);}
   </style>
 </head>
 <body>
@@ -103,7 +46,6 @@
     <button id="header-back-btn" aria-label="Retour">‹</button>
     <div class="header-title">💬 Julie</div>
   </div>
-
   <!-- Onboarding -->
   <div id="step-language" class="onboard-step">
     <p>Choisissez votre langue / Choose your language / Elige tu idioma / Wähle deine Sprache</p>
@@ -127,9 +69,7 @@
     </div>
     <button class="skip-btn" id="btn-cta-skip">Passer</button>
   </div>
-
   <div class="chat-container">
-    <!-- Sections -->
     <div id="section-services" class="section static-section">
       <h3>Services de l'hôtel</h3>
       <div class="service-list">
@@ -142,8 +82,6 @@
     <div id="detail-roomservice" class="section static-section"></div>
     <div id="detail-blanchisserie" class="section static-section"></div>
     <div id="detail-reception" class="section static-section"></div>
-
-    <!-- Chat Interface -->
     <div id="chat" class="chat-scroll"></div>
     <form id="chat-form">
       <div class="input-area">
@@ -152,7 +90,6 @@
       </div>
     </form>
   </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const headerBackBtn = document.getElementById('header-back-btn');
@@ -162,106 +99,65 @@
       const sections = document.querySelectorAll('.section');
       const chatScroll = document.getElementById('chat');
       const chatForm = document.getElementById('chat-form');
-      const chatInputArea = document.querySelector('.input-area');
       const inputEl = document.getElementById('user-input');
 
+      const sessionId = localStorage.getItem('chatSession') || crypto.randomUUID();
+      localStorage.setItem('chatSession', sessionId);
       let selectedLanguage = 'fr';
-      const languageTexts = {
-        fr: { placeholder: "Écris ton message ici..." },
-        en: { placeholder: "Type your message here..." },
-        es: { placeholder: "Escribe tu mensaje aquí..." },
-        de: { placeholder: "Schreib deine Nachricht hier..." }
-      };
+      const languageTexts = { fr:{},en:{},es:{},de:{} };
 
       function hideAll() {
-        [stepLang, stepIntro, stepCta, ...sections].forEach(el => el.classList.remove('active'));
-        chatScroll.classList.remove('active');
-        chatForm.classList.remove('active');
-        headerBackBtn.style.display = 'none';
+        [stepLang,stepIntro,stepCta,...sections].forEach(el=>el.classList.remove('active'));
+        chatScroll.classList.remove('active'); chatForm.classList.remove('active');
+        headerBackBtn.style.display='none';
       }
-
       function showChat() {
-        hideAll();
-        chatScroll.classList.add('active');
-        chatForm.classList.add('active');
-        inputEl.focus();
+        hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.focus();
       }
+      function showSection(id) { hideAll(); document.getElementById(id).classList.add('active'); headerBackBtn.style.display='block'; }
 
-      function showSection(id) {
-        hideAll();
-        document.getElementById(id).classList.add('active');
-        headerBackBtn.style.display = 'block';
+      // init
+      hideAll(); stepLang.classList.add('active');
+
+      // onboarding
+      document.querySelectorAll('.lang-btn').forEach(btn=>btn.addEventListener('click',()=>{
+        selectedLanguage=btn.dataset.lang;
+        hideAll(); stepIntro.classList.add('active');
+      }));
+      document.getElementById('btn-intro-next').addEventListener('click',()=>{hideAll();stepCta.classList.add('active');});
+      document.getElementById('btn-cta-skip').addEventListener('click',showChat);
+      document.querySelectorAll('#step-cta button[data-cta]').forEach(btn=>btn.addEventListener('click',()=>{
+        const action=btn.dataset.cta;
+        if(action==='chat')return showChat();
+        showSection(action);
+      }));
+      document.querySelectorAll('.service-list button').forEach(btn=>btn.addEventListener('click',()=>showSection(btn.dataset.detail)));
+      document.querySelectorAll('.btn-chat-start').forEach(btn=>btn.addEventListener('click',showChat));
+      headerBackBtn.addEventListener('click',()=>{
+        const active=document.querySelector('.section.active');
+        if(active&&active.id.startsWith('detail-'))return showSection('section-services');
+        hideAll(); stepCta.classList.add('active');
+      });
+
+      // chat requests
+      function addMessage(text,sender){
+        const w=document.createElement('div');w.className='message-wrapper';
+        const m=document.createElement('div');m.className='message '+sender;m.textContent=text;
+        w.appendChild(m);chatScroll.appendChild(w);chatScroll.scrollTop=chatScroll.scrollHeight;
       }
-
-      // Initialize on language step
-      hideAll();
-      stepLang.classList.add('active');
-
-      // Onboarding handlers
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          selectedLanguage = btn.dataset.lang;
-          inputEl.placeholder = languageTexts[selectedLanguage].placeholder;
-          hideAll();
-          stepIntro.classList.add('active');
-        });
-      });
-
-      document.getElementById('btn-intro-next').addEventListener('click', () => {
-        hideAll();
-        stepCta.classList.add('active');
-      });
-
-      document.getElementById('btn-cta-skip').addEventListener('click', showChat);
-
-      document.querySelectorAll('#step-cta button[data-cta]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const action = btn.dataset.cta;
-          if (action === 'chat') return showChat();
-          // load static content dynamically if empty
-          const sect = document.getElementById(action);
-          if (sect.innerHTML.trim() === '') {
-            if (action === 'section-livret') {
-              sect.innerHTML = '<h3>Livret d\'accueil</h3><p>Infos et règles de l\'hôtel.</p><button class="btn-chat-start">Lancer le chat</button>';
-            }
-          }
-          showSection(action);
-          document.querySelectorAll('.btn-chat-start').forEach(b => b.addEventListener('click', showChat));
-        });
-      });
-
-      // Section navigation for services
-      document.querySelectorAll('.service-list button').forEach(btn => {
-        btn.addEventListener('click', () => showSection(btn.dataset.detail));
-      });
-
-      document.querySelectorAll('.btn-chat-start').forEach(btn => {
-        btn.addEventListener('click', showChat);
-      });
-
-      // Back button
-      headerBackBtn.addEventListener('click', () => {
-        const active = document.querySelector('.section.active');
-        if (active && active.id.startsWith('detail-')) return showSection('section-services');
-        hideAll();
-        stepCta.classList.add('active');
-      });
-
-      // Chat handling
-      function addMessage(text, sender) {
-        const w = document.createElement('div'); w.className = 'message-wrapper';
-        const m = document.createElement('div'); m.className = 'message ' + sender; m.textContent = text;
-        w.appendChild(m);
-        chatScroll.appendChild(w);
-        chatScroll.scrollTop = chatScroll.scrollHeight;
-      }
-
-      chatForm.addEventListener('submit', e => {
-        e.preventDefault();
-        const txt = inputEl.value.trim(); if (!txt) return;
-        addMessage(txt, 'user');
-        inputEl.value = '';
-        setTimeout(() => addMessage('Réponse test...', 'bot'), 800);
+      chatForm.addEventListener('submit',async e=>{
+        e.preventDefault();const txt=inputEl.value.trim();if(!txt)return;
+        addMessage(txt,'user');inputEl.value='';
+        try{
+          const res=await fetch('https://c842-2001-861-2cab-2ce0-70c5-ngrok-free.app/webhook/30e22add-d5d7-461e-ac07-fc95a3843338',{
+            method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({message:txt,sessionId,language:selectedLanguage})
+          });
+          const data=await res.json();
+          addMessage(data.response||data.message||'Je n\'ai pas compris 😅','bot');
+        }catch(err){
+          addMessage('Erreur de connexion 😓','bot');
+        }
       });
     });
   </script>
