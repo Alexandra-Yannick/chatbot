@@ -250,6 +250,7 @@
       // back button
       headerBackBtn.addEventListener('click', () => {
         if (secServices.classList.contains('active') || secLivret.classList.contains('active')) return show(stepCta);
+        if (chatScroll.classList.contains('active')) return show(stepCta);
         if (stepIntro.classList.contains('active')) return show(stepLang);
         if (stepCta.classList.contains('active')) return show(stepIntro);
       });
