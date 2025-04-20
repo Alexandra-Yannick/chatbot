@@ -16,6 +16,13 @@
     .header-title{flex:1;text-align:center;}
     .onboard-step{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.95);z-index:100;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem;}
     .onboard-step.active{display:flex;}
+    .onboard-step img {
+  width: 150px;           /* largeur fixe */
+  height: auto;           /* conserve les proportions */
+  max-height: 200px;      /* ne dépasse jamais 200px de haut */
+  object-fit: contain;    /* pour éviter tout recadrage brutal */
+  margin-bottom: 1rem;
+}
     .lang-btn, .btn-primary, .cta-options button{background:var(--color-primary);color:#fff;border:none;border-radius:var(--radius);padding:.75rem 1.5rem;cursor:pointer;margin:.5rem 0;width:70%;}
     .lang-btn:hover, .btn-primary:hover, .cta-options button:hover{background:var(--color-primary-hover);}
     .skip-btn{background:none;color:var(--color-primary);margin-top:1rem;cursor:pointer;}
