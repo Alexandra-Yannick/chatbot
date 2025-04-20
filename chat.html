@@ -43,6 +43,13 @@
       text-align: center; padding: 1rem;
     }
     .onboard-step.active { display: flex; }
+    .onboard-step img {
+      width: 120px;           /* plus petit */
+      height: auto;
+      max-height: 150px;      /* taille max réduite */
+      object-fit: contain;
+      margin-bottom: 1rem;
+    }
     .lang-btn, .btn-primary, .cta-options button {
       background: var(--color-primary); color: #fff; border: none; border-radius: var(--radius);
       padding: .75rem 1.5rem; cursor: pointer; margin: .5rem 0; width: 70%;
@@ -149,99 +156,4 @@
     <div id="section-livret" class="section">
       <h2>Livret d'accueil</h2>
       <p>Informations et règles de l'hôtel.</p>
-      <button class="btn-chat-start">Lancer le chat</button>
-    </div>
-    <div id="chat" class="chat-scroll"></div>
-    <form id="chat-form" class="input-area">
-      <button type="button" class="emoji-btn">😊</button>
-      <input type="text" id="user-input" placeholder="Message…" autocomplete="off" />
-      <button type="submit" class="send-btn">➤</button>
-    </form>
-  </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const headerBackBtn = document.getElementById('header-back-btn');
-      const stepLang = document.getElementById('step-language');
-      const stepIntro = document.getElementById('step-intro');
-      const stepCta = document.getElementById('step-cta');
-      const secServices = document.getElementById('section-services');
-      const secLivret = document.getElementById('section-livret');
-      const chatScroll = document.getElementById('chat');
-      const chatForm = document.getElementById('chat-form');
-      const inputEl = document.getElementById('user-input');
-      const btnServices = document.getElementById('btn-services');
-      const btnLivret = document.getElementById('btn-livret');
-      const btnChat = document.getElementById('btn-chat');
-      const texts = {
-        fr: { introTitle:'Bienvenue !', introText:"Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle:'Par où commencer ?', services:'Services de l\'hôtel', livret:"Le livret d'accueil", chat:'Viens discuter', placeholder:'Écris votre message…' },
-        en: { introTitle:'Welcome!', introText:"I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle:'Where to start?', services:'Hotel services', livret:'Guest booklet', chat:'Chat', placeholder:'Type your message…' },
-        es: { introTitle:'¡Bienvenido!', introText:"Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle:'¿Por dónde empezar?', services:'Servicios del hotel', livret:'Folleto de bienvenida', chat:'Chat', placeholder:'Escribe tu mensaje…' },
-        de: { introTitle:'Willkommen!', introText:"Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle:'Wo anfangen?', services:'Hoteldienstleistungen', livret:'Gästebuch', chat:'Chat', placeholder:'Nachricht eingeben…' }
-      };
-      let lang = 'fr';
-
-      function hideAll() {
-        [stepLang, stepIntro, stepCta, secServices, secLivret].forEach(el => el.classList.remove('active'));
-        chatScroll.classList.remove('active');
-        chatForm.classList.remove('active');
-      }
-      function show(el) {
-        hideAll(); el.classList.add('active'); headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible'; }
-      function showChat() { hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.placeholder = texts[lang].placeholder; inputEl.focus(); headerBackBtn.style.visibility = 'visible'; }
-
-      show(stepLang);
-      document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => {
-        lang = btn.dataset.lang;
-        document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
-        document.getElementById('intro-text').innerHTML = texts[lang].introText;
-        document.getElementById('cta-title').textContent = texts[lang].ctaTitle;
-        btnServices.textContent = texts[lang].services;
-        btnLivret.textContent = texts[lang].livret;
-        btnChat.textContent = texts[lang].chat;
-        show(stepIntro);
-      }));
-      document.getElementById('btn-intro-next').addEventListener('click', () => show(stepCta));
-      btnServices.addEventListener('click', () => show(secServices));
-      btnLivret.addEventListener('click', () => show(secLivret));
-      btnChat.addEventListener('click', showChat);
-      headerBackBtn.addEventListener('click', () => {
-        if (secServices.classList.contains('active') || secLivret.classList.contains('active') || chatScroll.classList.contains('active')) return show(stepCta);
-        if (stepIntro.classList.contains('active')) return show(stepLang);
-        if (stepCta.classList.contains('active')) return show(stepIntro);
-      });
-
-      function addMessage(txt, sender) {
-        const w = document.createElement('div'); w.className = 'message-wrapper ' + sender;
-        const m = document.createElement('div'); m.className = 'message ' + sender; m.innerHTML = txt;
-        w.appendChild(m); chatScroll.appendChild(w); chatScroll.scrollTop = chatScroll.scrollHeight;
-      }
-
-      function showTypingIndicator() {
-        const wrapper = document.createElement('div'); wrapper.className = 'message-wrapper bot';
-        const indicator = document.createElement('div'); indicator.className = 'typing-indicator';
-        for (let i = 0; i < 3; i++) {
-          const dot = document.createElement('div'); dot.className = 'dot'; indicator.appendChild(dot);
-        }
-        wrapper.appendChild(indicator); chatScroll.appendChild(wrapper); chatScroll.scrollTop = chatScroll.scrollHeight;
-      }
-      function removeTypingIndicator() {
-        const ind = document.querySelector('.typing-indicator'); if (ind) ind.parentNode.remove();
-      }
-
-      chatForm.addEventListener('submit', async e => {
-        e.preventDefault(); const t = inputEl.value.trim(); if (!t) return;
-        addMessage(t, 'user'); inputEl.value = '';
-        removeTypingIndicator(); showTypingIndicator();
-        try {
-          const res = await fetch('https://YOUR_WEBHOOK_URL', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: t, language: lang }) });
-          const data = await res.json(); removeTypingIndicator();
-          addMessage(data.response || data.message, 'bot');
-        } catch {
-          removeTypingIndicator(); addMessage('Erreur de connexion 😓', 'bot');
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+      <button class=\``
