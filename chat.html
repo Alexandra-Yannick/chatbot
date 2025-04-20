@@ -42,6 +42,11 @@
       text-align: center; padding: 1rem;
     }
     .onboard-step.active { display: flex; }
+    /* Image style to prevent full-screen display */
+    .onboard-step img {
+      width: 120px; height: auto; max-height: 150px;
+      object-fit: contain; margin-bottom: 1rem;
+    }
     .lang-btn, .btn-primary, .cta-options button {
       background: var(--color-primary);
       color: #fff; border: none;
@@ -181,6 +186,17 @@
       btnLivret.addEventListener('click', () => show(secLivret));
       btnChat.addEventListener('click', showChat);
       btnStartChat.addEventListener('click', showChat);
+      
+      // Back button navigation
+      headerBackBtn.addEventListener('click', () => {
+        if (secServices.classList.contains('active') || secLivret.classList.contains('active')) {
+          show(stepCta);
+        } else if (stepCta.classList.contains('active')) {
+          show(stepIntro);
+        } else if (stepIntro.classList.contains('active')) {
+          show(stepLang);
+        }
+      });
     });
   </script>
 </body>
