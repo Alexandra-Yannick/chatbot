@@ -19,7 +19,7 @@
     html, body { height: 100%; background: var(--color-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { display: flex; flex-direction: column; padding-top: 4rem; }
 
-    /* Fixed header */
+    /* Header */
     .chat-header {
       position: fixed; top: 0; left: 0; right: 0; height: 4rem;
       display: flex; align-items: center; justify-content: center;
@@ -34,7 +34,7 @@
     }
     .header-title { flex: 1; text-align: center; }
 
-    /* Onboarding Steps under header */
+    /* Onboarding */
     .onboard-step {
       display: none; position: fixed;
       top: 4rem; bottom: 0; left: 0; right: 0;
@@ -43,22 +43,20 @@
       text-align: center; padding: 1rem;
     }
     .onboard-step.active { display: flex; }
-    .onboard-step p, .onboard-step h2 { margin-bottom: 1rem; }
-    .onboard-step img { width: 150px; height: auto; max-height: 200px; object-fit: contain; margin-bottom: 1rem; }
     .lang-btn, .btn-primary, .cta-options button {
       background: var(--color-primary); color: #fff; border: none; border-radius: var(--radius);
       padding: .75rem 1.5rem; cursor: pointer; margin: .5rem 0; width: 70%;
     }
     .lang-btn:hover, .btn-primary:hover, .cta-options button:hover { background: var(--color-primary-hover); }
 
-    /* Content container under header */
+    /* Container */
     .chat-container {
       flex: 1; display: flex; flex-direction: column;
       margin: .5rem; background: #fff; border-radius: var(--radius);
       overflow: hidden; box-shadow: 0 4px 12px var(--shadow);
     }
 
-    /* Sections and chat */
+    /* Sections */
     .section { display: none; flex: 1; overflow-y: auto; padding: 1rem; background: var(--color-bg); }
     .section.active { display: block; }
     .chat-scroll {
@@ -78,20 +76,35 @@
     .message.bot { background: var(--bubble-bot); color: #333; border-top-left-radius: 4px; }
     .message.user { background: var(--bubble-user); color: #000; border-top-right-radius: 4px; }
 
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex; align-items: center; gap: 4px; padding: .5rem;
+      max-width: 30px; background: var(--bubble-bot); border-radius: var(--radius);
+    }
+    .typing-indicator .dot {
+      width: 6px; height: 6px; background: #999; border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+    .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0.2; }
+      40% { opacity: 1; }
+    }
+
     /* Input */
     form#chat-form { display: none; width: 100%; }
     form#chat-form.active { display: flex; }
-    .input-area {
-      display: flex; align-items: center; padding: .75rem;
+    .input-area { display: flex; align-items: center; padding: .75rem;
       background: var(--input-bg); box-shadow: 0 -2px 4px var(--shadow);
     }
     .input-area .emoji-btn { background: none; border: none; font-size: 1.5rem; margin-right: .5rem; cursor: pointer; }
     .input-area input { flex: 1; padding: .75rem 1rem; border: 1px solid #ccc; border-radius: 30px; outline: none; margin-right: .5rem; }
     .input-area button.send-btn {
-      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-      border: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex;
-      align-items: center; justify-content: center; color: #fff; font-size: 1.25rem;
-      cursor: pointer; box-shadow: 0 2px 4px var(--shadow); transition: background .2s;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover)); border: none;
+      width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; color: #fff; font-size: 1.25rem; cursor: pointer;
+      box-shadow: 0 2px 4px var(--shadow); transition: background .2s;
     }
     .input-area button.send-btn:disabled { opacity: .5; cursor: not-allowed; }
   </style>
@@ -111,12 +124,12 @@
   </div>
   <div id="step-intro" class="onboard-step">
     <img src="image2.png" alt="Julie souriante">
-    <h2 id="intro-title">Bienvenue !</h2>
+    <h2 id="intro-title">Bienvenue !</h2>
     <p id="intro-text">Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.</p>
-    <button class="btn-primary" id="btn-intro-next">Cool !</button>
+    <button class="btn-primary" id="btn-intro-next">Cool !</button>
   </div>
   <div id="step-cta" class="onboard-step">
-    <h2 id="cta-title">Par où commencer ?</h2>
+    <h2 id="cta-title">Par où commencer ?</h2>
     <div class="cta-options">
       <button data-cta="section-services" id="btn-services">Services de l'hôtel</button>
       <button data-cta="section-livret" id="btn-livret">Le livret d'accueil</button>
@@ -161,33 +174,23 @@
       const btnLivret = document.getElementById('btn-livret');
       const btnChat = document.getElementById('btn-chat');
       const texts = {
-        fr: { introTitle:'Bienvenue !', introText:"Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle:'Par où commencer ?', services:'Services de l\'hôtel', livret:"Le livret d'accueil", chat:'Viens discuter', placeholder:'Écris votre message…' },
+        fr: { introTitle:'Bienvenue !', introText:"Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle:'Par où commencer ?', services:'Services de l\'hôtel', livret:"Le livret d'accueil", chat:'Viens discuter', placeholder:'Écris votre message…' },
         en: { introTitle:'Welcome!', introText:"I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle:'Where to start?', services:'Hotel services', livret:'Guest booklet', chat:'Chat', placeholder:'Type your message…' },
         es: { introTitle:'¡Bienvenido!', introText:"Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle:'¿Por dónde empezar?', services:'Servicios del hotel', livret:'Folleto de bienvenida', chat:'Chat', placeholder:'Escribe tu mensaje…' },
         de: { introTitle:'Willkommen!', introText:"Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle:'Wo anfangen?', services:'Hoteldienstleistungen', livret:'Gästebuch', chat:'Chat', placeholder:'Nachricht eingeben…' }
       };
       let lang = 'fr';
+
       function hideAll() {
         [stepLang, stepIntro, stepCta, secServices, secLivret].forEach(el => el.classList.remove('active'));
         chatScroll.classList.remove('active');
         chatForm.classList.remove('active');
       }
       function show(el) {
-        hideAll();
-        el.classList.add('active');
-        headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
-      }
-      function showChat() {
-        hideAll();
-        chatScroll.classList.add('active');
-        chatForm.classList.add('active');
-        inputEl.placeholder = texts[lang].placeholder;
-        inputEl.focus();
-        headerBackBtn.style.visibility = 'visible';
-      }
-      // init
+        hideAll(); el.classList.add('active'); headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible'; }
+      function showChat() { hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.placeholder = texts[lang].placeholder; inputEl.focus(); headerBackBtn.style.visibility = 'visible'; }
+
       show(stepLang);
-      // language selection
       document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => {
         lang = btn.dataset.lang;
         document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
@@ -207,17 +210,35 @@
         if (stepIntro.classList.contains('active')) return show(stepLang);
         if (stepCta.classList.contains('active')) return show(stepIntro);
       });
-      function addMessage(txt, sender) { const w = document.createElement('div'); w.className = 'message-wrapper ' + sender; const m = document.createElement('div'); m.className = 'message ' + sender; m.innerHTML = txt; w.appendChild(m); chatScroll.appendChild(w); chatScroll.scrollTop = chatScroll.scrollHeight; }
+
+      function addMessage(txt, sender) {
+        const w = document.createElement('div'); w.className = 'message-wrapper ' + sender;
+        const m = document.createElement('div'); m.className = 'message ' + sender; m.innerHTML = txt;
+        w.appendChild(m); chatScroll.appendChild(w); chatScroll.scrollTop = chatScroll.scrollHeight;
+      }
+
+      function showTypingIndicator() {
+        const wrapper = document.createElement('div'); wrapper.className = 'message-wrapper bot';
+        const indicator = document.createElement('div'); indicator.className = 'typing-indicator';
+        for (let i = 0; i < 3; i++) {
+          const dot = document.createElement('div'); dot.className = 'dot'; indicator.appendChild(dot);
+        }
+        wrapper.appendChild(indicator); chatScroll.appendChild(wrapper); chatScroll.scrollTop = chatScroll.scrollHeight;
+      }
+      function removeTypingIndicator() {
+        const ind = document.querySelector('.typing-indicator'); if (ind) ind.parentNode.remove();
+      }
+
       chatForm.addEventListener('submit', async e => {
         e.preventDefault(); const t = inputEl.value.trim(); if (!t) return;
         addMessage(t, 'user'); inputEl.value = '';
-        addMessage('Julie réfléchit…', 'bot');
+        removeTypingIndicator(); showTypingIndicator();
         try {
           const res = await fetch('https://YOUR_WEBHOOK_URL', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: t, language: lang }) });
-          const data = await res.json();
-          const tip = document.querySelector('.message-wrapper.bot:last-child .message'); if (tip) tip.innerHTML = data.response || data.message;
+          const data = await res.json(); removeTypingIndicator();
+          addMessage(data.response || data.message, 'bot');
         } catch {
-          addMessage('Erreur de connexion 😓', 'bot');
+          removeTypingIndicator(); addMessage('Erreur de connexion 😓', 'bot');
         }
       });
     });
