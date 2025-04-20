@@ -5,114 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Julie - Serial Chilleuse</title>
   <style>
-    :root {
-      --color-primary: #60C0E6;
-      --color-primary-hover: #468FCF;
-      --color-bg: #F2F7FA;
-      --bubble-user: #D0E8FF;
-      --bubble-bot: #FFFFFF;
-      --input-bg: #FFFFFF;
-      --radius: 20px;
-      --shadow: rgba(0,0,0,0.1);
-    }
+    :root { --color-primary: #60C0E6; --color-primary-hover: #468FCF; --color-bg: #F2F7FA; --bubble-user: #D0E8FF; --bubble-bot: #FFFFFF; --input-bg: #FFFFFF; --radius: 20px; --shadow: rgba(0,0,0,0.1); }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; background: var(--color-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { display: flex; flex-direction: column; padding-top: 4rem; }
 
     /* Header */
-    .chat-header {
-      position: fixed; top: 0; left: 0; right: 0; height: 4rem;
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 1rem; background: var(--color-primary);
-      color: #fff; font-size: 1.25rem; font-weight: bold;
-      box-shadow: 0 2px 4px var(--shadow); z-index: 200;
-    }
-    #header-back-btn {
-      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-      background: none; border: none; color: #fff;
-      font-size: 1.5rem; cursor: pointer;
-    }
+    .chat-header { position: fixed; top: 0; left: 0; right: 0; height: 4rem; display: flex; align-items: center; justify-content: center; padding: 0 1rem; background: var(--color-primary); color: #fff; font-size: 1.25rem; font-weight: bold; box-shadow: 0 2px 4px var(--shadow); z-index: 200; }
+    #header-back-btn { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
     .header-title { flex: 1; text-align: center; }
 
     /* Onboarding */
-    .onboard-step {
-      display: none; position: fixed;
-      top: 4rem; bottom: 0; left: 0; right: 0;
-      background: rgba(255,255,255,0.95); z-index: 100;
-      flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 1rem;
-    }
+    .onboard-step { display: none; position: fixed; top: 4rem; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.95); z-index: 100; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1rem; }
     .onboard-step.active { display: flex; }
-    .onboard-step img {
-      width: 120px;           /* plus petit */
-      height: auto;
-      max-height: 150px;      /* taille max réduite */
-      object-fit: contain;
-      margin-bottom: 1rem;
-    }
-    .lang-btn, .btn-primary, .cta-options button {
-      background: var(--color-primary); color: #fff; border: none; border-radius: var(--radius);
-      padding: .75rem 1.5rem; cursor: pointer; margin: .5rem 0; width: 70%;
-    }
+    .onboard-step img { width: 120px; height: auto; max-height: 150px; object-fit: contain; margin-bottom: 1rem; }
+    .lang-btn, .btn-primary, .cta-options button { background: var(--color-primary); color: #fff; border: none; border-radius: var(--radius); padding: .75rem 1.5rem; cursor: pointer; margin: .5rem 0; width: 70%; }
     .lang-btn:hover, .btn-primary:hover, .cta-options button:hover { background: var(--color-primary-hover); }
 
     /* Container */
-    .chat-container {
-      flex: 1; display: flex; flex-direction: column;
-      margin: .5rem; background: #fff; border-radius: var(--radius);
-      overflow: hidden; box-shadow: 0 4px 12px var(--shadow);
-    }
+    .chat-container { flex: 1; display: flex; flex-direction: column; margin: .5rem; background: #fff; border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 12px var(--shadow); }
 
     /* Sections */
     .section { display: none; flex: 1; overflow-y: auto; padding: 1rem; background: var(--color-bg); }
     .section.active { display: block; }
-    .chat-scroll {
-      flex: 1; overflow-y: auto; padding: 1rem; display: none;
-      flex-direction: column; gap: 1rem; background: var(--color-bg);
-    }
+    .chat-scroll { flex: 1; overflow-y: auto; padding: 1rem; display: none; flex-direction: column; gap: 1rem; background: var(--color-bg); }
     .chat-scroll.active { display: flex; }
 
     /* Messages */
     .message-wrapper { display: flex; width: 100%; align-items: flex-end; gap: .75rem; }
     .message-wrapper.bot { justify-content: flex-start; }
     .message-wrapper.user { justify-content: flex-end; }
-    .message {
-      max-width: 70%; padding: .75rem 1rem; border-radius: var(--radius);
-      box-shadow: 0 1px 3px var(--shadow); line-height: 1.4;
-    }
+    .message { max-width: 70%; padding: .75rem 1rem; border-radius: var(--radius); box-shadow: 0 1px 3px var(--shadow); line-height: 1.4; }
     .message.bot { background: var(--bubble-bot); color: #333; border-top-left-radius: 4px; }
     .message.user { background: var(--bubble-user); color: #000; border-top-right-radius: 4px; }
 
     /* Typing indicator */
-    .typing-indicator {
-      display: flex; align-items: center; gap: 4px; padding: .5rem;
-      max-width: 30px; background: var(--bubble-bot); border-radius: var(--radius);
-    }
-    .typing-indicator .dot {
-      width: 6px; height: 6px; background: #999; border-radius: 50%;
-      animation: blink 1s infinite;
-    }
+    .typing-indicator { display: flex; align-items: center; gap: 4px; padding: .5rem; max-width: 30px; background: var(--bubble-bot); border-radius: var(--radius); }
+    .typing-indicator .dot { width: 6px; height: 6px; background: #999; border-radius: 50%; animation: blink 1s infinite; }
     .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
     .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes blink {
-      0%, 80%, 100% { opacity: 0.2; }
-      40% { opacity: 1; }
-    }
+    @keyframes blink { 0%,80%,100% { opacity: 0.2; } 40% { opacity: 1; } }
 
     /* Input */
     form#chat-form { display: none; width: 100%; }
     form#chat-form.active { display: flex; }
-    .input-area { display: flex; align-items: center; padding: .75rem;
-      background: var(--input-bg); box-shadow: 0 -2px 4px var(--shadow);
-    }
+    .input-area { display: flex; align-items: center; padding: .75rem; background: var(--input-bg); box-shadow: 0 -2px 4px var(--shadow); }
     .input-area .emoji-btn { background: none; border: none; font-size: 1.5rem; margin-right: .5rem; cursor: pointer; }
     .input-area input { flex: 1; padding: .75rem 1rem; border: 1px solid #ccc; border-radius: 30px; outline: none; margin-right: .5rem; }
-    .input-area button.send-btn {
-      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover)); border: none;
-      width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center;
-      justify-content: center; color: #fff; font-size: 1.25rem; cursor: pointer;
-      box-shadow: 0 2px 4px var(--shadow); transition: background .2s;
-    }
+    .input-area button.send-btn { background: linear-gradient(135deg,var(--color-primary),var(--color-primary-hover)); border: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.25rem; cursor: pointer; box-shadow: 0 2px 4px var(--shadow); transition: background .2s; }
     .input-area button.send-btn:disabled { opacity: .5; cursor: not-allowed; }
   </style>
 </head>
@@ -122,6 +62,7 @@
     <div class="header-title">Julie</div>
   </div>
 
+  <!-- Onboarding -->
   <div id="step-language" class="onboard-step active">
     <p>Choisissez votre langue / Choose your language / Elige tu idioma / Wähle deine Sprache</p>
     <button class="lang-btn" data-lang="fr">Français</button>
@@ -156,4 +97,48 @@
     <div id="section-livret" class="section">
       <h2>Livret d'accueil</h2>
       <p>Informations et règles de l'hôtel.</p>
-      <button class=\``
+      <button class="btn-chat-start">Lancer le chat</button>
+    </div>
+    <div id="chat" class="chat-scroll"></div>
+    <form id="chat-form" class="input-area">
+      <button type="button" class="emoji-btn">😊</button>
+      <input type="text" id="user-input" placeholder="Message…" autocomplete="off" />
+      <button type="submit" class="send-btn">➤</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // éléments
+      const headerBackBtn = document.getElementById('header-back-btn');
+      const stepLang = document.getElementById('step-language');
+      const stepIntro = document.getElementById('step-intro');
+      const stepCta = document.getElementById('step-cta');
+      const secServices = document.getElementById('section-services');
+      const secLivret = document.getElementById('section-livret');
+      const chatScroll = document.getElementById('chat');
+      const chatForm = document.getElementById('chat-form');
+      const inputEl = document.getElementById('user-input');
+      const btnServices = document.getElementById('btn-services');
+      const btnLivret = document.getElementById('btn-livret');
+      const btnChat = document.getElementById('btn-chat');
+
+      // textes
+      const texts = { /* inchangé */ };
+      let lang = 'fr';
+
+      function hideAll() {
+        [stepLang, stepIntro, stepCta, secServices, secLivret].forEach(el => el.classList.remove('active'));
+        chatScroll.classList.remove('active'); chatForm.classList.remove('active');
+      }
+      function show(el) {
+        hideAll(); el.classList.add('active');
+        headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
+      }
+      function showChat() {
+        hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active');
+        inputEl.placeholder = texts[lang].placeholder; inputEl.focus();
+        headerBackBtn.style.visibility = 'visible';
+      }
+
+      // init onboarding\```
