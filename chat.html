@@ -191,9 +191,33 @@
     </div>
     </div>
     <div id="section-livret" class="section">
-      <iframe src="https://my.monlivretdaccueilgitesdefrance.fr/429eb289-3b94-45a9-b1a2-d0a22dad998b" 
-              style="border:none; width:100%; height:100%;" 
-              title="Livret d'accueil"></iframe>
+      <h2>Nous vous souhaitons un excellent séjour au sein de notre établissement</h2>
+      <div class="service-tiles">
+        <div class="service-tile" data-detail="detail-wifi">
+          <img src="wifi.png" alt="Wi-Fi">
+          <span>Wi-Fi</span>
+        </div>
+        <div class="service-tile" data-detail="detail-digicode">
+          <img src="digicode.png" alt="Digicode">
+          <span>Digicode</span>
+        </div>
+        <div class="service-tile" data-detail="detail-checkout">
+          <img src="checkout.png" alt="Check out">
+          <span>Check out</span>
+        </div>
+        <div class="service-tile" data-detail="detail-reception">
+          <img src="reception.png" alt="Réception">
+          <span>Réception</span>
+        </div>
+        <div class="service-tile" data-detail="detail-infos-pratiques">
+          <img src="infos_pratiques.png" alt="Infos pratiques">
+          <span>Infos pratiques</span>
+        </div>
+        <div class="service-tile" data-detail="detail-livre-dor">
+          <img src="livredor.png" alt="Livre d'or">
+          <span>Livre d'or</span>
+        </div>
+      </div>
     </div>
     <div id="chat" class="chat-scroll"></div>
     <form id="chat-form" class="input-area">
@@ -220,7 +244,7 @@
 
       // Textes par langue
       const texts = {
-        fr: { introTitle: 'Bienvenue !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjours.", ctaTitle: 'Par où commencer ?', services: "Services de l'hôtel", livret: "Le livret d'accueil", chat: 'Viens discuter', cool: 'Cool !', startChat: 'Lancer le chat', placeholder: 'Écris votre message…' },
+        fr: { introTitle: 'Bienvenmpue !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjours.", ctaTitle: 'Par où commencer ?', services: "Services de l'hôtel", livret: "Le livret d'accueil", chat: 'Viens discuter', cool: 'Cool !', startChat: 'Lancer le chat', placeholder: 'Écris votre message…' },
         en: { introTitle: 'Welcome!', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle: 'Where to start?', services: 'Hotel services', livret: 'Guest booklet', chat: 'Chat', cool: 'Cool!', startChat: 'Start chatting', placeholder: 'Type your message…' },
         es: { introTitle: '¡Bienvenido!', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar?', services: 'Servicios del hotel', livret: 'Folleto de bienvenida', chat: 'Chat', cool: '¡Genial!', startChat: 'Iniciar chat', placeholder: 'Escribe tu mensaje…' },
         de: { introTitle: 'Willkommen!', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen?', services: 'Hoteldienstleistungen', livret: 'Gästebuch', chat: 'Chat', cool: 'Cool!', startChat: 'Chat starten', placeholder: 'Nachricht eingeben…' }
