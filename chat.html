@@ -103,7 +103,11 @@
     .service-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow); }
     .service-tile img { width: 40px; height: 40px; margin-bottom: .5rem; }
     .service-tile span { font-size: .875rem; color: #333; text-align: center; }
-  </style>
+    /* Align content to top for Livret and Chat pages */
+  #section-livret.active, .chat-scroll.active {
+    padding-top: 0;
+  }
+</style>
 </head>
 <body>
   <div class="chat-header">
