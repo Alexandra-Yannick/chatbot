@@ -210,7 +210,16 @@
       }
 
       function show(el) {
-        hideAll(); el.classList.add('active'); headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
+        hideAll();
+        el.classList.add('active');
+        // Container background: white for services, transparent otherwise
+        const container = document.querySelector('.chat-container');
+        if (el === secServices) {
+          container.style.background = '#fff';
+        } else {
+          container.style.background = 'transparent';
+        }
+        headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
       }
 
       function showChat() {
