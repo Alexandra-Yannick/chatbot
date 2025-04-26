@@ -266,10 +266,22 @@
       btnChat1.addEventListener('click', showChat);
       btnChat2.addEventListener('click', showChat);
       backBtn.addEventListener('click', () => {
-        const prevId = historyStack.pop();
-        const prevEl = document.getElementById(prevId);
-        show(prevEl || stepLang);
-      });
+  if (historyStack.length) {
+    // Navigue dans la pile interne si possible
+    const prevId = historyStack.pop();
+    const prevEl = document.getElementById(prevId);
+    show(prevEl);
+  } else {
+    // Si on est sur une page detail-xxx.html, on retourne au chat
+    if (window.location.pathname.includes('detail-')) {
+      // Ajustez ici le nom de votre fichier principal (chat.html ou index.html)
+      window.location.href = 'chat.html';
+    } else {
+      // Sinon, comportement par défaut
+      window.history.back();
+    }
+  }
+});
       // Chat submit
       chatForm.addEventListener('submit', e => {
         e.preventDefault(); const text = inputEl.value.trim(); if (!text) return;
