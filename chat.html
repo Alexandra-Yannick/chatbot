@@ -234,9 +234,15 @@
       }
 
       function showChat() {
-        hideAll(); chatScroll.classList.add('active'); chatForm.classList.add('active'); inputEl.placeholder = texts[lang].placeholder; inputEl.focus();
-        // Message d'accueil
-        addMessage(lang === 'fr' ? 'Salut ! Comment puis-je vous aider aujourd\'hui ?' : texts[lang].chat, 'bot');
+        // Use show() to handle container and header
+        show(chatScroll);
+        // Activate the input area
+        chatForm.classList.add('active');
+        // Localized placeholder
+        inputEl.placeholder = texts[lang].placeholder;
+        inputEl.focus();
+        // Welcome message
+        addMessage(texts[lang].chat === 'Chat' ? 'Salut ! Comment puis-je vous aider aujourd\'hui ?' : texts[lang].chat, 'bot');
       }
 
       // Initialisation
