@@ -79,6 +79,24 @@
       gap: 1rem;
       margin-top: 1rem;
     }
+    .section h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .service-tiles > .chat-launch {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    /* Full-page mode removes container margins and rounding */
+    .chat-container.full-page {
+      margin: 0;
+      border-radius: 0;
+      box-shadow: none;
+      background: transparent;
+    }
     /* Center section headings */
     .section h2 {
       text-align: center;
@@ -201,7 +219,7 @@
 
       // Textes par langue
       const texts = {
-        fr: { introTitle: 'Bienvenいue !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjours.", ctaTitle: 'Par où commencer ?', services: "Services de l'hôtel", livret: "Le livret d'accueil", chat: 'Viens discuter', cool: 'Cool !', startChat: 'Lancer le chat', placeholder: 'Écris votre message…' },
+        fr: { introTitle: 'Bienvenue !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjours.", ctaTitle: 'Par où commencer ?', services: "Services de l'hôtel", livret: "Le livret d'accueil", chat: 'Viens discuter', cool: 'Cool !', startChat: 'Lancer le chat', placeholder: 'Écris votre message…' },
         en: { introTitle: 'Welcome!', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle: 'Where to start?', services: 'Hotel services', livret: 'Guest booklet', chat: 'Chat', cool: 'Cool!', startChat: 'Start chatting', placeholder: 'Type your message…' },
         es: { introTitle: '¡Bienvenido!', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar?', services: 'Servicios del hotel', livret: 'Folleto de bienvenida', chat: 'Chat', cool: '¡Genial!', startChat: 'Iniciar chat', placeholder: 'Escribe tu mensaje…' },
         de: { introTitle: 'Willkommen!', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen?', services: 'Hoteldienstleistungen', livret: 'Gästebuch', chat: 'Chat', cool: 'Cool!', startChat: 'Chat starten', placeholder: 'Nachricht eingeben…' }
