@@ -299,6 +299,7 @@ let currentSection = stepLang;  // section courante
       // événements onboarding
       btnLangs.forEach(b=>{
         b.addEventListener('click',()=>{
+          console.log('Tu as cliqué sur la langue :', b.dataset.lang);
           lang = b.dataset.lang;
           document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
           document.getElementById('intro-text').innerHTML  = texts[lang].introText;
