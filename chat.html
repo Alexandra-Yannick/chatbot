@@ -79,6 +79,18 @@
       gap: 1rem;
       margin-top: 1rem;
     }
+    /* Center section headings */
+    .section h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    /* Span the chat button across grid and center it */
+    .service-tiles > div:last-child {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
     .service-tiles h2 { text-align: center; margin-bottom: 1rem; }
     .service-tile {
       display: flex; flex-direction: column; align-items: center;
@@ -101,15 +113,7 @@
 
   <!-- Onboarding -->
   <div id="step-language" class="onboard-step active">
-    <p>Choisissez votre langue</p>
-    <br>
-    <p>Choose your language</p>
-    <br>
-    <p>Elige tu idioma</p>
-    <br>
-    <p>Wähle deine Sprache</p>
-    <br>
-    <br>
+    <p>Choisissez votre langue / Choose your language / Elige tu idioma / Wähle deine Sprache</p>
     <button class="lang-btn" data-lang="fr">Français</button>
     <button class="lang-btn" data-lang="en">English</button>
     <button class="lang-btn" data-lang="es">Español</button>
@@ -137,20 +141,13 @@
           <img src="room.png" alt="Room Service">
           <span>Room Service</span>
         </div>
-        <div class="service-tile" data-detail="detail-spa">
-          <img src="spa.png" alt="Spa">
-          <span>Spa</span>
+        <div class="service-tile" data-detail="detail-blanchisserie">
+          <img src="laundry.png" alt="Blanchisserie">
+          <span>Blanchisserie</span>
         </div>
-        <div class="service-tile" data-detail="detail-menage">
-          <img src="menage.png" alt="Réception">
-          <span>Service de ménage</span>
-        </div>
-        <div class="service-tile" data-detail="detail-petit-dejeuner">
-          <img src="petit-dejeuner.png" alt="Petit-déjeuner">
-          <span>Le petit-déjeuner</span>
-        </div>
-        <div>     
-        <button class="btn-primary" id="btn-start-chat">Lancer le chat</button>
+        <div class="service-tile" data-detail="detail-reception">
+          <img src="reception.png" alt="Réception">
+          <span>Réception 24h/24</span>
         </div>
       </div>
     </div>
