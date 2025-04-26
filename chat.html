@@ -2,138 +2,115 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Julie - Serial Chilleuse</title>
   <style>
-    :root { 
+    :root {
       --color-primary: #60C0E6;
       --color-primary-hover: #468FCF;
       --color-bg: #F2F7FA;
-      --bubble-user: #D0E8FF;
-      --bubble-bot: #FFFFFF;
       --radius: 20px;
       --shadow: rgba(0,0,0,0.1);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; background: var(--color-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    html, body { height: 100%; background: var(--color-bg); font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
     body { display: flex; flex-direction: column; padding-top: 4rem; }
 
     /* Header */
     .chat-header {
-      position: fixed; top: 0; left: 0; right: 0; height: 4rem;
-      display: flex; align-items: center; justify-content: center;
-      padding: 0 1rem; background: var(--color-primary);
-      color: #fff; font-size: 1.25rem; font-weight: bold;
-      box-shadow: 0 2px 4px var(--shadow); z-index: 200;
+      position: fixed; top:0; left:0; right:0; height:4rem;
+      display:flex; align-items:center; justify-content:center;
+      background:var(--color-primary); color:#fff;
+      font-size:1.25rem; font-weight:bold;
+      box-shadow:0 2px 4px var(--shadow); z-index:200;
+      padding:0 1rem;
     }
     #header-back-btn {
-      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-      background: none; border: none; color: #fff;
-      font-size: 1.5rem; cursor: pointer;
+      position:absolute; left:1rem; top:50%; transform:translateY(-50%);
+      background:none; border:none; color:#fff;
+      font-size:1.5rem; cursor:pointer;
+      visibility:hidden;
     }
-    .header-title { flex: 1; text-align: center; }
+    .header-title { flex:1; text-align:center; }
 
     /* Onboarding */
     .onboard-step {
-      display: none; position: fixed;
-      top: 4rem; bottom: 0; left: 0; right: 0;
-      background: rgba(255,255,255,0.95); z-index: 100;
-      flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 1rem;
+      display:none; position:fixed;
+      top:4rem; bottom:0; left:0; right:0;
+      background:rgba(255,255,255,0.95); z-index:100;
+      flex-direction:column; align-items:center; justify-content:center;
+      text-align:center; padding:1rem;
     }
-    .onboard-step.active { display: flex; }
+    .onboard-step.active { display:flex; }
     .lang-btn, .btn-primary, .cta-options button {
-      background: var(--color-primary);
-      color: #fff; border: none;
-      border-radius: var(--radius);
-      padding: .75rem 1.5rem;
-      cursor: pointer;
-      margin: .5rem 0;
-      width: 70%;
+      background:var(--color-primary); color:#fff; border:none;
+      border-radius:var(--radius); padding:.75rem 1.5rem;
+      cursor:pointer; margin:.5rem 0; width:70%;
     }
-    .lang-btn:hover, .btn-primary:hover, .cta-options button:hover { background: var(--color-primary-hover); }
+    .lang-btn:hover, .btn-primary:hover, .cta-options button:hover {
+      background:var(--color-primary-hover);
+    }
 
-    /* Container */
+    /* Main container */
     .chat-container {
-      flex: 1; display: flex; flex-direction: column;
-      margin: .5rem; background: #fff;
-      border-radius: var(--radius); overflow: hidden;
-      box-shadow: 0 4px 12px var(--shadow);
+      flex:1; display:flex; flex-direction:column;
+      margin:.5rem; background:#fff; border-radius:var(--radius);
+      overflow:hidden; box-shadow:0 4px 12px var(--shadow);
     }
 
     /* Sections & Chat */
-    .section { display: none; flex: 1; overflow-y: auto; padding: 1rem; background: var(--color-bg); }
-    .section.active { display: block; }
-    .chat-scroll { display: none; flex: 1; overflow-y: auto; padding: 1rem; flex-direction: column; gap: 1rem; background: var(--color-bg); }
-    .chat-scroll.active { display: flex; }
-    form#chat-form { display: none; width: 100%; }
-    form#chat-form.active { display: flex; }
-    .input-area { display: flex; align-items: center; padding: .75rem; background: #fff; box-shadow: 0 -2px 4px var(--shadow); }
-    .input-area input { flex: 1; padding: .75rem 1rem; border: 1px solid #ccc; border-radius: 30px; outline: none; margin-right: .5rem; }
-    .input-area button { background: var(--color-primary); border: none; color: #fff; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; cursor: pointer; }
+    .section { display:none; flex:1; overflow-y:auto; padding:1rem; background:var(--color-bg); }
+    .section.active { display:block; }
+    .chat-scroll {
+      display:none; flex:1; overflow-y:auto; padding:1rem;
+      flex-direction:column; gap:1rem; background:var(--color-bg);
+    }
+    .chat-scroll.active { display:flex; }
+    form#chat-form { display:none; width:100%; }
+    form#chat-form.active { display:flex; }
 
-    /* Service Tiles */
+    /* Input */
+    .input-area {
+      display:flex; align-items:center;
+      padding:.75rem; background:#fff;
+      box-shadow:0 -2px 4px var(--shadow);
+    }
+    .input-area input {
+      flex:1; padding:.75rem 1rem; border:1px solid #ccc;
+      border-radius:30px; outline:none; margin-right:.5rem;
+    }
+    .input-area button {
+      background:var(--color-primary); border:none; color:#fff;
+      width:2.5rem; height:2.5rem; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.25rem; cursor:pointer;
+    }
+
+    /* Vignettes */
     .service-tiles {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(100px,1fr));
+      gap:1rem; margin-top:1rem;
     }
-    .section h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .service-tiles > .chat-launch {
-      grid-column: 1 / -1;
-      display: flex;
-      justify-content: center;
-      margin-top: 2rem;
-    }
-
-    /* Full-page mode removes container margins and rounding */
-    .chat-container.full-page {
-      display: contents;
-      margin: 0;
-      border-radius: 0;
-      box-shadow: none;
-      background: transparent;
-    }
-    /* Center section headings */
-    .section h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    /* Span the chat button across grid and center it */
-    .service-tiles > div:last-child {
-      grid-column: 1 / -1;
-      display: flex;
-      justify-content: center;
-      margin-top: 2rem;
-    }
-    .service-tiles h2 { text-align: center; margin-bottom: 1rem; }
+    .section h2 { text-align:center; margin-bottom:1rem; }
     .service-tile {
-      display: flex; flex-direction: column; align-items: center;
-      padding: .75rem; background: #fff;
-      border-radius: var(--radius);
-      box-shadow: 0 2px 6px var(--shadow);
-      cursor: pointer;
-      transition: transform .1s, box-shadow .1s;
+      display:flex; flex-direction:column; align-items:center;
+      padding:.75rem; background:#fff; border-radius:var(--radius);
+      box-shadow:0 2px 6px var(--shadow); cursor:pointer;
+      transition:transform .1s,box-shadow .1s;
     }
-    .service-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow); }
-    .service-tile img { width: 40px; height: 40px; margin-bottom: .5rem; }
-    .service-tile span { font-size: .875rem; color: #333; text-align: center; }
-    /* Align content to top for Livret and Chat pages */
-  #section-livret.active, .chat-scroll.active {
-    padding-top: 0;
-  }
-  /* Full-page layout override for Livret & Chat */
-  .chat-container.full-page {
-    margin: 0;
-    border-radius: 0;
-    background: var(--color-bg);
-    box-shadow: none;
-  }
-</style>
+    .service-tile:hover {
+      transform:translateY(-2px); box-shadow:0 4px 12px var(--shadow);
+    }
+    .service-tile img { width:40px; height:40px; margin-bottom:.5rem; }
+    .service-tile span { font-size:.875rem; color:#333; text-align:center; }
+
+    /* Centrer bouton chat dans vignettes */
+    .chat-launch {
+      grid-column:1/-1;
+      display:flex; justify-content:center; margin-top:2rem;
+    }
+  </style>
 </head>
 <body>
   <div class="chat-header">
@@ -157,304 +134,211 @@
   <div id="step-cta" class="onboard-step">
     <h2 id="cta-title">Par où commencer ?</h2>
     <div class="cta-options">
-      <button class="cta-btn" data-cta="section-services" id="btn-services">Services de l'hôtel</button>
-      <button class="cta-btn" data-cta="section-livret" id="btn-livret">Le livret d'accueil</button>
-      <button class="cta-btn" data-cta="chat" id="btn-chat">Viens discuter</button>
+      <button data-cta="section-services" id="btn-services">Services de l'hôtel</button>
+      <button data-cta="section-livret" id="btn-livret">Le livret d'accueil</button>
+      <button data-cta="chat" id="btn-chat">Viens discuter</button>
     </div>
   </div>
 
+  <!-- Contenu principal -->
   <div class="chat-container">
+    <!-- Services -->
     <div id="section-services" class="section">
       <h2>Services de l'hôtel</h2>
       <div class="service-tiles">
-        <div class="service-tile" data-detail="detail-roomservice">
-          <img src="room.png" alt="Room Service">
-          <span>Room Service</span>
+        <div class="service-tile" data-detail="roomservice">
+          <img src="room.png" alt="Room Service"><span>Room Service</span>
         </div>
-        <div class="service-tile" data-detail="detail-spa">
-          <img src="spa.png" alt="Spa">
-          <span>Spa & Bien-être</span>
+        <div class="service-tile" data-detail="spa">
+          <img src="spa.png" alt="Spa"><span>Spa & Bien-être</span>
         </div>
-        <div class="service-tile" data-detail="detail-menage">
-          <img src="menage.png" alt="Ménage">
-          <span>Service de ménage</span>
+        <div class="service-tile" data-detail="menage">
+          <img src="menage.png" alt="Ménage"><span>Service de ménage</span>
         </div>
-        <div class="service-tile" data-detail="detail-petit-dejeuner">
-          <img src="petit-dejeuner.png" alt="Petit-déjeuner">
-          <span>Le petit-déjeuner</span>
+        <div class="service-tile" data-detail="petit-dejeuner">
+          <img src="petit-dejeuner.png" alt="Petit-déjeuner"><span>Le petit-déjeuner</span>
         </div>
-        <!-- Bouton de lancement du chat -->
-        <div class="service-tile chat-launch">
+        <div class="chat-launch">
           <button class="btn-primary" id="btn-start-chat">Lancer le chat</button>
         </div>
       </div>
     </div>
-    </div>
+
+    <!-- Livret -->
     <div id="section-livret" class="section">
-      <h2>Livret d'accueil</h2>
-      <div class="service-tile" data-detail="detail-wifi">
-          <img src="wifi.png" alt="Wifi">
-          <span>Wifi</span>
+      <h2>Nous vous souhaitons un excellent séjour au sein de notre établissement</h2>
+      <div class="service-tiles">
+        <div class="service-tile" data-detail="wifi">
+          <img src="wifi.png" alt="Wi-Fi"><span>Wi-Fi</span>
         </div>
-      <div class="service-tile" data-detail="detail-digicode">
-          <img src="digicode.png" alt="Digicode">
-          <span>Digicode</span>
+        <div class="service-tile" data-detail="digicode">
+          <img src="digicode.png" alt="Digicode"><span>Digicode</span>
         </div>
-      <div class="service-tile" data-detail="detail-reception">
-          <img src="reception.png" alt="Réception">
-          <span>Réception</span>
+        <div class="service-tile" data-detail="checkout">
+          <img src="checkout.png" alt="Check-out"><span>Check-out</span>
         </div>
-      <div class="service-tile" data-detail="detail-checkout">
-          <img src="checkout.png" alt="Checkout">
-          <span>Check-out</span>
+        <div class="service-tile" data-detail="reception">
+          <img src="reception.png" alt="Réception"><span>Réception</span>
         </div>
-      <div class="service-tile" data-detail="detail-infos">
-          <img src="infos.png" alt="Infos-Pratique">
-          <span>Infos Pratique</span>
+        <div class="service-tile" data-detail="infos-pratiques">
+          <img src="infos.png" alt="Infos pratiques"><span>Infos pratiques</span>
         </div>
-      <div class="service-tile" data-detail="detail-livre-d-or">
-          <img src="livreor.png" alt="Livre d'or">
-          <span>Livre d'Or</span>
+        <div class="service-tile" data-detail="livre-dor">
+          <img src="livreor.png" alt="Livre d'or"><span>Livre d'or</span>
         </div>
-      <button class="btn-primary" id="btn-start-chat">Lancer le chat</button>
+        <div class="chat-launch">
+          <button class="btn-primary" id="btn-start-chat-2">Lancer le chat</button>
+        </div>
+      </div>
     </div>
+
+    <!-- Chat -->
     <div id="chat" class="chat-scroll"></div>
     <form id="chat-form" class="input-area">
-      <input type="text" id="user-input" placeholder="Message…" autocomplete="off">
+      <input type="text" id="user-input" placeholder="Écris votre message…" autocomplete="off">
       <button type="submit">➤</button>
     </form>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const headerBackBtn = document.getElementById('header-back-btn');
+      // éléments
+      const backBtn = document.getElementById('header-back-btn');
       const stepLang = document.getElementById('step-language');
       const stepIntro = document.getElementById('step-intro');
-      const stepCta = document.getElementById('step-cta');
-      const secServices = document.getElementById('section-services');
-      const secLivret = document.getElementById('section-livret');
-      const chatScroll = document.getElementById('chat');
+      const stepCta  = document.getElementById('step-cta');
+      const secServ  = document.getElementById('section-services');
+      const secLiv   = document.getElementById('section-livret');
+      const chatBox  = document.getElementById('chat');
       const chatForm = document.getElementById('chat-form');
-      const inputEl = document.getElementById('user-input');
-      const btnServices = document.getElementById('btn-services');
-      const btnLivret = document.getElementById('btn-livret');
-      const btnChat = document.getElementById('btn-chat');
-      const btnStartChat = document.getElementById('btn-start-chat');
+      const inputEl  = document.getElementById('user-input');
+      const btnLangs = document.querySelectorAll('.lang-btn');
+      const btnIntro = document.getElementById('btn-intro-next');
+      const btnCTA   = document.querySelectorAll('.cta-options button');
+      const tiles    = document.querySelectorAll('.service-tile');
+      const btnChat1 = document.getElementById('btn-start-chat');
+      const btnChat2 = document.getElementById('btn-start-chat-2');
 
-      // Textes par langue
+      // textes par langue
       const texts = {
-        fr: { introTitle: 'Coucou !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjours.", ctaTitle: 'Par où commencer ?', services: "Services de l'hôtel", livret: "Le livret d'accueil", chat: 'Viens discuter', cool: 'Cool !', startChat: 'Lancer le chat', placeholder: 'Écris votre message…' },
-        en: { introTitle: 'Welcome!', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle: 'Where to start?', services: 'Hotel services', livret: 'Guest booklet', chat: 'Chat', cool: 'Cool!', startChat: 'Start chatting', placeholder: 'Type your message…' },
-        es: { introTitle: '¡Bienvenido!', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar?', services: 'Servicios del hotel', livret: 'Folleto de bienvenida', chat: 'Chat', cool: '¡Genial!', startChat: 'Iniciar chat', placeholder: 'Escribe tu mensaje…' },
-        de: { introTitle: 'Willkommen!', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen?', services: 'Hoteldienstleistungen', livret: 'Gästebuch', chat: 'Chat', cool: 'Cool!', startChat: 'Chat starten', placeholder: 'Nachricht eingeben…' }
+        fr: {
+          introTitle: 'coucou toi !',
+          introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.",
+          ctaTitle: 'Par où commencer ?',
+          placeholder: 'Écris votre message…',
+          welcome: 'Salut ! Comment puis-je vous aider aujourd\'hui ?'
+        },
+        en: {
+          introTitle: 'Welcome !',
+          introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.",
+          ctaTitle: 'Where to start ?',
+          placeholder: 'Type your message…',
+          welcome: 'Hi there ! How can I assist you today ?'
+        },
+        es: {
+          introTitle: '¡Bienvenido !',
+          introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.",
+          ctaTitle: '¿Por dónde empezar ?',
+          placeholder: 'Escribe tu mensaje…',
+          welcome: '¡Hola ! ¿En qué puedo ayudarte hoy ?'
+        },
+        de: {
+          introTitle: 'Willkommen !',
+          introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.",
+          ctaTitle: 'Wo anfangen ?',
+          placeholder: 'Nachricht eingeben…',
+          welcome: 'Hallo ! Wie kann ich Ihnen heute helfen ?'
+        }
       };
       let lang = 'fr';
 
-      // Ajout messages
-      function addMessage(text, sender) {
-        const wrapper = document.createElement('div'); wrapper.className = 'message-wrapper ' + sender;
-        const msg = document.createElement('div'); msg.className = 'message ' + sender; msg.innerHTML = text;
-        wrapper.appendChild(msg); chatScroll.appendChild(wrapper); chatScroll.scrollTop = chatScroll.scrollHeight;
-      }
-
+      // helper
       function hideAll() {
-        [stepLang, stepIntro, stepCta, secServices, secLivret].forEach(el => el.classList.remove('active'));
-        chatScroll.classList.remove('active'); chatForm.classList.remove('active');
+        [stepLang,stepIntro,stepCta,secServ,secLiv,chatBox,chatForm]
+          .forEach(e=>e.classList.remove('active'));
+        backBtn.style.visibility = 'hidden';
       }
-
       function show(el) {
         hideAll();
         el.classList.add('active');
-        // Toggle full-page layout
-        const container = document.querySelector('.chat-container');
-        if (el === secServices) {
-          container.classList.remove('full-page');
-        } else {
-          container.classList.add('full-page');
-        }
-        headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
+        if (el!==stepLang) backBtn.style.visibility='visible';
       }
 
+      // chat message
+      function addMessage(txt, cls) {
+        const w = document.createElement('div');
+        w.className = 'message-wrapper ' + cls;
+        const m = document.createElement('div');
+        m.className = 'message ' + cls;
+        m.innerHTML = txt;
+        w.appendChild(m);
+        chatBox.appendChild(w);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+
+      // show chat area
       function showChat() {
-        // Use show() to handle container and header
-        show(chatScroll);
-        // Activate the input area
+        hideAll();
+        chatBox.classList.add('active');
         chatForm.classList.add('active');
-        // Localized placeholder
+        backBtn.style.visibility='visible';
         inputEl.placeholder = texts[lang].placeholder;
         inputEl.focus();
-        // Welcome message
-        addMessage(texts[lang].chat === 'Chat' ? 'Salut ! Comment puis-je vous aider aujourd\'hui ?' : texts[lang].chat, 'bot');
+        addMessage(texts[lang].welcome,'bot');
       }
 
-      // Initialisation
+      // init
       show(stepLang);
 
-      // Sélection langue
-      document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => {
-        lang = btn.dataset.lang;
-        document.getElementById('intro-title').textContent = texts[lang].introTitle;
-        document.getElementById('intro-text').innerHTML = texts[lang].introText;
-        document.getElementById('cta-title').textContent = texts[lang].ctaTitle;
-        btnServices.textContent = texts[lang].services;
-        btnLivret.textContent = texts[lang].livret;
-        btnChat.textContent = texts[lang].chat;
-        document.getElementById('btn-intro-next').textContent = texts[lang].cool;
-        btnStartChat.textContent = texts[lang].startChat;
-        show(stepIntro);
-      }));
-
-      // Bouton Cool !
-      document.getElementById('btn-intro-next').addEventListener('click', () => show(stepCta));
-
-      // CTA
-      btnServices.addEventListener('click', () => show(secServices));
-      btnLivret.addEventListener('click', () => show(secLivret));
-      btnChat.addEventListener('click', showChat);
-      btnStartChat.addEventListener('click', showChat);
-
-      // Retour
-      headerBackBtn.addEventListener('click', () => {
-        if (secServices.classList.contains('active') || secLivret.classList.contains('active') || chatScroll.classList.contains('active')) {
-          show(stepCta);
-        } else if (stepCta.classList.contains('active')) {
+      // événements onboarding
+      btnLangs.forEach(b=>{
+        b.addEventListener('click',()=>{
+          lang = b.dataset.lang;
+          document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
+          document.getElementById('intro-text').innerHTML  = texts[lang].introText;
+          document.getElementById('cta-title').innerHTML   = texts[lang].ctaTitle;
           show(stepIntro);
-        } else if (stepIntro.classList.contains('active')) {
-          show(stepLang);
-        }
+        });
+      });
+      btnIntro.addEventListener('click',()=> show(stepCta));
+      btnCTA.forEach(b=>{
+        b.addEventListener('click',()=>{
+          const action = b.dataset.cta;
+          if (action==='section-services') show(secServ);
+          else if (action==='section-livret') show(secLiv);
+          else showChat();
+        });
+      });
+
+      // tuiles clic → pages detail
+      tiles.forEach(t=>{
+        t.addEventListener('click',()=>{
+          window.location.href = 'detail-' + t.dataset.detail + '.html';
+        });
+      });
+
+      // restart chat buttons
+      btnChat1.addEventListener('click', showChat);
+      btnChat2.addEventListener('click', showChat);
+
+      // back navigation
+      backBtn.addEventListener('click',()=>{
+        if (secServ.classList.contains('active')||secLiv.classList.contains('active')) show(stepCta);
+        else if (chatBox.classList.contains('active')) show(stepCta);
+        else if (stepCta.classList.contains('active')) show(stepIntro);
+        else if (stepIntro.classList.contains('active')) show(stepLang);
+      });
+
+      // chat submit (exemple simple)
+      chatForm.addEventListener('submit',e=>{
+        e.preventDefault();
+        const t = inputEl.value.trim(); if(!t) return;
+        addMessage(t,'user');
+        inputEl.value='';
+        // réponse factice
+        setTimeout(()=>addMessage('Réponse test…','bot'),500);
       });
     });
   </script>
 </body>
 </html>
-
-
-<!-- detail-roomservice.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Room Service</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Room Service</h1>
-    <p>Page en construction – commande de repas.</p>
-  </main>
-</body></html>
-
-<!-- detail-spa.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Spa & Bien-être</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Spa & Bien-être</h1>
-    <p>Page en construction – réservations de soins.</p>
-  </main>
-</body></html>
-
-<!-- detail-menage.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Service de ménage</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Service de ménage</h1>
-    <p>Page en construction – demandes de nettoyage.</p>
-  </main>
-</body></html>
-
-<!-- detail-petit-dejeuner.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Le petit-déjeuner</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Le petit-déjeuner</h1>
-    <p>Page en construction – horaires & menus.</p>
-  </main>
-</body></html>
-
-<!-- detail-wifi.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Wi-Fi</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Wi-Fi</h1>
-    <p>Page en construction – identifiants & conseils.</p>
-  </main>
-</body></html>
-
-<!-- detail-digicode.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Digicode</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Digicode</h1>
-    <p>Page en construction – code d’accès.</p>
-  </main>
-</body></html>
-
-<!-- detail-checkout.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Check-out</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Check-out</h1>
-    <p>Page en construction – modalités de départ.</p>
-  </main>
-</body></html>
-
-<!-- detail-reception.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Réception</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Réception</h1>
-    <p>Page en construction – infos 24h/24.</p>
-  </main>
-</body></html>
-
-<!-- detail-infos-pratiques.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Infos pratiques</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Infos pratiques</h1>
-    <p>Page en construction – plan & transports.</p>
-  </main>
-</body></html>
-
-<!-- detail-livre-dor.html -->
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Livre d'or</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
-  <header>
-    <button onclick="history.back()" aria-label="Retour">←</button>
-    <strong>Julie</strong>
-  </header>
-  <main>
-    <h1>Livre d'or</h1>
-    <p>Page en construction – vos avis et témoignages.</p>
-  </main>
-</body></html>
