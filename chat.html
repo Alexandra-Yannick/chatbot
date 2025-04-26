@@ -202,6 +202,8 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      let historyStack = [];
+let currentSection = stepLang;  // section courante
       // éléments
       const backBtn = document.getElementById('header-back-btn');
       const stepLang = document.getElementById('step-language');
@@ -259,10 +261,14 @@
         backBtn.style.visibility = 'hidden';
       }
       function show(el) {
-        hideAll();
-        el.classList.add('active');
-        if (el!==stepLang) backBtn.style.visibility='visible';
-      }
+  if (currentSection && currentSection !== el) {
+    historyStack.push(currentSection.id);
+  }
+  hideAll();
+  el.classList.add('active');
+  headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
+  currentSection = el;
+}
 
       // chat message
       function addMessage(txt, cls) {
@@ -322,12 +328,18 @@
       btnChat2.addEventListener('click', showChat);
 
       // back navigation
-      backBtn.addEventListener('click',()=>{
-        if (secServ.classList.contains('active')||secLiv.classList.contains('active')) show(stepCta);
-        else if (chatBox.classList.contains('active')) show(stepCta);
-        else if (stepCta.classList.contains('active')) show(stepIntro);
-        else if (stepIntro.classList.contains('active')) show(stepLang);
-      });
+    backBtn.addEventListener('click', () => {
+  if (historyStack.length > 0) {
+    const prevId = historyStack.pop();
+    const prevEl = document.getElementById(prevId);
+    if (prevEl) {
+      show(prevEl);
+      return;
+    }
+  }
+  // en dernier recours, on retourne à l'étape langue
+  show(stepLang);
+});
 
       // chat submit (exemple simple)
       chatForm.addEventListener('submit',e=>{
