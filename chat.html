@@ -166,22 +166,23 @@
   <div class="chat-container">
     <div id="section-services" class="section">
       <h2>Services de l'hôtel</h2>
-      <a href="detail-roomservice.html" class="service-tile">
+      <div class="service-tiles">
+        <div class="service-tile" data-detail="detail-roomservice">
           <img src="room.png" alt="Room Service">
           <span>Room Service</span>
-      </a>
-       <a href="detail-spa.html" class="service-tile">
+        </div>
+        <div class="service-tile" data-detail="detail-spa">
           <img src="spa.png" alt="Spa">
           <span>Spa & Bien-être</span>
-       </a>
-        <a href="detail-menage.html" class="service-tile">
+        </div>
+        <div class="service-tile" data-detail="detail-menage">
           <img src="menage.png" alt="Ménage">
           <span>Service de ménage</span>
-        </a>
-        <a href="detail-petit-dejeuner.html" class="service-tile">
+        </div>
+        <div class="service-tile" data-detail="detail-petit-dejeuner">
           <img src="petit-dejeuner.png" alt="Petit-déjeuner">
           <span>Le petit-déjeuner</span>
-        </a>
+        </div>
         <!-- Bouton de lancement du chat -->
         <div class="service-tile chat-launch">
           <button class="btn-primary" id="btn-start-chat">Lancer le chat</button>
@@ -190,33 +191,32 @@
     </div>
     </div>
     <div id="section-livret" class="section">
-      <h2>Nous vous souhaitons un excellent séjour au sein de notre établissement</h2>
-      <div class="service-tiles">
-       <a href="detail-wifi.html" data-detail="detail-wifi">
-          <img src="wifi.png" alt="Wi-Fi">
-          <span>Wi-Fi</span>
-        </a>
-        <a href="detail-digicode.html" data-detail="detail-digicode">
+      <h2>Livret d'accueil</h2>
+      <div class="service-tile" data-detail="detail-wifi">
+          <img src="wifi.png" alt="Wifi">
+          <span>Wifi</span>
+        </div>
+      <div class="service-tile" data-detail="detail-digicode">
           <img src="digicode.png" alt="Digicode">
           <span>Digicode</span>
-        </a>
-       <a href="detail-checkout.html" data-detail="detail-checkout">
-          <img src="checkout.png" alt="Check out">
-          <span>Check out</span>
-        </a>
-        <a href="detail-reception.html" data-detail="detail-reception">
+        </div>
+      <div class="service-tile" data-detail="detail-reception">
           <img src="reception.png" alt="Réception">
           <span>Réception</span>
-        </a>
-        <a href="detail-infos.html" data-detail="detail-infos">
-          <img src="infos.png" alt="Infos pratiques">
-          <span>Infos pratiques</span>
-        </a>
-        <a href="detail-livre-d-or.html" data-detail="detail-livre-d-or">
-          <img src="livre-or.png" alt="Livre d'or">
-          <span>Livre d'or</span>
-        </a>
-      </div>
+        </div>
+      <div class="service-tile" data-detail="detail-checkout">
+          <img src="checkout.png" alt="Checkout">
+          <span>Check-out</span>
+        </div>
+      <div class="service-tile" data-detail="detail-infos">
+          <img src="infos.png" alt="Infos-Pratique">
+          <span>Infos Pratique</span>
+        </div>
+      <div class="service-tile" data-detail="detail-livre-d-or">
+          <img src="livreor.png" alt="Livre d'or">
+          <span>Livre d'Or</span>
+        </div>
+      <button class="btn-primary" id="btn-start-chat">Lancer le chat</button>
     </div>
     <div id="chat" class="chat-scroll"></div>
     <form id="chat-form" class="input-area">
@@ -243,7 +243,7 @@
 
       // Textes par langue
       const texts = {
-        fr: { introTitle: 'Bienvenいue !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjours.", ctaTitle: 'Par où commencer ?', services: "Services de l'hôtel", livret: "Le livret d'accueil", chat: 'Viens discuter', cool: 'Cool !', startChat: 'Lancer le chat', placeholder: 'Écris votre message…' },
+        fr: { introTitle: 'Coucou !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjours.", ctaTitle: 'Par où commencer ?', services: "Services de l'hôtel", livret: "Le livret d'accueil", chat: 'Viens discuter', cool: 'Cool !', startChat: 'Lancer le chat', placeholder: 'Écris votre message…' },
         en: { introTitle: 'Welcome!', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle: 'Where to start?', services: 'Hotel services', livret: 'Guest booklet', chat: 'Chat', cool: 'Cool!', startChat: 'Start chatting', placeholder: 'Type your message…' },
         es: { introTitle: '¡Bienvenido!', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar?', services: 'Servicios del hotel', livret: 'Folleto de bienvenida', chat: 'Chat', cool: '¡Genial!', startChat: 'Iniciar chat', placeholder: 'Escribe tu mensaje…' },
         de: { introTitle: 'Willkommen!', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen?', services: 'Hoteldienstleistungen', livret: 'Gästebuch', chat: 'Chat', cool: 'Cool!', startChat: 'Chat starten', placeholder: 'Nachricht eingeben…' }
@@ -327,3 +327,134 @@
   </script>
 </body>
 </html>
+
+
+<!-- detail-roomservice.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Room Service</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Room Service</h1>
+    <p>Page en construction – commande de repas.</p>
+  </main>
+</body></html>
+
+<!-- detail-spa.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Spa & Bien-être</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Spa & Bien-être</h1>
+    <p>Page en construction – réservations de soins.</p>
+  </main>
+</body></html>
+
+<!-- detail-menage.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Service de ménage</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Service de ménage</h1>
+    <p>Page en construction – demandes de nettoyage.</p>
+  </main>
+</body></html>
+
+<!-- detail-petit-dejeuner.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Le petit-déjeuner</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Le petit-déjeuner</h1>
+    <p>Page en construction – horaires & menus.</p>
+  </main>
+</body></html>
+
+<!-- detail-wifi.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Wi-Fi</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Wi-Fi</h1>
+    <p>Page en construction – identifiants & conseils.</p>
+  </main>
+</body></html>
+
+<!-- detail-digicode.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Digicode</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Digicode</h1>
+    <p>Page en construction – code d’accès.</p>
+  </main>
+</body></html>
+
+<!-- detail-checkout.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Check-out</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Check-out</h1>
+    <p>Page en construction – modalités de départ.</p>
+  </main>
+</body></html>
+
+<!-- detail-reception.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Réception</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Réception</h1>
+    <p>Page en construction – infos 24h/24.</p>
+  </main>
+</body></html>
+
+<!-- detail-infos-pratiques.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Infos pratiques</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Infos pratiques</h1>
+    <p>Page en construction – plan & transports.</p>
+  </main>
+</body></html>
+
+<!-- detail-livre-dor.html -->
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Julie – Livre d'or</title><style>:root{--color-primary:#60C0E6;--shadow:rgba(0,0,0,0.1);--radius:20px;--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}*{box-sizing:border-box;margin:0;padding:0}body{font-family:var(--font);background:#F2F7FA}header{background:var(--color-primary);color:#fff;padding:1rem;position:sticky;top:0;box-shadow:0 2px 4px var(--shadow);display:flex;align-items:center;justify-content:center;position:relative}header button{position:absolute;left:1rem;font-size:1.5rem;background:none;border:none;color:#fff;cursor:pointer}main{padding:2rem}h1{text-align:center;margin-bottom:1rem;font-size:1.5rem}</style></head><body>
+  <header>
+    <button onclick="history.back()" aria-label="Retour">←</button>
+    <strong>Julie</strong>
+  </header>
+  <main>
+    <h1>Livre d'or</h1>
+    <p>Page en construction – vos avis et témoignages.</p>
+  </main>
+</body></html>
