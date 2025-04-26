@@ -244,10 +244,10 @@
         addMessage(texts[lang].welcome, 'bot');
       }
 
-      // nouvelle initialisation : si on arrive avec #section-services,
-// on ouvre directement la section Services, sinon on lance l’onboarding
-if (window.location.hash === '#section-services') {
+ if (window.location.hash === '#section-services') {
   show(document.getElementById('section-services'));
+} else if (window.location.hash === '#section-livret') {
+  show(document.getElementById('section-livret'));
 } else {
   show(stepLang);
 }
