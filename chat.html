@@ -214,18 +214,90 @@
       show(stepLang);
 
       // Sélection de la langue
+      // Textes par langue
+      const texts = {
+        fr: {
+          introTitle: 'Bienvenue !',
+          introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.",
+          ctaTitle: 'Par où commencer ?',
+          services: "Services de l'hôtel",
+          livret: "Le livret d'accueil",
+          chat: 'Viens discuter',
+          cool: 'Cool !',
+          startChat: 'Lancer le chat',
+          placeholder: 'Écris votre message…'
+        },
+        en: {
+          introTitle: 'Welcome!',
+          introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.",
+          ctaTitle: 'Where to start?',
+          services: 'Hotel services',
+          livret: 'Guest booklet',
+          chat: 'Chat',
+          cool: 'Cool!',
+          startChat: 'Start chatting',
+          placeholder: 'Type your message…'
+        },
+        es: {
+          introTitle: '¡Bienvenido!',
+          introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.",
+          ctaTitle: '¿Por dónde empezar?',
+          services: 'Servicios del hotel',
+          livret: 'Folleto de bienvenida',
+          chat: 'Chat',
+          cool: '¡Genial!',
+          startChat: 'Iniciar chat',
+          placeholder: 'Escribe tu mensaje…'
+        },
+        de: {
+          introTitle: 'Willkommen!',
+          introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.",
+          ctaTitle: 'Wo anfangen?',
+          services: 'Hoteldienstleistungen',
+          livret: 'Gästebuch',
+          chat: 'Chat',
+          cool: 'Cool!',
+          startChat: 'Chat starten',
+          placeholder: 'Nachricht eingeben…'
+        }
+      };
+      let lang = 'fr';
+      
+      // Sélection de la langue et mise à jour du wording
       document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => show(stepIntro));
+        btn.addEventListener('click', () => {
+          lang = btn.dataset.lang;
+          // Mise à jour textes UI
+          document.getElementById('intro-title').textContent = texts[lang].introTitle;
+          document.getElementById('intro-text').innerHTML = texts[lang].introText;
+          document.getElementById('cta-title').textContent = texts[lang].ctaTitle;
+          document.getElementById('btn-services').textContent = texts[lang].services;
+          document.getElementById('btn-livret').textContent = texts[lang].livret;
+          document.getElementById('btn-chat').textContent = texts[lang].chat;
+          document.getElementById('btn-intro-next').textContent = texts[lang].cool;
+          document.getElementById('btn-start-chat').textContent = texts[lang].startChat;
+          show(stepIntro);
+        });
       });
+
+      // Placeholder du chat correctement localisé
+      function showChat() {
+        hideAll();
+        chatScroll.classList.add('active');
+        chatForm.classList.add('active');
+        inputEl.placeholder = texts[lang].placeholder;
+        inputEl.focus();
+        // Premier message de Julie
+        addMessage(`Salut ! Comment puis-je vous aider aujourd'hui ?`, 'bot');
+      }
 
       // Bouton Cool
       document.getElementById('btn-intro-next').addEventListener('click', () => show(stepCta));
-
       // Boutons CTA
       btnServices.addEventListener('click', () => show(secServices));
       btnLivret.addEventListener('click', () => show(secLivret));
       btnChat.addEventListener('click', showChat);
-      btnStartChat.addEventListener('click', showChat);
+      btnStartChat.addEventListener('click', showChat);.addEventListener('click', showChat);
 
       // Navigation retour
       headerBackBtn.addEventListener('click', () => {
