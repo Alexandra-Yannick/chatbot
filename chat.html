@@ -107,6 +107,13 @@
   #section-livret.active, .chat-scroll.active {
     padding-top: 0;
   }
+  /* Full-page layout override for Livret & Chat */
+  .chat-container.full-page {
+    margin: 0;
+    border-radius: 0;
+    background: var(--color-bg);
+    box-shadow: none;
+  }
 </style>
 </head>
 <body>
@@ -216,12 +223,12 @@
       function show(el) {
         hideAll();
         el.classList.add('active');
-        // Container background: white for services, transparent otherwise
+        // Toggle full-page layout
         const container = document.querySelector('.chat-container');
         if (el === secServices) {
-          container.style.background = '#fff';
+          container.classList.remove('full-page');
         } else {
-          container.style.background = 'transparent';
+          container.classList.add('full-page');
         }
         headerBackBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
       }
