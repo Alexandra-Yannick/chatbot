@@ -194,6 +194,10 @@ body {
 /* Espacement spécifique pour les <p> de l’écran langue */
 #step-language p {
   margin: 0.5rem 0;         /* 0.5rem au-dessus et en-dessous */
+  /* 1) Aligne le contenu en haut (plutôt qu'au centre) */
+  justify-content: flex-start !important;
+  /* 2) Resserre le padding interne pour réduire l'espace */
+  padding-top: 0.5rem !important;
 }
     
   </style>
