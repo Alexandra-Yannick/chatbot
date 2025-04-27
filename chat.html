@@ -124,7 +124,7 @@
 
   <!-- Onboarding -->
   <div id="step-language" class="onboard-step active">
-    <p>Choisissez votre langue</p>
+    <p>Choisissez votre langue</p><br>
     <p>Choose your language</p><br>
     <p>Elige tu idioma</p> <br>
     <p>Wähle deine Sprache</p><br>
@@ -207,9 +207,9 @@
     </form>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-  // Récupération des éléments
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ─── 1) Récupération des éléments ────────────────────────────────
   const backBtn   = document.getElementById('header-back-btn');
   const stepLang  = document.getElementById('step-language');
   const stepIntro = document.getElementById('step-intro');
@@ -226,24 +226,130 @@
   const btnChat1  = document.getElementById('btn-start-chat');
   const btnChat2  = document.getElementById('btn-start-chat-2');
 
-  // État initial
+  // ─── 2) État initial ────────────────────────────────────────────
   let historyStack   = [];
   let currentSection = stepLang;
+  let lang           = 'fr';
 
-  // Textes par langue
+  // ─── 3) Textes statiques par langue ─────────────────────────────
   const texts = {
-    fr: { introTitle: 'Coucou !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd’hui ?' },
-    en: { introTitle: 'Welcome !', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.",       ctaTitle: 'Where to start ?',    placeholder: 'Type your message…',        welcome: 'Hi there ! How can I assist you today ?' },
-    es: { introTitle: '¡Bienvenido !', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar ?', placeholder: 'Escribe tu mensaje…',     welcome: '¡Hola ! ¿En qué puedo ayudarte hoy ?' },
-    de: { introTitle: 'Willkommen !', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen ?',       placeholder: 'Nachricht eingeben…',      welcome: 'Hallo ! Wie kann ich Ihnen heute helfen ?' }
+    fr: {
+      introTitle:   'Coucou !',
+      introText:    "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.",
+      ctaTitle:     'Par où commencer ?',
+      placeholder:  'Écris votre message…',
+      welcome:      'Salut ! Comment puis-je vous aider aujourd’hui ?'
+    },
+    en: {
+      introTitle:   'Welcome !',
+      introText:    "I'm <strong>Julie</strong>, your virtual concierge for your stay.",
+      ctaTitle:     'Where to start ?',
+      placeholder:  'Type your message…',
+      welcome:      'Hi there ! How can I assist you today ?'
+    },
+    es: {
+      introTitle:   '¡Bienvenido !',
+      introText:    "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.",
+      ctaTitle:     '¿Por dónde empezar ?',
+      placeholder:  'Escribe tu mensaje…',
+      welcome:      '¡Hola ! ¿En qué puedo ayudarte hoy ?'
+    },
+    de: {
+      introTitle:   'Willkommen !',
+      introText:    "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.",
+      ctaTitle:     'Wo anfangen ?',
+      placeholder:  'Nachricht eingeben…',
+      welcome:      'Hallo ! Wie kann ich Ihnen heute helfen ?'
+    }
   };
-  let lang = 'fr';
 
-  // Helpers
+  // ─── 4) Étiquettes UI dynamiques par langue ───────────────────────
+  const uiLabels = {
+    fr: {
+      ctaServices:           "Services de l'hôtel",
+      ctaLivret:             "Le livret d'accueil",
+      ctaChat:               "Viens discuter",
+      sectionServicesTitle:  "Services de l'hôtel",
+      sectionLivretTitle:    "Nous vous souhaitons un excellent séjour au sein de notre établissement",
+      tiles: {
+        roomservice:      "Room Service",
+        spa:              "Spa & Bien-être",
+        menage:           "Service de ménage",
+        "petit-dejeuner": "Le petit-déjeuner",
+        wifi:             "Wi-Fi",
+        digicode:         "Digicode",
+        checkout:         "Check-out",
+        reception:        "Réception",
+        "infos-pratiques":"Infos pratiques",
+        "livre-dor":      "Livre d'or"
+      }
+    },
+    en: {
+      ctaServices:          "Hotel services",
+      ctaLivret:            "Welcome booklet",
+      ctaChat:              "Chat with Julie",
+      sectionServicesTitle: "Hotel Services",
+      sectionLivretTitle:   "We wish you a wonderful stay at our hotel",
+      tiles: {
+        roomservice:      "Room Service",
+        spa:              "Spa & Wellness",
+        menage:           "Housekeeping",
+        "petit-dejeuner": "Breakfast",
+        wifi:             "Wi-Fi",
+        digicode:         "Keycode",
+        checkout:         "Check-out",
+        reception:        "Reception",
+        "infos-pratiques":"Practical info",
+        "livre-dor":      "Guestbook"
+      }
+    },
+    es: {
+      ctaServices:          "Servicios del hotel",
+      ctaLivret:            "Manual de bienvenida",
+      ctaChat:              "Chatear con Julie",
+      sectionServicesTitle: "Servicios del hotel",
+      sectionLivretTitle:   "¡Te deseamos una estancia maravillosa!",
+      tiles: {
+        roomservice:      "Servicio a la habitación",
+        spa:              "Spa y bienestar",
+        menage:           "Limpieza",
+        "petit-dejeuner": "Desayuno",
+        wifi:             "Wi-Fi",
+        digicode:         "Código de acceso",
+        checkout:         "Salida",
+        reception:        "Recepción",
+        "infos-pratiques":"Información práctica",
+        "livre-dor":      "Libro de visitas"
+      }
+    },
+    de: {
+      ctaServices:          "Hoteldienstleistungen",
+      ctaLivret:            "Gästebuch",
+      ctaChat:              "Mit Julie chatten",
+      sectionServicesTitle: "Hoteldienstleistungen",
+      sectionLivretTitle:   "Wir wünschen Ihnen einen wunderschönen Aufenthalt",
+      tiles: {
+        roomservice:      "Zimmerservice",
+        spa:              "Spa & Wellness",
+        menage:           "Zimmerreinigung",
+        "petit-dejeuner": "Frühstück",
+        wifi:             "Wi-Fi",
+        digicode:         "Zugangscode",
+        checkout:         "Check-out",
+        reception:        "Rezeption",
+        "infos-pratiques":"Praktische Infos",
+        "livre-dor":      "Gästebuch"
+      }
+    }
+  };
+
+  // ─── 5) Helpers de navigation et d’affichage ───────────────────────
   function hideAll() {
-    [stepLang, stepIntro, stepCta, secServ, secLiv, chatBox, chatForm].forEach(el => el.classList.remove('active'));
+    [stepLang, stepIntro, stepCta, secServ, secLiv, chatBox, chatForm]
+      .forEach(el => el.classList.remove('active'));
     backBtn.style.visibility = 'hidden';
   }
+
   function show(el) {
     if (currentSection && currentSection !== el) {
       historyStack.push(currentSection.id);
@@ -253,6 +359,7 @@
     backBtn.style.visibility = (el === stepLang) ? 'hidden' : 'visible';
     currentSection = el;
   }
+
   function addMessage(txt, cls) {
     const wrapper = document.createElement('div');
     wrapper.className = 'message-wrapper ' + cls;
@@ -263,26 +370,8 @@
     chatBox.appendChild(wrapper);
     chatBox.scrollTop = chatBox.scrollHeight;
   }
+
   function showChat() {
-    function updateUILanguage() {
-  const L = uiLabels[lang];
-
-  // CTA buttons
-  document.querySelector('[data-cta="section-services"]').innerText = L.ctaServices;
-  document.querySelector('[data-cta="section-livret"]').innerText  = L.ctaLivret;
-  document.querySelector('[data-cta="chat"]').innerText          = L.ctaChat;
-
-  // Section headings
-  secServ.querySelector('h2').innerText = L.sectionServicesTitle;
-  secLiv.querySelector('h2').innerText  = L.sectionLivretTitle;
-
-  // Tuiles
-  tiles.forEach(tile => {
-    const key = tile.dataset.detail;
-    const span = tile.querySelector('span');
-    if (L.tiles[key]) span.innerText = L.tiles[key];
-  });
-}
     hideAll();
     chatBox.classList.add('active');
     chatForm.classList.add('active');
@@ -292,74 +381,92 @@
     addMessage(texts[lang].welcome, 'bot');
   }
 
-  // Initialisation selon fragment d’URL (venant de detail-*.html)
+  // ─── 6) Mise à jour des labels UI selon la langue ────────────────
+  function updateUILanguage() {
+    const L = uiLabels[lang];
+    // CTA buttons
+    document.querySelector('[data-cta="section-services"]').innerText = L.ctaServices;
+    document.querySelector('[data-cta="section-livret"]').innerText   = L.ctaLivret;
+    document.querySelector('[data-cta="chat"]').innerText            = L.ctaChat;
+    // Section headings
+    secServ.querySelector('h2').innerText = L.sectionServicesTitle;
+    secLiv.querySelector('h2').innerText  = L.sectionLivretTitle;
+    // Tiles
+    tiles.forEach(tile => {
+      const key = tile.dataset.detail;
+      const span = tile.querySelector('span');
+      if (L.tiles[key]) span.innerText = L.tiles[key];
+    });
+  }
+
+  // ─── 7) Initialisation (hash ou onboard) ─────────────────────────
   const hash = window.location.hash;
   if (hash === '#section-services' || hash === '#section-livret') {
-    // 1) Affiche directement la section correspondante
     show(document.getElementById(hash.slice(1)));
-    // 2) Pré-charge un retour vers CTA lors du premier « back »
     historyStack = ['step-cta'];
   } else {
-    // démarrage normal
     show(stepLang);
   }
-      updateUILanguage();  // <-- met à jour les libellés dès le chargement
-      // Événements Onboarding
-      btnLangs.forEach(b => b.addEventListener('click', () => {
-        lang = b.dataset.lang;
-        // vos updates intro-title, intro-text, cta-title…
-  updateUILanguage();      // <-- met à jour tous les libellés UI
-  show(stepIntro);
-        document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
-        document.getElementById('intro-text').innerHTML = texts[lang].introText;
-        document.getElementById('cta-title').innerHTML = texts[lang].ctaTitle;
-        show(stepIntro);
-      }));
-      btnIntro.addEventListener('click', () => show(stepCta));
-      btnCTA.forEach(b => b.addEventListener('click', () => {
-        const action = b.dataset.cta;
-        if (action === 'section-services') show(secServ);
-        else if (action === 'section-livret') show(secLiv);
-        else showChat();
-      }));
-      tiles.forEach(t => t.addEventListener('click', () => window.location.href = 'detail-' + t.dataset.detail + '.html'));
-      btnChat1.addEventListener('click', showChat);
-      btnChat2.addEventListener('click', showChat);
-      backBtn.addEventListener('click', () => {
-  if (historyStack.length) {
-    // 1) S’il reste des écrans dans la pile, on y revient
-    const prevId = historyStack.pop();
-    const prevEl = document.getElementById(prevId);
-    show(prevEl);
-  } else {
-    // 2) Navigation ascendante dans l’app
-    switch (currentSection.id) {
-      case 'section-services':
-      case 'section-livret':
-        // De Services/Livret → Par où commencer ?
-        show(stepCta);
-        break;
-      case 'step-cta':
-        // De Par où commencer ? → Intro
-        show(stepIntro);
-        break;
-      case 'step-intro':
-        // De Intro → Choix de la langue
-        show(stepLang);
-        break;
-      default:
-        // 3) Une fois arrivé sur l’écran Langue, on libère le vrai back
-        window.history.back();
+  updateUILanguage();
+
+  // ─── 8) Événements Onboarding & UI ───────────────────────────────
+  btnLangs.forEach(b => b.addEventListener('click', () => {
+    lang = b.dataset.lang;
+    // textes intro/CTA
+    document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
+    document.getElementById('intro-text').innerHTML  = texts[lang].introText;
+    document.getElementById('cta-title').innerHTML   = texts[lang].ctaTitle;
+    // mise à jour UI globale
+    updateUILanguage();
+    show(stepIntro);
+  }));
+
+  btnIntro.addEventListener('click', () => show(stepCta));
+
+  btnCTA.forEach(b => b.addEventListener('click', () => {
+    const action = b.dataset.cta;
+    if (action === 'section-services') show(secServ);
+    else if (action === 'section-livret')  show(secLiv);
+    else showChat();
+  }));
+
+  tiles.forEach(t => t.addEventListener('click', () => {
+    window.location.href = 'detail-' + t.dataset.detail + '.html';
+  }));
+
+  btnChat1.addEventListener('click', showChat);
+  btnChat2.addEventListener('click', showChat);
+
+  backBtn.addEventListener('click', () => {
+    if (historyStack.length) {
+      const prevId = historyStack.pop();
+      const prevEl = document.getElementById(prevId);
+      show(prevEl);
+    } else {
+      switch (currentSection.id) {
+        case 'section-services':
+        case 'section-livret':
+          show(stepCta);    break;
+        case 'step-cta':
+          show(stepIntro);  break;
+        case 'step-intro':
+          show(stepLang);   break;
+        default:
+          window.history.back();
+      }
     }
-  }
-});
-      // Chat submit
-      chatForm.addEventListener('submit', e => {
-        e.preventDefault(); const text = inputEl.value.trim(); if (!text) return;
-        addMessage(text, 'user'); inputEl.value = '';
-        setTimeout(() => addMessage('Réponse test…', 'bot'), 500);
   });
-    });
-  </script>
+
+  // ─── 9) Soumission du chat ─────────────────────────────────────────
+  chatForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const text = inputEl.value.trim();
+    if (!text) return;
+    addMessage(text, 'user');
+    inputEl.value = '';
+    setTimeout(() => addMessage('Réponse test…', 'bot'), 500);
+  });
+});
+</script>
 </body>
 </html>
