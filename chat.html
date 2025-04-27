@@ -282,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reception:        "Réception",
         "infos-pratiques":"Infos pratiques",
         "livre-dor":      "Livre d'or"
+        btnIntro: "C’est parti !"
       }
     },
     en: {
@@ -301,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reception:        "Reception",
         "infos-pratiques":"Practical info",
         "livre-dor":      "Guestbook"
+  btnIntro: "Let’s go!"
       }
     },
     es: {
@@ -320,6 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reception:        "Recepción",
         "infos-pratiques":"Información práctica",
         "livre-dor":      "Libro de visitas"
+        btnIntro: "¡Vamos!"
       }
     },
     de: {
@@ -339,6 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reception:        "Rezeption",
         "infos-pratiques":"Praktische Infos",
         "livre-dor":      "Gästebuch"
+        btnIntro: "Los geht’s!"
       }
     }
   };
@@ -397,6 +401,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const span = tile.querySelector('span');
       if (L.tiles[key]) span.innerText = L.tiles[key];
        // Chat-launch buttons dans Services et Livret
+      // Traduction du bouton “Cool !”
+document.getElementById('btn-intro-next').innerText = uiLabels[lang].btnIntro;
   btnChat1.innerText = L.ctaChat;
   btnChat2.innerText = L.ctaChat;
     });
