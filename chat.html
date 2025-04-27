@@ -183,23 +183,24 @@ body {
 }
 .onboard-step {
   top: 3rem !important;
-}
-    /* Override pour remonter l’onboarding */
-.onboard-step {
-  top: 3rem !important;    /* remplacez 3rem par la valeur qui vous convient */
-  padding: 1rem !important;/* vous pouvez réduire si besoin */
-  gap: 0.5rem;               /* espace uniforme entre chaque enfant */
-}
+}}
 
 /* Espacement spécifique pour les <p> de l’écran langue */
 #step-language p {
   margin: 0.5rem 0;         /* 0.5rem au-dessus et en-dessous */
-  /* 1) Aligne le contenu en haut (plutôt qu'au centre) */
-  justify-content: flex-start !important;
-  /* 2) Resserre le padding interne pour réduire l'espace */
-  padding-top: 0.5rem !important;
 }
-    
+    /* 1) Onboarding langue : contenu aligné en haut, peu de padding */
+#step-language.onboard-step.active {
+  top: 3rem !important;                /* remonte l’overlay */
+  justify-content: flex-start !important; /* aligne le contenu en haut */
+  padding-top: 0.5rem !important;      /* réduit l’espace interne haut */
+  gap: 0.5rem;                         /* espace uniforme entre les <p> et les boutons */
+}
+
+/* 2) Marges propres pour chaque ligne de texte */
+#step-language p {
+  margin: 0.5rem 0;                    /* 0.5rem au-dessus et en-dessous */
+}
   </style>
 </head>
 <body>
