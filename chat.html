@@ -264,6 +264,25 @@
     chatBox.scrollTop = chatBox.scrollHeight;
   }
   function showChat() {
+    function updateUILanguage() {
+  const L = uiLabels[lang];
+
+  // CTA buttons
+  document.querySelector('[data-cta="section-services"]').innerText = L.ctaServices;
+  document.querySelector('[data-cta="section-livret"]').innerText  = L.ctaLivret;
+  document.querySelector('[data-cta="chat"]').innerText          = L.ctaChat;
+
+  // Section headings
+  secServ.querySelector('h2').innerText = L.sectionServicesTitle;
+  secLiv.querySelector('h2').innerText  = L.sectionLivretTitle;
+
+  // Tuiles
+  tiles.forEach(tile => {
+    const key = tile.dataset.detail;
+    const span = tile.querySelector('span');
+    if (L.tiles[key]) span.innerText = L.tiles[key];
+  });
+}
     hideAll();
     chatBox.classList.add('active');
     chatForm.classList.add('active');
@@ -284,9 +303,13 @@
     // démarrage normal
     show(stepLang);
   }
+      updateUILanguage();  // <-- met à jour les libellés dès le chargement
       // Événements Onboarding
       btnLangs.forEach(b => b.addEventListener('click', () => {
         lang = b.dataset.lang;
+        // vos updates intro-title, intro-text, cta-title…
+  updateUILanguage();      // <-- met à jour tous les libellés UI
+  show(stepIntro);
         document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
         document.getElementById('intro-text').innerHTML = texts[lang].introText;
         document.getElementById('cta-title').innerHTML = texts[lang].ctaTitle;
