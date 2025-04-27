@@ -184,6 +184,17 @@ body {
 .onboard-step {
   top: 3rem !important;
 }
+    /* Override pour remonter l’onboarding */
+.onboard-step {
+  top: 3rem !important;    /* remplacez 3rem par la valeur qui vous convient */
+  padding: 1rem !important;/* vous pouvez réduire si besoin */
+  gap: 0.5rem;               /* espace uniforme entre chaque enfant */
+}
+
+/* Espacement spécifique pour les <p> de l’écran langue */
+#step-language p {
+  margin: 0.5rem 0;         /* 0.5rem au-dessus et en-dessous */
+}
     
   </style>
 </head>
@@ -195,10 +206,10 @@ body {
 
   <!-- Onboarding -->
   <div id="step-language" class="onboard-step active">
-    <p>Choisissez votre langue</p><br>
-    <p>Choose your language</p><br>
-    <p>Elige tu idioma</p> <br>
-    <p>Wähle deine Sprache</p><br>
+    <p>Choisissez votre langue</p>
+    <p>Choose your language</p>
+    <p>Elige tu idioma</p> 
+    <p>Wähle deine Sprache</p>
     <button class="lang-btn" data-lang="fr">Français</button>
     <button class="lang-btn" data-lang="en">English</button>
     <button class="lang-btn" data-lang="es">Español</button>
