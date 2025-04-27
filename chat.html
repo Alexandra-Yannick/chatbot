@@ -396,6 +396,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const key = tile.dataset.detail;
       const span = tile.querySelector('span');
       if (L.tiles[key]) span.innerText = L.tiles[key];
+       // Chat-launch buttons dans Services et Livret
+  btnChat1.innerText = L.ctaChat;
+  btnChat2.innerText = L.ctaChat;
+}
     });
   }
 
