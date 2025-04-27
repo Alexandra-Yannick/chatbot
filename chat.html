@@ -169,6 +169,15 @@
     .service-tile span { font-size: .875rem; color: #333; text-align: center; }
 
     .chat-launch { grid-column: 1 / -1; display: flex; justify-content: center; margin-top: 2rem; }
+  
+  /* Méta-info en haut de la bulle */
+.message .meta {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+    
   </style>
 </head>
 <body>
@@ -425,15 +434,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function addMessage(txt, cls) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'message-wrapper ' + cls;
-    const msg = document.createElement('div');
-    msg.className = 'message ' + cls;
-    msg.innerHTML = txt;
-    wrapper.appendChild(msg);
-    chatBox.appendChild(wrapper);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
+  // horaire au format HH:MM
+  const now = new Date();
+  const hh = String(now.getHours()).padStart(2, '0');
+  const mm = String(now.getMinutes()).padStart(2, '0');
+  const time = `${hh}:${mm}`;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'message-wrapper ' + cls;
+
+  const msg = document.createElement('div');
+  msg.className = 'message ' + cls;
+
+  // Créer et injecter le span meta (label + heure)
+  const who = (cls === 'bot') ? 'Julie' : 'Toi';
+  const meta = document.createElement('span');
+  meta.className = 'meta';
+  meta.innerText = `${who} – ${time}`;
+  msg.appendChild(meta);
+
+  // Le contenu du message
+  const content = document.createElement('div');
+  content.innerHTML = txt;
+  msg.appendChild(content);
+
+  wrapper.appendChild(msg);
+  chatBox.appendChild(wrapper);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
 
   function showChat() {
     hideAll();
