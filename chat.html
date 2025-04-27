@@ -36,6 +36,40 @@
   width: 120px;             /* ajustez selon la dimension souhaitée */
   border-radius: var(--radius); /* optionnel : coins arrondis */
 }
+
+    /* ─── Chat bubbles ────────────────────────────────────────────────── */
+.message-wrapper {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.message-wrapper.bot {
+  justify-content: flex-start;   /* bulles de Julie à gauche */
+}
+
+.message-wrapper.user {
+  justify-content: flex-end;     /* bulles utilisateur à droite */
+}
+
+.message {
+  max-width: 75%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 4px var(--shadow);
+  word-wrap: break-word;
+}
+
+/* Bulles de Julie */
+.message.bot {
+  background: #fff;
+  color: #333;
+}
+
+/* Bulles de l’utilisateur */
+.message.user {
+  background: var(--color-primary);
+  color: #fff;
+}
     
    /* Micro-copy sous les autres options, juste avant “Viens discuter” */
 .chat-pitch {
