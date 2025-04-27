@@ -190,68 +190,82 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // Récupération des éléments
-      const backBtn = document.getElementById('header-back-btn');
-      const stepLang = document.getElementById('step-language');
-      const stepIntro = document.getElementById('step-intro');
-      const stepCta = document.getElementById('step-cta');
-      const secServ = document.getElementById('section-services');
-      const secLiv = document.getElementById('section-livret');
-      const chatBox = document.getElementById('chat');
-      const chatForm = document.getElementById('chat-form');
-      const inputEl = document.getElementById('user-input');
-      const btnLangs = document.querySelectorAll('.lang-btn');
-      const btnIntro = document.getElementById('btn-intro-next');
-      const btnCTA = document.querySelectorAll('.cta-options button');
-      const tiles = document.querySelectorAll('.service-tile');
-      const btnChat1 = document.getElementById('btn-start-chat');
-      const btnChat2 = document.getElementById('btn-start-chat-2');
+  // Récupération des éléments
+  const backBtn   = document.getElementById('header-back-btn');
+  const stepLang  = document.getElementById('step-language');
+  const stepIntro = document.getElementById('step-intro');
+  const stepCta   = document.getElementById('step-cta');
+  const secServ   = document.getElementById('section-services');
+  const secLiv    = document.getElementById('section-livret');
+  const chatBox   = document.getElementById('chat');
+  const chatForm  = document.getElementById('chat-form');
+  const inputEl   = document.getElementById('user-input');
+  const btnLangs  = document.querySelectorAll('.lang-btn');
+  const btnIntro  = document.getElementById('btn-intro-next');
+  const btnCTA    = document.querySelectorAll('.cta-options button');
+  const tiles     = document.querySelectorAll('.service-tile');
+  const btnChat1  = document.getElementById('btn-start-chat');
+  const btnChat2  = document.getElementById('btn-start-chat-2');
 
-      // État initial
-      let historyStack = [];
-      let currentSection = stepLang;
+  // État initial
+  let historyStack   = [];
+  let currentSection = stepLang;
 
-      // Textes par langue
-      const texts = {
-        fr: { introTitle: 'Coucou !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd\'hui ?' },
-        en: { introTitle: 'Welcome !', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle: 'Where to start ?', placeholder: 'Type your message…', welcome: 'Hi there ! How can I assist you today ?' },
-        es: { introTitle: '¡Bienvenido !', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar ?', placeholder: 'Escribe tu mensaje…', welcome: '¡Hola ! ¿En qué puedo ayudarte hoy ?' },
-        de: { introTitle: 'Willkommen !', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen ?', placeholder: 'Nachricht eingeben…', welcome: 'Hallo ! Wie kann ich Ihnen heute helfen ?' }
-      };
-      let lang = 'fr';
+  // Textes par langue
+  const texts = {
+    fr: { introTitle: 'Coucou !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd’hui ?' },
+    en: { introTitle: 'Welcome !', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.",       ctaTitle: 'Where to start ?',    placeholder: 'Type your message…',        welcome: 'Hi there ! How can I assist you today ?' },
+    es: { introTitle: '¡Bienvenido !', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar ?', placeholder: 'Escribe tu mensaje…',     welcome: '¡Hola ! ¿En qué puedo ayudarte hoy ?' },
+    de: { introTitle: 'Willkommen !', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen ?',       placeholder: 'Nachricht eingeben…',      welcome: 'Hallo ! Wie kann ich Ihnen heute helfen ?' }
+  };
+  let lang = 'fr';
 
-      // Helpers
-      function hideAll() {
-        [stepLang, stepIntro, stepCta, secServ, secLiv, chatBox, chatForm].forEach(el => el.classList.remove('active'));
-        backBtn.style.visibility = 'hidden';
-      }
-      function show(el) {
-        if (currentSection && currentSection !== el) historyStack.push(currentSection.id);
-        hideAll();
-        el.classList.add('active');
-        backBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
-        currentSection = el;
-      }
-      function addMessage(txt, cls) {
-        const wrapper = document.createElement('div'); wrapper.className = 'message-wrapper ' + cls;
-        const msg = document.createElement('div'); msg.className = 'message ' + cls; msg.innerHTML = txt;
-        wrapper.appendChild(msg); chatBox.appendChild(wrapper); chatBox.scrollTop = chatBox.scrollHeight;
-      }
-      function showChat() {
-        hideAll(); chatBox.classList.add('active'); chatForm.classList.add('active');
-        backBtn.style.visibility = 'visible';
-        inputEl.placeholder = texts[lang].placeholder; inputEl.focus();
-        addMessage(texts[lang].welcome, 'bot');
-      }
+  // Helpers
+  function hideAll() {
+    [stepLang, stepIntro, stepCta, secServ, secLiv, chatBox, chatForm].forEach(el => el.classList.remove('active'));
+    backBtn.style.visibility = 'hidden';
+  }
+  function show(el) {
+    if (currentSection && currentSection !== el) {
+      historyStack.push(currentSection.id);
+    }
+    hideAll();
+    el.classList.add('active');
+    backBtn.style.visibility = (el === stepLang) ? 'hidden' : 'visible';
+    currentSection = el;
+  }
+  function addMessage(txt, cls) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'message-wrapper ' + cls;
+    const msg = document.createElement('div');
+    msg.className = 'message ' + cls;
+    msg.innerHTML = txt;
+    wrapper.appendChild(msg);
+    chatBox.appendChild(wrapper);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+  function showChat() {
+    hideAll();
+    chatBox.classList.add('active');
+    chatForm.classList.add('active');
+    backBtn.style.visibility = 'visible';
+    inputEl.placeholder = texts[lang].placeholder;
+    inputEl.focus();
+    addMessage(texts[lang].welcome, 'bot');
+  }
 
- if (window.location.hash === '#section-services') {
-  show(document.getElementById('section-services'));
-} else if (window.location.hash === '#section-livret') {
-  show(document.getElementById('section-livret'));
-} else {
-  show(stepLang);
-}
-
+  // Initialisation selon fragment d’URL (venant de detail-*.html)
+  const hash = window.location.hash;
+  if (hash === '#section-services' || hash === '#section-livret') {
+    // 1) Affiche directement la section correspondante
+    show(document.getElementById(hash.slice(1)));
+    // 2) Pré-charge un retour vers CTA lors du premier « back »
+    historyStack = ['step-cta'];
+  } else {
+    // démarrage normal
+    show(stepLang);
+  }
+});
       // Événements Onboarding
       btnLangs.forEach(b => b.addEventListener('click', () => {
         lang = b.dataset.lang;
