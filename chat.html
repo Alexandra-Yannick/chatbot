@@ -265,7 +265,6 @@
     // démarrage normal
     show(stepLang);
   }
-});
       // Événements Onboarding
       btnLangs.forEach(b => b.addEventListener('click', () => {
         lang = b.dataset.lang;
@@ -317,6 +316,7 @@
         e.preventDefault(); const text = inputEl.value.trim(); if (!text) return;
         addMessage(text, 'user'); inputEl.value = '';
         setTimeout(() => addMessage('Réponse test…', 'bot'), 500);
+      });
       });
     });
   </script>
