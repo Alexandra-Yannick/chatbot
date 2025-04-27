@@ -281,10 +281,11 @@ document.addEventListener('DOMContentLoaded', () => {
         checkout:         "Check-out",
         reception:        "Réception",
         "infos-pratiques":"Infos pratiques",
-        "livre-dor":      "Livre d'or",
+        "livre-dor":      "Livre d'or"
+      },
         btnIntro: "C’est parti !"
-      }
     },
+    
     en: {
       ctaServices:          "Hotel services",
       ctaLivret:            "Welcome booklet",
@@ -301,10 +302,11 @@ document.addEventListener('DOMContentLoaded', () => {
         checkout:         "Check-out",
         reception:        "Reception",
         "infos-pratiques":"Practical info",
-        "livre-dor":      "Guestbook",
+        "livre-dor":      "Guestbook"
+      },
   btnIntro: "Let’s go!"
-      }
     },
+    
     es: {
       ctaServices:          "Servicios del hotel",
       ctaLivret:            "Manual de bienvenida",
@@ -321,10 +323,11 @@ document.addEventListener('DOMContentLoaded', () => {
         checkout:         "Salida",
         reception:        "Recepción",
         "infos-pratiques":"Información práctica",
-        "livre-dor":      "Libro de visitas",
+        "livre-dor":      "Libro de visitas"
+      },
         btnIntro: "¡Vamos!"
-      }
     },
+    
     de: {
       ctaServices:          "Hoteldienstleistungen",
       ctaLivret:            "Gästebuch",
@@ -341,10 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
         checkout:         "Check-out",
         reception:        "Rezeption",
         "infos-pratiques":"Praktische Infos",
-        "livre-dor":      "Gästebuch",
+        "livre-dor":      "Gästebuch"
+      },
         btnIntro: "Los geht’s!"
-      }
-    }
+      },
   };
 
   // ─── 5) Helpers de navigation et d’affichage ───────────────────────
@@ -388,21 +391,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── 6) Mise à jour des labels UI selon la langue ────────────────
   function updateUILanguage() {
     const L = uiLabels[lang];
+  
     // CTA buttons
     document.querySelector('[data-cta="section-services"]').innerText = L.ctaServices;
     document.querySelector('[data-cta="section-livret"]').innerText   = L.ctaLivret;
     document.querySelector('[data-cta="chat"]').innerText            = L.ctaChat;
+   
     // Section headings
     secServ.querySelector('h2').innerText = L.sectionServicesTitle;
     secLiv.querySelector('h2').innerText  = L.sectionLivretTitle;
+   
     // Tiles
     tiles.forEach(tile => {
       const key = tile.dataset.detail;
       const span = tile.querySelector('span');
       if (L.tiles[key]) span.innerText = L.tiles[key];
-       // Chat-launch buttons dans Services et Livret
-      // Traduction du bouton “Cool !”
+     
+           // Traduction du bouton “Cool !”
 document.getElementById('btn-intro-next').innerText = uiLabels[lang].btnIntro;
+     
+      // Chat-launch buttons dans Services et Livret
   btnChat1.innerText = L.ctaChat;
   btnChat2.innerText = L.ctaChat;
     });
