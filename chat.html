@@ -16,13 +16,15 @@
     html, body { height: 100%; background: var(--color-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { display: flex; flex-direction: column; padding-top: 4rem; }
 
-    /* Micro-copy sous le titre CTA */
+   /* Micro-copy sous les autres options, juste avant “Viens discuter” */
 .chat-pitch {
-  margin: 0 0 1rem;
-  font-style: italic;
-  color: #555;
-  text-align: center;
-  line-height: 1.4;
+  margin: 1rem auto;           /* espace au-dessus et en-dessous */
+  max-width: 240px;            /* limite la largeur pour aérer */
+  font-size: 0.9rem;           /* un peu plus petit que les boutons */
+  font-style: italic;          /* ton léger, informel */
+  color: #555;                 /* gris mid-tone pour différencier */
+  text-align: center;          /* centré sous les boutons */
+  line-height: 1.4;            /* un interligne confortable */
 }
     
     /* Header */
@@ -123,9 +125,9 @@
   <!-- Onboarding -->
   <div id="step-language" class="onboard-step active">
     <p>Choisissez votre langue</p>
-    <p>Choose your language</p>
-    <p>Elige tu idioma</p> 
-    <p>Wähle deine Sprache</p>
+    <p>Choose your language</p><br>
+    <p>Elige tu idioma</p> <br>
+    <p>Wähle deine Sprache</p><br>
     <button class="lang-btn" data-lang="fr">Français</button>
     <button class="lang-btn" data-lang="en">English</button>
     <button class="lang-btn" data-lang="es">Español</button>
