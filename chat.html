@@ -16,6 +16,15 @@
     html, body { height: 100%; background: var(--color-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     body { display: flex; flex-direction: column; padding-top: 4rem; }
 
+    /* Micro-copy sous le titre CTA */
+.chat-pitch {
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: #555;
+  text-align: center;
+  line-height: 1.4;
+}
+    
     /* Header */
     .chat-header {
       position: fixed; top: 0; left: 0; right: 0; height: 4rem;
@@ -126,6 +135,13 @@
   </div>
   <div id="step-cta" class="onboard-step">
     <h2 id="cta-title">Par où commencer ?</h2>
+    
+    <!-- === NOUVEAU : micro-copy Option C === -->
+  <p class="chat-pitch">
+    Besoin d’un plan de pro ?<br>
+    Parle à Julie : son IA et ses influenceurs locaux t’ont déniché les meilleurs spots autour de l’hôtel.
+  </p>
+    
     <div class="cta-options">
       <button data-cta="section-services">Services de l'hôtel</button>
       <button data-cta="section-livret">Le livret d'accueil</button>
