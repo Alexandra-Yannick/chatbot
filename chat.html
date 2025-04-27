@@ -213,7 +213,7 @@
 
       // Textes par langue
       const texts = {
-        fr: { introTitle: 'Bienvenue !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd\'hui ?' },
+        fr: { introTitle: 'Coucou !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd\'hui ?' },
         en: { introTitle: 'Welcome !', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle: 'Where to start ?', placeholder: 'Type your message…', welcome: 'Hi there ! How can I assist you today ?' },
         es: { introTitle: '¡Bienvenido !', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar ?', placeholder: 'Escribe tu mensaje…', welcome: '¡Hola ! ¿En qué puedo ayudarte hoy ?' },
         de: { introTitle: 'Willkommen !', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen ?', placeholder: 'Nachricht eingeben…', welcome: 'Hallo ! Wie kann ich Ihnen heute helfen ?' }
@@ -272,25 +272,30 @@
       btnChat2.addEventListener('click', showChat);
       backBtn.addEventListener('click', () => {
   if (historyStack.length) {
-    // 1) S’il reste des écrans dans la pile, on revient à celui-ci
+    // 1) S’il reste des écrans dans la pile, on y revient
     const prevId = historyStack.pop();
     const prevEl = document.getElementById(prevId);
     show(prevEl);
   } else {
-    // 2) Sinon, on remonte l’arborescence des étapes
-    if (currentSection.id === 'section-services' || currentSection.id === 'section-livret') {
-      // De Services/Livret → « Par où commencer ? »
-      show(stepCta);
+    // 2) Navigation ascendante dans l’app
+    switch (currentSection.id) {
+      case 'section-services':
+      case 'section-livret':
+        // De Services/Livret → Par où commencer ?
+        show(stepCta);
+        break;
+      case 'step-cta':
+        // De Par où commencer ? → Intro
+        show(stepIntro);
+        break;
+      case 'step-intro':
+        // De Intro → Choix de la langue
+        show(stepLang);
+        break;
+      default:
+        // 3) Une fois arrivé sur l’écran Langue, on libère le vrai back
+        window.history.back();
     }
-    else if (currentSection.id === 'step-cta') {
-      // De « Par où commencer ? » → Intro
-      show(stepIntro);
-    }
-    else if (currentSection.id === 'step-intro') {
-      // De Intro → Choix langue
-      show(stepLang);
-    }
-    // (pas de window.history.back() ici : on reste toujours dans l’app)
   }
 });
       // Chat submit
