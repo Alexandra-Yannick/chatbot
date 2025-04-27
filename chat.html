@@ -520,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chatForm.classList.add('active');
     backBtn.style.visibility = 'visible';
     inputEl.placeholder = texts[lang].placeholder;
-    inputEl.focus();
+     window.scrollTo(0, 0);
     addMessage(texts[lang].welcome, 'bot');
   }
 
