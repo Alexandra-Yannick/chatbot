@@ -201,6 +201,29 @@ body {
 #step-language p {
   margin: 0.5rem 0;                    /* 0.5rem au-dessus et en-dessous */
 }
+    /* ─── Override spécifique pour les écrans Intro et CTA ───────────────── */
+#step-intro.onboard-step.active,
+#step-cta.onboard-step.active {
+  /* 1) Décale l’overlay juste sous le header */
+  top: 3rem !important;
+  /* 2) Colle le contenu en haut au lieu de centrer */
+  justify-content: flex-start !important;
+  /* 3) Réduit le padding interne haut */
+  padding-top: 0.5rem !important;
+  /* 4) Espace régulier entre les enfants (<h2>, <p>, boutons) */
+  gap: 1rem;
+}
+
+/* Si besoin, ajustez les marges des éléments internes */
+#step-intro h2,
+#step-cta h2 {
+  margin-bottom: 0.5rem;  /* réduit l’espace sous le titre */
+}
+#step-intro p,
+#step-cta .chat-pitch {
+  margin-bottom: 1rem;    /* espace raisonnable sous le paragraphe */
+}
+    
   </style>
 </head>
 <body>
