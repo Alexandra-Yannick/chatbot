@@ -213,7 +213,7 @@
 
       // Textes par langue
       const texts = {
-        fr: { introTitle: 'Salut !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd\'hui ?' },
+        fr: { introTitle: 'Bienvenue !', introText: "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd\'hui ?' },
         en: { introTitle: 'Welcome !', introText: "I'm <strong>Julie</strong>, your virtual concierge for your stay.", ctaTitle: 'Where to start ?', placeholder: 'Type your message…', welcome: 'Hi there ! How can I assist you today ?' },
         es: { introTitle: '¡Bienvenido !', introText: "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.", ctaTitle: '¿Por dónde empezar ?', placeholder: 'Escribe tu mensaje…', welcome: '¡Hola ! ¿En qué puedo ayudarte hoy ?' },
         de: { introTitle: 'Willkommen !', introText: "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.", ctaTitle: 'Wo anfangen ?', placeholder: 'Nachricht eingeben…', welcome: 'Hallo ! Wie kann ich Ihnen heute helfen ?' }
@@ -272,25 +272,25 @@
       btnChat2.addEventListener('click', showChat);
       backBtn.addEventListener('click', () => {
   if (historyStack.length) {
-    // Navigue dans la pile interne si possible
+    // 1) S’il reste des écrans dans la pile, on revient à celui-ci
     const prevId = historyStack.pop();
     const prevEl = document.getElementById(prevId);
     show(prevEl);
   } else {
-    // 1) Si on est sur Services ou Livret (pas d'historique interne),
-    //    on revient à l'écran "Par où commencer ?"
-    if (currentSection.id === 'section-services'
-     || currentSection.id === 'section-livret') {
+    // 2) Sinon, on remonte l’arborescence des étapes
+    if (currentSection.id === 'section-services' || currentSection.id === 'section-livret') {
+      // De Services/Livret → « Par où commencer ? »
       show(stepCta);
     }
-    // 2) Sinon si on est sur un detail-xxx.html, on revient au chat
-    else if (window.location.pathname.includes('detail-')) {
-      window.location.href = 'chat.html';
+    else if (currentSection.id === 'step-cta') {
+      // De « Par où commencer ? » → Intro
+      show(stepIntro);
     }
-    // 3) Sinon on laisse le navigateur gérer le back normal
-    else {
-      window.history.back();
+    else if (currentSection.id === 'step-intro') {
+      // De Intro → Choix langue
+      show(stepLang);
     }
+    // (pas de window.history.back() ici : on reste toujours dans l’app)
   }
 });
       // Chat submit
