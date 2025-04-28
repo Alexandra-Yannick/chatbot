@@ -323,86 +323,162 @@ body {
       <button type="submit">➤</button>
     </form>
   </div>
-
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-  console.log('✅ DOM Ready – script de chat chargé');
-
-  // 1) Éléments de l’UI (assure-toi qu’ils sont bien tous là)
-  const backBtn   = document.getElementById('header-back-btn');
-  const stepLang  = document.getElementById('step-language');
-  const stepIntro = document.getElementById('step-intro');
-  const stepCta   = document.getElementById('step-cta');
-  // … le reste de tes const secServ, secLiv, chatBox, chatForm, inputEl, etc.
-
-  // 2) Définis ton état initial
-  let historyStack   = [];
-  let currentSection = stepLang;
-  let lang           = 'fr';
-
-  // 3) Tes textes par langue (doit déjà être là)
-  const texts = {
-    fr: { introTitle: 'Coucou !', introText: "Je suis <strong>Julie</strong>…", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd’hui ?' },
-    en: { /* … */ },
-    es: { /* … */ },
-    de: { /* … */ }
-  };
-  console.log('💡 langues disponibles dans texts :', Object.keys(texts));
-
-  // 4) Tes uiLabels par langue (idem)
-  const uiLabels = { /* … */ };
-
-  // ─── **NOUVEAU : CHOIX DE LA LANGUE** ────────────────────────────
-  const btnLangs = document.querySelectorAll('.lang-btn');
-  console.log('🔢 Boutons langue trouvés :', btnLangs.length);
-
-  btnLangs.forEach(b => {
-    console.log('– prêt à écouter le clic sur', b.dataset.lang);
-    b.addEventListener('click', () => {
-      const selected = b.dataset.lang;
-      console.log('👆 Langue cliquée :', selected);
-
-      if (!texts[selected]) {
-        console.error('🚨 Texte introuvable pour la langue :', selected);
-        return;
+    document.addEventListener('DOMContentLoaded', () => {
+      // ─── 1) Récupération des éléments ────────────────────────────────
+      const backBtn   = document.getElementById('header-back-btn');
+      const stepLang  = document.getElementById('step-language');
+      const stepIntro = document.getElementById('step-intro');
+      const stepCta   = document.getElementById('step-cta');
+      const secServ   = document.getElementById('section-services');
+      const secLiv    = document.getElementById('section-livret');
+      const chatBox   = document.getElementById('chat');
+      const chatForm  = document.getElementById('chat-form');
+      const inputEl   = document.getElementById('user-input');
+      const btnLangs  = document.querySelectorAll('.lang-btn');
+      const btnIntro  = document.getElementById('btn-intro-next');
+      const btnCTA    = document.querySelectorAll('.cta-options button');
+      const tiles     = document.querySelectorAll('.service-tile');
+      const btnChat1  = document.getElementById('btn-start-chat');
+      const btnChat2  = document.getElementById('btn-start-chat-2');
+    
+      // ─── 2) Textes statiques par langue ─────────────────────────────
+      const texts = {
+        fr: {
+          introTitle:   'Coucou !',
+          introText:    "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.",
+          ctaTitle:     'Par où commencer ?',
+          placeholder:  'Écris votre message…',
+          welcome:      'Salut ! Comment puis-je vous aider aujourd’hui ?'
+        },
+        en: {
+          introTitle:   'Welcome !',
+          introText:    "I'm <strong>Julie</strong>, your virtual concierge for your stay.",
+          ctaTitle:     'Where to start ?',
+          placeholder:  'Type your message…',
+          welcome:      'Hi there ! How can I assist you today ?'
+        },
+        es: {
+          introTitle:   '¡Bienvenido !',
+          introText:    "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.",
+          ctaTitle:     '¿Por dónde empezar ?',
+          placeholder:  'Escribe tu mensaje…',
+          welcome:      '¡Hola ! ¿En qué puedo ayudarte hoy ?'
+        },
+        de: {
+          introTitle:   'Willkommen !',
+          introText:    "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.",
+          ctaTitle:     'Wo anfangen ?',
+          placeholder:  'Nachricht eingeben…',
+          welcome:      'Hallo ! Wie kann ich Ihnen heute helfen ?'
+        }
+      };
+    
+      // ─── 3) UI dynamiques par langue ─────────────────────────────────
+      const uiLabels = {
+        fr: {
+          ctaServices:          "Services de l'hôtel",
+          ctaLivret:            "Le livret d'accueil",
+          ctaChat:              "Je veux découvrir les spots",
+          sectionServicesTitle: "Services de l'hôtel",
+          sectionLivretTitle:   "Nous vous souhaitons un excellent séjour au sein de notre établissement",
+          tiles: {
+            roomservice:      "Room Service",
+            spa:              "Spa & Bien-être",
+            menage:           "Service de ménage",
+            "petit-dejeuner": "Le petit-déjeuner",
+            wifi:             "Wi-Fi",
+            digicode:         "Digicode",
+            checkout:         "Check-out",
+            reception:        "Réception",
+            "infos-pratiques":"Infos pratiques",
+            "livre-dor":      "Livre d'or"
+          },
+          btnIntro: "C’est parti !"
+        },
+        /* … mêmes structures pour en, es, de … */
+      };
+    
+      console.log('✅ DOM Ready – script de chat chargé');
+      console.log('💡 langues disponibles dans texts :', Object.keys(texts));
+      console.log('🔢 Boutons langue trouvés :', btnLangs.length);
+    
+      // ─── 4) État initial ────────────────────────────────────────────
+      let historyStack   = [];
+      let currentSection = stepLang;
+      let lang           = 'fr';
+    
+      // ─── 5) Helpers ─────────────────────────────────────────────────
+      function hideAll() {
+        [stepLang, stepIntro, stepCta, secServ, secLiv, chatBox, chatForm]
+          .forEach(el => el.classList.remove('active'));
+        backBtn.style.visibility = 'hidden';
       }
-      // on met à jour la langue active
-      lang = selected;
-
-      // on réaffiche l’intro dans la bonne langue
-      document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
-      document.getElementById('intro-text').innerHTML  = texts[lang].introText;
-      document.getElementById('cta-title').innerHTML   = texts[lang].ctaTitle;
-
-      // on met à jour le reste de l’UI (boutons, sections, etc.)
-      updateUILanguage();
-
-      // on passe à l’étape suivante
-      show(stepIntro);
-    });
-  });
-    
-      // ─── 5) Helpers de navigation et d’affichage ───────────────────────
-      function hideAll() { /* … */ }
-      function show(el) { /* … */ }
-      function addMessage(txt, cls) { /* … */ }
-      function showChat() { /* … */ }
-      function updateUILanguage() { /* … */ }
-    
-      // ─── 6) Initialisation de l’écran ────────────────────────────────
-      const hash = window.location.hash;
-      if (hash === '#section-services' || hash === '#section-livret') {
-        show(document.getElementById(hash.slice(1)));
-        historyStack = ['step-cta'];
-      } else {
-        show(stepLang);
+      function show(el) {
+        if (currentSection !== el) historyStack.push(currentSection.id);
+        hideAll();
+        el.classList.add('active');
+        backBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
+        currentSection = el;
       }
-      updateUILanguage();
+      function addMessage(txt, cls) {
+        const now = new Date();
+        const hh = String(now.getHours()).padStart(2,'0');
+        const mm = String(now.getMinutes()).padStart(2,'0');
+        const wrapper = document.createElement('div');
+        wrapper.className = 'message-wrapper ' + cls;
+        const msg = document.createElement('div');
+        msg.className = 'message ' + cls;
+        const meta = document.createElement('span');
+        meta.className = 'meta';
+        meta.innerText = `${cls==='bot'?'Julie':'Toi'} – ${hh}:${mm}`;
+        msg.appendChild(meta);
+        const content = document.createElement('div');
+        content.innerHTML = txt;
+        msg.appendChild(content);
+        wrapper.appendChild(msg);
+        chatBox.appendChild(wrapper);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+      function updateUILanguage() {
+        const L = uiLabels[lang];
+        document.querySelector('[data-cta="section-services"]').innerText = L.ctaServices;
+        document.querySelector('[data-cta="section-livret"]').innerText   = L.ctaLivret;
+        document.querySelector('[data-cta="chat"]').innerText            = L.ctaChat;
+        secServ.querySelector('h2').innerText = L.sectionServicesTitle;
+        secLiv.querySelector('h2').innerText  = L.sectionLivretTitle;
+        tiles.forEach(tile => {
+          const key = tile.dataset.detail;
+          const span = tile.querySelector('span');
+          if (L.tiles[key]) span.innerText = L.tiles[key];
+        });
+        btnIntro.innerText = uiLabels[lang].btnIntro;
+        btnChat1.innerText = L.ctaChat;
+        btnChat2.innerText = L.ctaChat;
+      }
     
-      // ─── 7) Events UI (CTA, tuiles, back) ───────────────────────────
-      /* … ton code existant pour btnIntro, btnCTA, tiles, backBtn … */
+      // ─── 6) Onboarding langue ────────────────────────────────────────
+      btnLangs.forEach(b => {
+        console.log('– prêt à écouter le clic sur', b.dataset.lang);
+        b.addEventListener('click', () => {
+          console.log('👆 Langue cliquée :', b.dataset.lang);
+          lang = b.dataset.lang;
+          document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
+          document.getElementById('intro-text').innerHTML  = texts[lang].introText;
+          document.getElementById('cta-title').innerHTML   = texts[lang].ctaTitle;
+          updateUILanguage();
+          show(stepIntro);
+        });
+      });
+      btnIntro.addEventListener('click', () => show(stepCta));
+      btnCTA.forEach(b => b.addEventListener('click', () => {
+        const action = b.dataset.cta;
+        if (action === 'section-services') show(secServ);
+        else if (action === 'section-livret') show(secLiv);
+        else showChat();
+      }));
     
-      // ─── 8) Soumission du chat ─────────────────────────────────────────
+      // ─── 7) Chat form handler ────────────────────────────────────────
       chatForm.addEventListener('submit', async e => {
         e.preventDefault();
         const text = inputEl.value.trim();
@@ -410,31 +486,30 @@ body {
         addMessage(text, 'user');
         inputEl.value = '';
         try {
-          const response = await fetch('/api/recommands', {
+          const res = await fetch('/api/recommands', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query: text })
           });
-          if (!response.ok) {
-            const errText = await response.text();
-            console.error('Erreur serveur:', response.status, errText);
-            throw new Error(`Le serveur a répondu ${response.status}`);
-          }
-          const data = await response.json();
-          if (data.message) addMessage(data.message, 'bot');
-          else {
-            console.error('Réponse inattendue :', data);
-            addMessage("Oups : format de réponse invalide.", 'bot');
-          }
+          if (!res.ok) throw new Error(`Le serveur a répondu ${res.status}`);
+          const { message } = await res.json();
+          addMessage(message, 'bot');
         } catch (err) {
           console.error('Erreur fetch /api/recommands :', err);
-          addMessage(
-            "Oups, j'ai eu un problème pour récupérer les recommandations.",
-            'bot'
-          );
+          addMessage("Oups, j'ai eu un problème pour récupérer les recommandations.", 'bot');
         }
       });
+    
+      // ─── 8) Lancement initial ────────────────────────────────────────
+      const hash = window.location.hash;
+      if (hash === '#section-services' || hash === '#section-livret') {
+        show(document.getElementById(hash.slice(1)));
+        historyStack = ['step-cta'];
+      } else {
+        show(stepLang);
+      }
     });
     </script>
+  
 </body>
 </html>
