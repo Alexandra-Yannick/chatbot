@@ -326,92 +326,97 @@ body {
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // ─── éléments de l’UI ─────────────────────────────────────────────
-      const chatBox  = document.getElementById('chat');
-      const chatForm = document.getElementById('chat-form');
-      const inputEl  = document.getElementById('user-input');
+      console.log('✅ DOM Ready – script de chat chargé');
     
-      // ─── helper pour afficher un message ──────────────────────────────
-      function addMessage(txt, cls) {
-        const now = new Date();
-        const hh  = String(now.getHours()).padStart(2, '0');
-        const mm  = String(now.getMinutes()).padStart(2, '0');
-        const wrapper = document.createElement('div');
-        wrapper.className = `message-wrapper ${cls}`;
-        const msg = document.createElement('div');
-        msg.className = `message ${cls}`;
-        const meta = document.createElement('span');
-        meta.className = 'meta';
-        meta.innerText = `${cls === 'bot' ? 'Julie' : 'Toi'} – ${hh}:${mm}`;
-        msg.appendChild(meta);
-        const content = document.createElement('div');
-        content.innerHTML = txt;
-        msg.appendChild(content);
-        wrapper.appendChild(msg);
-        chatBox.appendChild(wrapper);
-        chatBox.scrollTop = chatBox.scrollHeight;
+      // ─── 1) Récupération des éléments ────────────────────────────────
+      const backBtn   = document.getElementById('header-back-btn');
+      const stepLang  = document.getElementById('step-language');
+      const stepIntro = document.getElementById('step-intro');
+      const stepCta   = document.getElementById('step-cta');
+      const secServ   = document.getElementById('section-services');
+      const secLiv    = document.getElementById('section-livret');
+      const chatBox   = document.getElementById('chat');
+      const chatForm  = document.getElementById('chat-form');
+      const inputEl   = document.getElementById('user-input');
+      
+      // ─── 2) État initial ────────────────────────────────────────────
+      let historyStack   = [];
+      let currentSection = stepLang;
+      let lang           = 'fr';
+    
+      // ─── 3) Textes & UI par langue ─────────────────────────────────
+      const texts = {/* … ton objet texts … */};
+      const uiLabels = {/* … ton objet uiLabels … */};
+    
+      // ─── 4) Onboarding Langues ──────────────────────────────────────
+      const btnLangs = document.querySelectorAll('.lang-btn');
+      console.log('🔢 Boutons langue trouvés :', btnLangs.length);
+      btnLangs.forEach(b => {
+        console.log('– prêt à écouter le clic sur', b.dataset.lang);
+        b.addEventListener('click', () => {
+          console.log('👆 Langue cliquée :', b.dataset.lang);
+          lang = b.dataset.lang;
+          // Mise à jour des titres
+          document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
+          document.getElementById('intro-text').innerHTML  = texts[lang].introText;
+          document.getElementById('cta-title').innerHTML   = texts[lang].ctaTitle;
+          updateUILanguage();
+          show(stepIntro);
+        });
+      });
+    
+      // ─── 5) Helpers de navigation et d’affichage ───────────────────────
+      function hideAll() { /* … */ }
+      function show(el) { /* … */ }
+      function addMessage(txt, cls) { /* … */ }
+      function showChat() { /* … */ }
+      function updateUILanguage() { /* … */ }
+    
+      // ─── 6) Initialisation de l’écran ────────────────────────────────
+      const hash = window.location.hash;
+      if (hash === '#section-services' || hash === '#section-livret') {
+        show(document.getElementById(hash.slice(1)));
+        historyStack = ['step-cta'];
+      } else {
+        show(stepLang);
       }
+      updateUILanguage();
     
-      // ─── état conversation ────────────────────────────────────────────
-      const conversationContext = {};
-      let awaitingAmbiance = false;
+      // ─── 7) Events UI (CTA, tuiles, back) ───────────────────────────
+      /* … ton code existant pour btnIntro, btnCTA, tiles, backBtn … */
     
-      // ─── soumission du formulaire ──────────────────────────────────────
-      chatForm.addEventListener('submit', async function handler(e) {
+      // ─── 8) Soumission du chat ─────────────────────────────────────────
+      chatForm.addEventListener('submit', async e => {
         e.preventDefault();
         const text = inputEl.value.trim();
         if (!text) return;
         addMessage(text, 'user');
         inputEl.value = '';
-    
         try {
-          // si on vient de donner l’ambiance, on la stocke
-          if (awaitingAmbiance) {
-            conversationContext.ambiance = text.toLowerCase();
-            awaitingAmbiance = false;
-          }
-    
-          // on envoie la requête
-          const payload = {
-            query: awaitingAmbiance
-              ? conversationContext.lastQuery
-              : text,
-            context: conversationContext
-          };
           const response = await fetch('/api/recommands', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ query: text })
           });
-    
           if (!response.ok) {
             const errText = await response.text();
             console.error('Erreur serveur:', response.status, errText);
-            throw new Error(`Serveur ${response.status}`);
+            throw new Error(`Le serveur a répondu ${response.status}`);
           }
-    
           const data = await response.json();
-    
-          // besoin de clarification ?
-          if (data.needClarification) {
-            // on mémorise la question initiale
-            conversationContext.lastQuery = text;
-            awaitingAmbiance = true;
-            addMessage(data.message, 'bot');
-            return;
+          if (data.message) addMessage(data.message, 'bot');
+          else {
+            console.error('Réponse inattendue :', data);
+            addMessage("Oups : format de réponse invalide.", 'bot');
           }
-    
-          // réponse finale
-          addMessage(data.message, 'bot');
-    
         } catch (err) {
-          console.error(err);
-          addMessage("Oups, une erreur est survenue.", 'bot');
+          console.error('Erreur fetch /api/recommands :', err);
+          addMessage(
+            "Oups, j'ai eu un problème pour récupérer les recommandations.",
+            'bot'
+          );
         }
       });
-      
-      // ─── message de bienvenue ─────────────────────────────────────────
-      addMessage("Salut ! Comment puis-je vous aider aujourd’hui ?", 'bot');
     });
     </script>
 </body>
