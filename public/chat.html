@@ -325,45 +325,62 @@ body {
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      console.log('✅ DOM Ready – script de chat chargé');
-    
-      // ─── 1) Récupération des éléments ────────────────────────────────
-      const backBtn   = document.getElementById('header-back-btn');
-      const stepLang  = document.getElementById('step-language');
-      const stepIntro = document.getElementById('step-intro');
-      const stepCta   = document.getElementById('step-cta');
-      const secServ   = document.getElementById('section-services');
-      const secLiv    = document.getElementById('section-livret');
-      const chatBox   = document.getElementById('chat');
-      const chatForm  = document.getElementById('chat-form');
-      const inputEl   = document.getElementById('user-input');
-      
-      // ─── 2) État initial ────────────────────────────────────────────
-      let historyStack   = [];
-      let currentSection = stepLang;
-      let lang           = 'fr';
-    
-      // ─── 3) Textes & UI par langue ─────────────────────────────────
-      const texts = {/* … ton objet texts … */};
-      const uiLabels = {/* … ton objet uiLabels … */};
-    
-      // ─── 4) Onboarding Langues ──────────────────────────────────────
-      const btnLangs = document.querySelectorAll('.lang-btn');
-      console.log('🔢 Boutons langue trouvés :', btnLangs.length);
-      btnLangs.forEach(b => {
-        console.log('– prêt à écouter le clic sur', b.dataset.lang);
-        b.addEventListener('click', () => {
-          console.log('👆 Langue cliquée :', b.dataset.lang);
-          lang = b.dataset.lang;
-          // Mise à jour des titres
-          document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
-          document.getElementById('intro-text').innerHTML  = texts[lang].introText;
-          document.getElementById('cta-title').innerHTML   = texts[lang].ctaTitle;
-          updateUILanguage();
-          show(stepIntro);
-        });
-      });
+  document.addEventListener('DOMContentLoaded', () => {
+  console.log('✅ DOM Ready – script de chat chargé');
+
+  // 1) Éléments de l’UI (assure-toi qu’ils sont bien tous là)
+  const backBtn   = document.getElementById('header-back-btn');
+  const stepLang  = document.getElementById('step-language');
+  const stepIntro = document.getElementById('step-intro');
+  const stepCta   = document.getElementById('step-cta');
+  // … le reste de tes const secServ, secLiv, chatBox, chatForm, inputEl, etc.
+
+  // 2) Définis ton état initial
+  let historyStack   = [];
+  let currentSection = stepLang;
+  let lang           = 'fr';
+
+  // 3) Tes textes par langue (doit déjà être là)
+  const texts = {
+    fr: { introTitle: 'Coucou !', introText: "Je suis <strong>Julie</strong>…", ctaTitle: 'Par où commencer ?', placeholder: 'Écris votre message…', welcome: 'Salut ! Comment puis-je vous aider aujourd’hui ?' },
+    en: { /* … */ },
+    es: { /* … */ },
+    de: { /* … */ }
+  };
+  console.log('💡 langues disponibles dans texts :', Object.keys(texts));
+
+  // 4) Tes uiLabels par langue (idem)
+  const uiLabels = { /* … */ };
+
+  // ─── **NOUVEAU : CHOIX DE LA LANGUE** ────────────────────────────
+  const btnLangs = document.querySelectorAll('.lang-btn');
+  console.log('🔢 Boutons langue trouvés :', btnLangs.length);
+
+  btnLangs.forEach(b => {
+    console.log('– prêt à écouter le clic sur', b.dataset.lang);
+    b.addEventListener('click', () => {
+      const selected = b.dataset.lang;
+      console.log('👆 Langue cliquée :', selected);
+
+      if (!texts[selected]) {
+        console.error('🚨 Texte introuvable pour la langue :', selected);
+        return;
+      }
+      // on met à jour la langue active
+      lang = selected;
+
+      // on réaffiche l’intro dans la bonne langue
+      document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
+      document.getElementById('intro-text').innerHTML  = texts[lang].introText;
+      document.getElementById('cta-title').innerHTML   = texts[lang].ctaTitle;
+
+      // on met à jour le reste de l’UI (boutons, sections, etc.)
+      updateUILanguage();
+
+      // on passe à l’étape suivante
+      show(stepIntro);
+    });
+  });
     
       // ─── 5) Helpers de navigation et d’affichage ───────────────────────
       function hideAll() { /* … */ }
