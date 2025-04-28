@@ -611,30 +611,48 @@ document.getElementById('btn-intro-next').innerText = uiLabels[lang].btnIntro;
   });
 
 // ─── 9) Soumission du chat ─────────────────────────────────────────
-chatForm.addEventListener('submit', e => {
+chatForm.addEventListener('submit', async e => {
   e.preventDefault();
   const text = inputEl.value.trim();
   if (!text) return;
 
-  // 1) Affiche le message de l'utilisateur
+  // 1) Affiche le message de l’utilisateur
   addMessage(text, 'user');
   inputEl.value = '';
 
-  // 2) Envoie la requête à notre endpoint (Airtable → OpenAI)
-  fetch('/api/recommands', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query: text })  // on peut transmettre la question si besoin
-  })
-  .then(res => res.json())
-  .then(data => {
-    // 3) Affiche la réponse générée par l'API
-    addMessage(data.message, 'bot');
-  })
-  .catch(err => {
-    console.error('Erreur fetch /api/recommands:', err);
-    addMessage("Oups, j'ai eu un problème pour récupérer les recommandations.", 'bot');
-  });
+  try {
+    // 2) Appelle ton API avec la question éventuelle
+    const response = await fetch('/api/recommands', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query: text })
+    });
+
+    // 3) Si status >=400, on lit le texte brut (pour debug) et on déclenche une erreur
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error('Erreur serveur:', response.status, errText);
+      throw new Error(`Le serveur a répondu ${response.status}`);
+    }
+
+    // 4) Parse le JSON renvoyé
+    const data = await response.json();
+
+    // 5) Affiche la réponse ou le message d’erreur renvoyé
+    if (data.message) {
+      addMessage(data.message, 'bot');
+    } else {
+      console.error('Réponse inattendue:', data);
+      addMessage("Oups : format de réponse invalide.", 'bot');
+    }
+
+  } catch (err) {
+    console.error('Erreur fetch /api/recommands :', err);
+    addMessage(
+      "Oups, j'ai eu un problème pour récupérer les recommandations.",
+      'bot'
+    );
+  }
 });
 });
 </script>
