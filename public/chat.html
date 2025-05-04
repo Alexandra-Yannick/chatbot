@@ -5,230 +5,50 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Julie - Serial Chilleuse</title>
   <style>
-    :root {
-      --color-primary: #000000;
-      --color-primary-hover: #413D44;
-      --color-bg: #FFFFFF;
-      --radius: 20px;
-      --shadow: rgba(0,0,0,0.1);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --color-primary: #000000; --color-primary-hover: #413D44; --color-bg: #FFFFFF; --radius: 20px; --shadow: rgba(0,0,0,0.1); }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; background: var(--color-bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    body { display: flex; flex-direction: column; padding-top: 4rem; }
-
-    /* Espacement spécifique sur l’écran d’intro */
-#step-intro h2 {
-  margin-bottom: 1.5rem;
-}
-
-#step-intro p {
-  margin-bottom: 2rem;
-}
-
-#btn-intro-next {
-  margin-top: 1rem;
-}
-
-    /* Style pour l’image de l’intro */
-#step-intro .intro-image {
-  display: block;           /* pour que margin auto fonctionne */
-  margin: 0 auto 1.5rem;    /* centré + espace en dessous */
-  width: 120px;             /* ajustez selon la dimension souhaitée */
-  border-radius: var(--radius); /* optionnel : coins arrondis */
-}
-
-    /* ─── Chat bubbles ────────────────────────────────────────────────── */
-.message-wrapper {
-  display: flex;
-  margin-bottom: 1rem;
-}
-
-.message-wrapper.bot {
-  justify-content: flex-start;   /* bulles de Julie à gauche */
-}
-
-.message-wrapper.user {
-  justify-content: flex-end;     /* bulles utilisateur à droite */
-}
-
-.message {
-  max-width: 75%;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius);
-  box-shadow: 0 2px 4px var(--shadow);
-  word-wrap: break-word;
-}
-
-/* Bulles de Julie */
-.message.bot {
-  background: #fff;
-  color: #333;
-}
-
-/* Bulles de l’utilisateur */
-.message.user {
-  background: var(--color-primary);
-  color: #fff;
-}
-    
-   /* Micro-copy sous les autres options, juste avant “Viens discuter” */
-.chat-pitch {
-  margin: 1rem auto;           /* espace au-dessus et en-dessous */
-  max-width: 240px;            /* limite la largeur pour aérer */
-  font-size: 0.9rem;           /* un peu plus petit que les boutons */
-  font-style: italic;          /* ton léger, informel */
-  color: #555;                 /* gris mid-tone pour différencier */
-  text-align: center;          /* centré sous les boutons */
-  line-height: 1.4;            /* un interligne confortable */
-}
-    
-    /* Header */
-    .chat-header {
-      position: fixed; top: 0; left: 0; right: 0; height: 4rem;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--color-primary); color: #fff;
-      font-size: 1.25rem; font-weight: bold;
-      box-shadow: 0 2px 4px var(--shadow); z-index: 200;
-      padding: 0 1rem;
-    }
-    #header-back-btn {
-      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
-      background: none; border: none; color: #fff;
-      font-size: 1.5rem; cursor: pointer;
-      visibility: hidden;
-    }
-    .header-title { flex: 1; text-align: center; }
-
-    /* Onboarding */
-    .onboard-step {
-      display: none; position: fixed;
-      top: 4rem; bottom: 0; left: 0; right: 0;
-      background: rgba(255,255,255,0.95); z-index: 100;
-      flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 1rem;
-    }
-    .onboard-step.active { display: flex; }
-    .lang-btn, .btn-primary, .cta-options button {
-      background: var(--color-primary); color: #fff; border: none;
-      border-radius: var(--radius); padding: .75rem 1.5rem;
-      cursor: pointer; margin: .5rem 0; width: 70%;
-    }
-    .lang-btn:hover, .btn-primary:hover, .cta-options button:hover {
-      background: var(--color-primary-hover);
-    }
-
-    /* Main container */
-    .chat-container {
-      flex: 1; display: flex; flex-direction: column;
-      margin: .5rem; background: #fff; border-radius: var(--radius);
-      overflow: hidden; box-shadow: 0 4px 12px var(--shadow);
-    }
-
-    /* Sections & Chat */
-    .section { display: none; flex: 1; overflow-y: auto; padding: 1rem; background: var(--color-bg); }
-    .section.active { display: block; }
-    .chat-scroll {
-      display: none; flex: 1; overflow-y: auto;
-      padding: 1rem; flex-direction: column; gap: 1rem; background: var(--color-bg);
-    }
-    .chat-scroll.active { display: flex; }
-    form#chat-form { display: none; width: 100%; }
-    form#chat-form.active { display: flex; }
-
-    /* Input */
-    .input-area {
-      display: flex; align-items: center;
-      padding: .75rem; background: #fff;
-      box-shadow: 0 -2px 4px var(--shadow);
-    }
-    .input-area input {
-      flex: 1; padding: .75rem 1rem; border: 1px solid #ccc;
-      border-radius: 30px; outline: none; margin-right: .5rem;
-    }
-    .input-area button {
-      background: var(--color-primary); border: none; color: #fff;
-      width: 2.5rem; height: 2.5rem; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.25rem; cursor: pointer;
-    }
-
-    /* Vignettes */
-    .service-tiles {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 1rem; margin-top: 1rem;
-    }
-    .section h2 { text-align: center; margin-bottom: 1rem; }
-    .service-tile {
-      display: flex; flex-direction: column; align-items: center;
-      padding: .75rem; background: #fff; border-radius: var(--radius);
-      box-shadow: 0 2px 6px var(--shadow); cursor: pointer;
-      transition: transform .1s, box-shadow .1s;
-    }
-    .service-tile:hover { transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow); }
-    .service-tile img { width: 40px; height: 40px; margin-bottom: .5rem; }
-    .service-tile span { font-size: .875rem; color: #333; text-align: center; }
-
-    .chat-launch { grid-column: 1 / -1; display: flex; justify-content: center; margin-top: 2rem; }
-  
-  /* Méta-info en haut de la bulle */
-.message .meta {
-  display: block;
-  font-size: 0.75rem;
-  color: #666;
-  margin-bottom: 0.25rem;
-}
-    /* Override pour remonter le contenu sous le header */
-body {
-  padding-top: 3rem !important;
-}
-.onboard-step {
-  top: 3rem !important;
-}
-
-/* Espacement spécifique pour les <p> de l’écran langue */
-#step-language p {
-  margin: 0.5rem 0;         /* 0.5rem au-dessus et en-dessous */
-}
-    /* 1) Onboarding langue : contenu aligné en haut, peu de padding */
-#step-language.onboard-step.active {
-  top: 3rem !important;                /* remonte l’overlay */
-  justify-content: flex-start !important; /* aligne le contenu en haut */
-  padding-top: 2rem !important;      /* réduit l’espace interne haut */
-  gap: 0.5rem;                         /* espace uniforme entre les <p> et les boutons */
-}
-
-/* 2) Marges propres pour chaque ligne de texte */
-#step-language p {
-  margin: 0.5rem 0;                    /* 0.5rem au-dessus et en-dessous */
-}
-    /* ─── Override spécifique pour les écrans Intro et CTA ───────────────── */
-#step-intro.onboard-step.active,
-#step-cta.onboard-step.active {
-  /* 1) Décale l’overlay juste sous le header */
-  top: 3rem !important;
-  /* 2) Colle le contenu en haut au lieu de centrer */
-  justify-content: flex-start !important;
-  /* 3) Réduit le padding interne haut */
-  padding-top: 2rem !important;
-  /* 4) Espace régulier entre les enfants (<h2>, <p>, boutons) */
-  gap: 1rem;
-}
-
-/* Si besoin, ajustez les marges des éléments internes */
-#step-intro h2,
-#step-cta h2 {
-  margin-bottom: 2rem;  /* réduit l’espace sous le titre */
-}
-#step-intro p,
-#step-cta .chat-pitch {
-  margin-bottom: 2rem;    /* espace raisonnable sous le paragraphe */
-}
-
-    /* Empêche iOS de zoomer quand on focus l’input */
-.input-area input {
-  font-size: 16px; /* iOS stoppe son zoom automatique dès 16px */
-}
-    
+    body { display: flex; flex-direction: column; padding-top: 3rem; }
+    @keyframes blink { 0%,100% { opacity:.2; } 20% { opacity:1; } }
+    .chat-header { position: fixed; top:0; left:0; right:0; height:3rem; display:flex; align-items:center; justify-content:center; background:var(--color-primary); color:#fff; font-size:1.25rem; font-weight:bold; box-shadow:0 2px 4px var(--shadow); z-index:200; padding:0 1rem; }
+    #header-back-btn { position:absolute; left:1rem; top:50%; transform:translateY(-50%); background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer; visibility:hidden; }
+    .header-title { flex:1; text-align:center; }
+    .onboard-step { display:none; position:fixed; top:3rem; bottom:0; left:0; right:0; background:rgba(255,255,255,0.95); z-index:100; flex-direction:column; align-items:center; justify-content:flex-start; text-align:center; padding:2rem 1rem; gap:1rem; }
+    .onboard-step.active { display:flex; }
+    /* Langue */
+    #step-language p { margin:0.5rem 0; }
+    .lang-btn { background:var(--color-primary); color:#fff; border:none; border-radius:var(--radius); padding:.75rem 1.5rem; cursor:pointer; margin:.5rem 0; width:70%; transition:background 0.2s; }
+    .lang-btn:hover { background:var(--color-primary-hover); }
+    /* Intro */
+    .intro-image { width:120px; border-radius:var(--radius); margin-bottom:1.5rem; }
+    .btn-primary, .cta-options button { background:var(--color-primary); color:#fff; border:none; border-radius:var(--radius); padding:.75rem 1.5rem; cursor:pointer; margin:.5rem; transition:background 0.2s; }
+    .btn-primary:hover, .cta-options button:hover { background:var(--color-primary-hover); }
+    .chat-pitch { margin:1rem auto; max-width:240px; font-size:0.9rem; font-style:italic; color:#555; text-align:center; line-height:1.4; }
+    /* Sections */
+    .section, .chat-scroll { display:none; flex:1; overflow-y:auto; padding:1rem; background:var(--color-bg); }
+    .section.active, .chat-scroll.active { display:flex; flex-direction:column; gap:1rem; height: calc(100vh - 6rem);overflow-y: auto; }
+    .service-tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:1rem; margin-top:1rem; }
+    .service-tile { display:flex; flex-direction:column; align-items:center; padding:.75rem; background:#fff; border-radius:var(--radius); box-shadow:0 2px 6px var(--shadow); cursor:pointer; transition:transform .1s,box-shadow .1s; }
+    .service-tile:hover { transform:translateY(-2px); box-shadow:0 4px 12px var(--shadow); }
+    .service-tile img { width:40px; height:40px; margin-bottom:.5rem; }
+    .service-tile span { font-size:.875rem; color:#333; text-align:center; }
+    /* Chat */
+    .message-wrapper { display:flex; margin-bottom:1rem; }
+    .message-wrapper.bot { justify-content:flex-start; }
+    .message-wrapper.user { justify-content:flex-end; }
+    .message { max-width:75%; padding:.75rem 1rem; border-radius:var(--radius); box-shadow:0 2px 4px var(--shadow); word-wrap:break-word; }
+    .message.bot { background:#fff; color:#333; }
+    .message.user { background:var(--color-primary); color:#fff; }
+    .typing { justify-content:flex-start; }
+    .typing .message { background:transparent; box-shadow:none; }
+    .typing .dot { display:inline-block; width:8px; height:8px; margin:0 2px; border-radius:50%; background:#ccc; animation:blink 1.4s infinite both; }
+    .dot:nth-child(2) { animation-delay:.2s; }
+    .dot:nth-child(3) { animation-delay:.4s; }
+    .input-area { display:none; align-items:center; padding:.75rem; background:#fff; box-shadow:0 -2px 4px var(--shadow); }
+    .input-area.active { display:flex; }
+    .input-area input { flex:1; padding:.75rem 1rem; border:1px solid #ccc; border-radius:30px; outline:none; margin-right:.5rem; font-size:16px; }
+    .input-area button { background:var(--color-primary); border:none; color:#fff; width:2.5rem; height:2.5rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.25rem; cursor:pointer; transition:background 0.2s; }
+    .input-area button:hover { background:var(--color-primary-hover); }
   </style>
 </head>
 <body>
@@ -237,301 +57,231 @@ body {
     <div class="header-title">Julie</div>
   </div>
 
-  <!-- Onboarding -->
   <div id="step-language" class="onboard-step active">
-    <p>Choisissez votre langue</p>
-    <p>Choose your language</p>
-    <p>Elige tu idioma</p> 
-    <p>Wähle deine Sprache</p>
+    <p data-i18n="lang.choose_fr">Choisissez votre langue</p>
+    <p data-i18n="lang.choose_en">Choose your language</p>
+    <p data-i18n="lang.choose_es">Elige tu idioma</p>
+    <p data-i18n="lang.choose_de">Wähle deine Sprache</p>
     <button class="lang-btn" data-lang="fr">Français</button>
     <button class="lang-btn" data-lang="en">English</button>
     <button class="lang-btn" data-lang="es">Español</button>
     <button class="lang-btn" data-lang="de">Deutsch</button>
   </div>
+
   <div id="step-intro" class="onboard-step">
-     <!-- Votre image, juste au-dessus du titre -->
-  <img src="image2.png" alt="Illustration Julie" class="intro-image" />
-    <h2 id="intro-title">Bienvenue !</h2>
-    <p id="intro-text">Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.</p>
-    <button class="btn-primary" id="btn-intro-next">Cool !</button>
+    <img src="image2.png" alt="Illustration Julie" class="intro-image" />
+    <h2 data-i18n="intro.title">Bienvenue !</h2>
+    <p data-i18n="intro.text">Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.</p>
+    <button class="btn-primary" id="btn-intro-next" data-i18n="intro.button">C'est parti !</button>
   </div>
+
   <div id="step-cta" class="onboard-step">
-    <h2 id="cta-title">Par où commencer ?</h2>
-    <br>
+    <h2 data-i18n="cta.title">Par où commencer ?</h2>
     <div class="cta-options">
-      <button data-cta="section-services">Services de l'hôtel</button>
-      <button data-cta="section-livret">Le livret d'accueil</button>
-      <!-- === NOUVEAU : micro-copy Option C === -->
-  <p class="chat-pitch">
-    Parle à Julie : son IA et ses influenceurs locaux t’ont déniché les meilleurs spots autour de l’hôtel.
-  </p>
-      <button data-cta="chat">Lance le chat</button>
+      <button data-cta="section-services" data-i18n="cta.services">Services de l'hôtel</button>
+      <button data-cta="section-livret" data-i18n="cta.guide">Le livret d'accueil</button>
+      <p class="chat-pitch" data-i18n="cta.pitch">Parle à Julie : son IA et ses influenceurs locaux t'ont déniché les meilleurs spots autour de l'hôtel.</p>
+      <button data-cta="chat" data-i18n="cta.chat">Lancer le chat</button>
     </div>
+  </div>
+  <!-- STEP : Récapitulatif avant envoi -->
+  <div id="step-summary" class="onboard-step">
+    <h2>Tu as choisi :</h2>
+    <pre id="summary-text"></pre>
+    <button class="btn-primary" id="btn-summary-confirm">Valider</button>
+    <button class="lang-btn" id="btn-summary-edit">Modifier</button>
   </div>
 
   <div class="chat-container">
-    <!-- Services -->
     <div id="section-services" class="section">
-      <h2>Services de l'hôtel</h2>
-      <div class="service-tiles">
-        <div class="service-tile" data-detail="roomservice">
-          <img src="room.png" alt="Room Service"><span>Room Service</span>
-        </div>
-        <div class="service-tile" data-detail="spa">
-          <img src="spa.png" alt="Spa"><span>Spa & Bien-être</span>
-        </div>
-        <div class="service-tile" data-detail="menage">
-          <img src="menage.png" alt="Ménage"><span>Service de ménage</span>
-        </div>
-        <div class="service-tile" data-detail="petit-dejeuner">
-          <img src="petit-dejeuner.png" alt="Petit-déjeuner"><span>Le petit-déjeuner</span>
-        </div>
-        <div class="chat-launch"><button class="btn-primary" id="btn-start-chat">Lancer le chat</button></div>
+      <!-- … tes tuiles de services … -->
+      <div class="chat-launch">
+        <button class="btn-primary" data-cta="chat" data-i18n="chat.start">
+          Lancer le chat
+        </button>
       </div>
     </div>
-
-    <!-- Livret -->
     <div id="section-livret" class="section">
-      <h2>Nous vous souhaitons un excellent séjour au sein de notre établissement</h2>
-      <div class="service-tiles">
-        <div class="service-tile" data-detail="wifi">
-          <img src="wifi.png" alt="Wi-Fi"><span>Wi-Fi</span>
-        </div>
-        <div class="service-tile" data-detail="digicode">
-          <img src="digicode.png" alt="Digicode"><span>Digicode</span>
-        </div>
-        <div class="service-tile" data-detail="checkout">
-          <img src="checkout.png" alt="Check-out"><span>Check-out</span>
-        </div>
-        <div class="service-tile" data-detail="reception">
-          <img src="reception.png" alt="Réception"><span>Réception</span>
-        </div>
-        <div class="service-tile" data-detail="infos-pratiques">
-          <img src="infos.png" alt="Infos pratiques"><span>Infos pratiques</span>
-        </div>
-        <div class="service-tile" data-detail="livre-dor">
-          <img src="livre-or.png" alt="Livre d'or"><span>Livre d'or</span>
-        </div>
-        <div class="chat-launch"><button class="btn-primary" id="btn-start-chat-2">Lancer le chat</button></div>
+      <!-- … tes tuiles du livret … -->
+      <div class="chat-launch">
+        <button class="btn-primary" data-cta="chat" data-i18n="chat.start">
+          Lancer le chat
+        </button>
       </div>
     </div>
 
-    <!-- Chat -->
     <div id="chat" class="chat-scroll"></div>
-    <form id="chat-form" class="input-area">
-      <input type="text" id="user-input" placeholder="Écris votre message…" autocomplete="off" />
-      <button type="submit">➤</button>
-    </form>
+
+    <div id="typing-indicator" class="message-wrapper bot typing" style="display:none;">
+      <div class="message bot">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+  </div> <!-- ← fermeture unique de .chat-container -->
+
+  <form id="chat-form" class="input-area">
+    <input type="text" id="user-input" placeholder="Écris votre message…" autocomplete="off" />
+    <button type="submit">➤</button>
+  </form>
+   <!-- LOADER CENTRAL (hors <script>) -->
+  <div id="loader" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)">
+    🔄 Recherche en cours…
   </div>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      // ─── 1) Récupération des éléments ────────────────────────────────
-      const backBtn   = document.getElementById('header-back-btn');
-      const stepLang  = document.getElementById('step-language');
-      const stepIntro = document.getElementById('step-intro');
-      const stepCta   = document.getElementById('step-cta');
-      const secServ   = document.getElementById('section-services');
-      const secLiv    = document.getElementById('section-livret');
-      const chatBox   = document.getElementById('chat');
-      const chatForm  = document.getElementById('chat-form');
-      const inputEl   = document.getElementById('user-input');
-      const btnLangs  = document.querySelectorAll('.lang-btn');
-      const btnIntro  = document.getElementById('btn-intro-next');
-      const btnCTA    = document.querySelectorAll('.cta-options button');
-      const tiles     = document.querySelectorAll('.service-tile');
-      const btnChat1  = document.getElementById('btn-start-chat');
-      const btnChat2  = document.getElementById('btn-start-chat-2');
-  
-      let dialogueStage = 0;
-      let userAmbiance = '';
-
-      // ─── 2) Textes statiques par langue ─────────────────────────────
-      const texts = {
-        fr: {
-          introTitle:   'Coucou !',
-          introText:    "Je suis <strong>Julie</strong>, votre concierge virtuelle pour votre séjour.",
-          ctaTitle:     'Par où commencer ?',
-          placeholder:  'Écris votre message…',
-          welcome:      'Salut ! Comment puis-je vous aider aujourd’hui ?'
-        },
-        en: {
-          introTitle:   'Welcome !',
-          introText:    "I'm <strong>Julie</strong>, your virtual concierge for your stay.",
-          ctaTitle:     'Where to start ?',
-          placeholder:  'Type your message…',
-          welcome:      'Hi there ! How can I assist you today ?'
-        },
-        es: {
-          introTitle:   '¡Bienvenido !',
-          introText:    "Soy <strong>Julie</strong>, tu conserje virtual durante tu estancia.",
-          ctaTitle:     '¿Por dónde empezar ?',
-          placeholder:  'Escribe tu mensaje…',
-          welcome:      '¡Hola ! ¿En qué puedo ayudarte hoy ?'
-        },
-        de: {
-          introTitle:   'Willkommen !',
-          introText:    "Ich bin <strong>Julie</strong>, Ihre virtuelle Concierge während Ihres Aufenthalts.",
-          ctaTitle:     'Wo anfangen ?',
-          placeholder:  'Nachricht eingeben…',
-          welcome:      'Hallo ! Wie kann ich Ihnen heute helfen ?'
-        }
-      };
+      // ─── DOM Elements ─────────────────────────────────────────
+      const backBtn     = document.getElementById('header-back-btn');
+      const stepLang    = document.getElementById('step-language');
+      const stepIntro   = document.getElementById('step-intro');
+      const stepCta     = document.getElementById('step-cta');
+      const secServ     = document.getElementById('section-services');
+      const secLiv      = document.getElementById('section-livret');
+      const chatBox     = document.getElementById('chat');
+      const chatForm    = document.getElementById('chat-form');
+      const inputEl     = document.getElementById('user-input');
+      const btnLangs    = document.querySelectorAll('.lang-btn');
+      const btnIntro    = document.getElementById('btn-intro-next');
+      const ctaBtns     = document.querySelectorAll('[data-cta]');
+      const typingInd   = document.getElementById('typing-indicator');
+      const stepSummary = document.getElementById('step-summary');
+      const summaryText = document.getElementById('summary-text');
+      const btnConfirm  = document.getElementById('btn-summary-confirm');
+      const btnEdit     = document.getElementById('btn-summary-edit');
+      const loader      = document.getElementById('loader');
     
-      // ─── 3) UI dynamiques par langue ─────────────────────────────────
-      const uiLabels = {
-        fr: {
-          ctaServices:          "Services de l'hôtel",
-          ctaLivret:            "Le livret d'accueil",
-          ctaChat:              "Je veux découvrir les spots",
-          sectionServicesTitle: "Services de l'hôtel",
-          sectionLivretTitle:   "Nous vous souhaitons un excellent séjour au sein de notre établissement",
-          tiles: {
-            roomservice:      "Room Service",
-            spa:              "Spa & Bien-être",
-            menage:           "Service de ménage",
-            "petit-dejeuner": "Le petit-déjeuner",
-            wifi:             "Wi-Fi",
-            digicode:         "Digicode",
-            checkout:         "Check-out",
-            reception:        "Réception",
-            "infos-pratiques":"Infos pratiques",
-            "livre-dor":      "Livre d'or"
-          },
-          btnIntro: "C’est parti !"
-        },
-        /* … mêmes structures pour en, es, de … */
-      };
+      // ─── Contexte & historique ─────────────────────────────────
+      let context = {
+  stage: 'greet',
+  hotelId: 'Comfort Aparthotel Bordeaux Bègles Arena'  // ou le Name exact que tu as dans Airtable
+};      const history = [];
     
-      console.log('✅ DOM Ready – script de chat chargé');
-      console.log('💡 langues disponibles dans texts :', Object.keys(texts));
-      console.log('🔢 Boutons langue trouvés :', btnLangs.length);
-    
-      // ─── 4) État initial ────────────────────────────────────────────
-      let historyStack   = [];
-      let currentSection = stepLang;
-      let lang           = 'fr';
-    
-      // ─── 5) Helpers ─────────────────────────────────────────────────
+      // ─── show/hide screens ─────────────────────────────────────
       function hideAll() {
-        [stepLang, stepIntro, stepCta, secServ, secLiv, chatBox, chatForm]
+        [stepLang, stepIntro, stepCta, secServ, secLiv, chatBox, chatForm, stepSummary]
           .forEach(el => el.classList.remove('active'));
         backBtn.style.visibility = 'hidden';
       }
       function show(el) {
-        if (currentSection !== el) historyStack.push(currentSection.id);
+        const current = document.querySelector('.onboard-step.active');
+        if (current) history.push(current);
         hideAll();
         el.classList.add('active');
-        backBtn.style.visibility = el === stepLang ? 'hidden' : 'visible';
-        currentSection = el;
+        backBtn.style.visibility = history.length > 0 ? 'visible' : 'hidden';
       }
-
+      backBtn.addEventListener('click', () => show(history.pop() || stepLang));
+    
+      // ─── Helpers UI ────────────────────────────────────────────
+      const messages = [{
+        role: 'system',
+        content: "Tu es Julie, concierge virtuelle chaleureuse…"
+      }];
       function addMessage(txt, who) {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'message-wrapper ' + (who==='bot'?'bot':'user');
-    const msg = document.createElement('div');
-    msg.className = 'message ' + (who==='bot'?'bot':'user');
-    msg.innerHTML = txt;
-    wrapper.appendChild(msg);
-    chatBox.appendChild(wrapper);
-    chatBox.scrollTop = chatBox.scrollHeight;
+        const w = document.createElement('div');
+        w.className = 'message-wrapper ' + who;
+        const m = document.createElement('div');
+        m.className = 'message ' + who;
+        m.innerHTML = txt;
+         w.appendChild(m);
+        chatBox.appendChild(w);
+        chatBox.scrollTop = chatBox.scrollHeight;
       }
-
-      function updateUILanguage() {
-        const L = uiLabels[lang];
-        document.querySelector('[data-cta="section-services"]').innerText = L.ctaServices;
-        document.querySelector('[data-cta="section-livret"]').innerText   = L.ctaLivret;
-        document.querySelector('[data-cta="chat"]').innerText            = L.ctaChat;
-        secServ.querySelector('h2').innerText = L.sectionServicesTitle;
-        secLiv.querySelector('h2').innerText  = L.sectionLivretTitle;
-        tiles.forEach(tile => {
-          const key = tile.dataset.detail;
-          const span = tile.querySelector('span');
-          if (L.tiles[key]) span.innerText = L.tiles[key];
-        });
-        btnIntro.innerText = uiLabels[lang].btnIntro;
-        btnChat1.innerText = L.ctaChat;
-        btnChat2.innerText = L.ctaChat;
-      }
-      function showChat() {
-    hideAll();
-    chatBox.classList.add('active');
-    chatForm.classList.add('active');
-    backBtn.style.visibility = 'visible';
-    inputEl.placeholder = texts[lang].placeholder;
-    window.scrollTo(0, 0);
-    addMessage(texts[lang].welcome, 'bot');
-  }
+      function showTyping() { typingInd.style.display = 'flex'; }
+      function hideTyping() { typingInd.style.display = 'none'; }
     
-      // ─── 6) Onboarding langue ────────────────────────────────────────
-      btnLangs.forEach(b => {
-        console.log('– prêt à écouter le clic sur', b.dataset.lang);
-        b.addEventListener('click', () => {
-          console.log('👆 Langue cliquée :', b.dataset.lang);
-          lang = b.dataset.lang;
-          document.getElementById('intro-title').innerHTML = texts[lang].introTitle;
-          document.getElementById('intro-text').innerHTML  = texts[lang].introText;
-          document.getElementById('cta-title').innerHTML   = texts[lang].ctaTitle;
-          updateUILanguage();
-          show(stepIntro);
+      // ─── Fonction centralisée d’appel API ──────────────────────
+      async function sendRecommands(query = '') {
+        console.log('→ sendRecommands payload', { stage: context.stage, context, query });
+        showTyping();
+        const res = await fetch('/api/recommands', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            stage: context.stage,
+            context,
+            query,
+            messages
+          })
         });
-      });
+        const data = await res.json();
+const message = data.message;
+// si jamais le serveur renvoie un context, on le met à jour, sinon on l’ignore
+if (data.context) context = data.context;
+messages.push({ role: 'assistant', content: message });
+addMessage(message, 'bot');
+      }
+    
+      // ─── Onboarding classique ───────────────────────────────────
+      btnLangs.forEach(btn =>
+        btn.addEventListener('click', () => show(stepIntro))
+      );
       btnIntro.addEventListener('click', () => show(stepCta));
-      btnCTA.forEach(b => b.addEventListener('click', () => {
-        const action = b.dataset.cta;
-        if (action === 'section-services') show(secServ);
-        else if (action === 'section-livret') show(secLiv);
-        else showChat();
-      }));
     
-      // ─── 7) Chat form handler ────────────────────────────────────────
+      // ─── Clic sur “Lancer le chat” → premier appel sans query ──
+      ctaBtns.forEach(btn =>
+  btn.addEventListener('click', async () => {
+    if (btn.dataset.cta === 'chat') {
+      // 1) Affiche la vue chat
+      show(chatBox);
+      chatForm.classList.add('active');
+
+      // 2) Envoie la première requête (messages contient a minima le system prompt)
+      await sendRecommands();
+
+      // 3) Le handler doit renvoyer un message d’intro qu’on affichera ici même
+    }
+    else if (btn.dataset.cta === 'section-services') show(secServ);
+    else if (btn.dataset.cta === 'section-livret')   show(secLiv);
+  })
+);    
+      // ─── Gestion du récapitulatif (Valider / Modifier) ─────────
+      btnConfirm.addEventListener('click', async () => {
+  loader.style.display = 'block';
+  await sendRecommands();   // envoi du résumé validé
+  loader.style.display = 'none';
+
+  // ← NOUVEAU : revenir à la vue chat
+  show(chatBox);
+  chatForm.classList.add('active');
+});
+      btnEdit.addEventListener('click', () => {
+        show(stepCta);
+      });
+    
+      // ─── Envoi du formulaire de chat (flow questions → résumé) ──
       chatForm.addEventListener('submit', async e => {
         e.preventDefault();
         const text = inputEl.value.trim();
         if (!text) return;
+    
+        // 1) Enregistre la réponse dans le contexte
+        if (context.stage === 'ask_type')        context.type        = text;
+        else if (context.stage === 'ask_distance') context.maxDistance = parseFloat(text) || null;
+        else if (context.stage === 'ask_ambiance') context.ambiance    = text;
+    
+        // 2) Affiche la bulle de l’utilisateur
         addMessage(text, 'user');
+        messages.push({ role: 'user', content: text });
         inputEl.value = '';
-        if (dialogueStage === 0) {
-      // 1ère réponse : on demande l’ambiance
-      addMessage('Pour personnaliser mes suggestions : quelle ambiance préférez-vous ? (cosy, dynamique, romantique…)', 'bot');
-      dialogueStage = 1;
-      return;
-    }
-
-    if (dialogueStage === 1) {
-      // on stocke l’ambiance et on appelle enfin l’API
-      userAmbiance = text;
-      addMessage('Je cherche… un instant', 'bot');
-      try {
-        const res = await fetch('/api/recommands', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            preference: userAmbiance 
-          })
-        });
-        if (!res.ok) throw new Error(await res.text());
-        const { message } = await res.json();
-        addMessage(message, 'bot');
-      } catch (err) {
-        console.error(err);
-        addMessage("Oups, j'ai eu un problème pour récupérer les recommandations.", 'bot');
-      }
-
-      dialogueStage = 2;
-      return;
-    }
+    
+        // 3) Appel API avec la saisie
+        await sendRecommands(text);
+    
+        // 4) Si on vient de renseigner l'ambiance, passe au résumé
+        if (context.stage === 'ask_confirm') {
+          summaryText.textContent =
+            `• Type : ${context.type}\n` +
+            `• Distance max : ${context.maxDistance !== null ? context.maxDistance + ' km' : 'peu importe'}\n` +
+            `• Ambiance : ${context.ambiance}`;
+          return show(stepSummary);
+        }
+        // sinon, la prochaine question ou la recommendation s'affichera dans le chat
       });
     
-      // ─── 8) Lancement initial ────────────────────────────────────────
-      const hash = window.location.hash;
-      if (hash === '#section-services' || hash === '#section-livret') {
-        show(document.getElementById(hash.slice(1)));
-        historyStack = ['step-cta'];
-      } else {
-        show(stepLang);
-      }
+      // ─── Démarrage de l’app ────────────────────────────────────
+      show(stepLang);
     });
     </script>
-  
 </body>
 </html>
