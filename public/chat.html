@@ -27,11 +27,11 @@
     /* Sections */
     .section, .chat-scroll { display:none; flex:1; overflow-y:auto; padding:1rem; background:var(--color-bg); }
     .section.active, .chat-scroll.active { display:flex; flex-direction:column; gap:1rem; height: calc(100vh - 6rem);overflow-y: auto; }
-    .service-tiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:1rem; margin-top:1rem; }
-    .service-tile { display:flex; flex-direction:column; align-items:center; padding:.75rem; background:#fff; border-radius:var(--radius); box-shadow:0 2px 6px var(--shadow); cursor:pointer; transition:transform .1s,box-shadow .1s; }
+    .service-tiles { display: grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:1rem; justify-items: center; }
+    .service-tile { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 1rem; background: #fff; border-radius: var(--radius); box-shadow: 0 2px 6px var(--shadow); cursor: pointer; transition: transform .1s, box-shadow .1s; }
     .service-tile:hover { transform:translateY(-2px); box-shadow:0 4px 12px var(--shadow); }
-    .service-tile img { width:40px; height:40px; margin-bottom:.5rem; }
-    .service-tile span { font-size:.875rem; color:#333; text-align:center; }
+    .service-tile img { width:64px; height:64px; object-fit: contain; margin-bottom: .75rm; }
+    .service-tile span { font-size:.0.9rem; margin-top: 0.25rem; color:#333;  }
     /* Chat */
     .message-wrapper { display:flex; margin-bottom:1rem; }
     .message-wrapper.bot { justify-content:flex-start; }
@@ -49,7 +49,10 @@
     .input-area input { flex:1; padding:.75rem 1rem; border:1px solid #ccc; border-radius:30px; outline:none; margin-right:.5rem; font-size:16px; }
     .input-area button { background:var(--color-primary); border:none; color:#fff; width:2.5rem; height:2.5rem; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.25rem; cursor:pointer; transition:background 0.2s; }
     .input-area button:hover { background:var(--color-primary-hover); }
-  </style>
+    #section-services h2 { text-align: center; margin-bottom: 1rem;}
+    #section-livret h2 { text-align: center; margin-bottom: 1rem;}
+    .chat-launch { display: flex; justify-content: center; margin-top: 1.5rem; /* espace au-dessus si besoin */}
+ </style>
 </head>
 <body>
   <div class="chat-header">
@@ -94,22 +97,56 @@
 
   <div class="chat-container">
     <div id="section-services" class="section">
-      <!-- … tes tuiles de services … -->
+        <h2>Services de l’hôtel</h2>
+        <div class="service-tiles">
+          <a href="detail-roomservice.html" class="service-tile">            <img src="/room.png" alt="Room service" />
+            <span>Room service</span>
+          </a>
+          <a href="detail-reception.html" class="service-tile">            <img src="/reception.png" alt="Réception" />
+            <span>Réception</span>
+          </a>
+          <a href="detail-spa.html" class="service-tile">            <img src="/spa.png" alt="Spa" />
+            <span>Spa</span>
+          </a>
+          <a href="detail-menage.html" class="service-tile">            <img src="/menage.png" alt="Ménage" />
+            <span>Ménage</span>
+          </a>
+          <a href="detail-petit-dejeuner.html" class="service-tile">            <img src="/petit-dejeuner.png" alt="Petit-Déjeuner" />
+            <span>Petit-Déjeuner</span>
+          </a>
+          <!-- … ajoute autant de tuiles que tu veux … -->
+      </div>
       <div class="chat-launch">
         <button class="btn-primary" data-cta="chat" data-i18n="chat.start">
           Lancer le chat
         </button>
-      </div>
+    </div>
     </div>
     <div id="section-livret" class="section">
-      <!-- … tes tuiles du livret … -->
+        <h2>Le livret d’accueil</h2>
+        <div class="service-tiles">
+          <a href="detail-wifi.html" class="service-tile">            <img src="/wifi.png" alt="Wifi" />
+            <span>Wifi</span>
+          </a>
+          <a href="detail-digicode.html" class="service-tile">            <img src="/digicode.png" alt="Digicode" />
+            <span>Digicode</span>
+          </a>
+          <a href="detail-infos-pratiques.html" class="service-tile">            <img src="/infos.png" alt="Infos pratiques" />
+            <span>Infos pratiques</span>
+          </a>
+          <a href="detail-reception.html" class="service-tile">          <img src="/reception.png" alt="Réception" />
+          <span>Réception</span>
+          </a>
+          <a href="detail-livre-dor.html" class="service-tile">        <img src="/livre-or.png" alt="Livre d'or" />
+        <span>Livre d'Or</span>
+          </a>  
+        </div>
       <div class="chat-launch">
         <button class="btn-primary" data-cta="chat" data-i18n="chat.start">
           Lancer le chat
         </button>
-      </div>
     </div>
-
+    </div>
     <div id="chat" class="chat-scroll"></div>
 
     <div id="typing-indicator" class="message-wrapper bot typing" style="display:none;">
@@ -117,6 +154,11 @@
         <span class="dot"></span>
         <span class="dot"></span>
         <span class="dot"></span>
+        <div class="reactions">
+          <button class="react" data-emoji="👍">👍</button>
+          <button class="react" data-emoji="🤔">🤔</button>
+          <button class="react" data-emoji="🔄">🔄</button>
+        </div>
       </div>
     </div>
   </div> <!-- ← fermeture unique de .chat-container -->
@@ -184,7 +226,20 @@
         m.className = 'message ' + who;
         m.innerHTML = txt;
          w.appendChild(m);
-        chatBox.appendChild(w);
+       // Si c'est la toute dernière question « Que souhaitez-vous faire maintenant ? »
+  if (who === 'bot' && /Que souhaitez-vous faire maintenant\s*\?$/i.test(txt)) {
+    const reactions = document.createElement('div');
+    reactions.className = 'reactions';
+    ['👍', '🤔', '🔄'].forEach(emoji => {
+      const btn = document.createElement('button');
+      btn.className = 'react';
+      btn.dataset.emoji = emoji;
+      btn.textContent = emoji;
+      reactions.appendChild(btn);
+    });
+    m.appendChild(reactions);
+  }
+         chatBox.appendChild(w);
         chatBox.scrollTop = chatBox.scrollHeight;
       }
       function showTyping() { typingInd.style.display = 'flex'; }
@@ -211,7 +266,32 @@ if (data.context) context = data.context;
 messages.push({ role: 'assistant', content: message });
 addMessage(message, 'bot');
       }
-    
+      chatBox.addEventListener('click', e => {
+  if (e.target.matches('.react')) {
+    const emoji = e.target.dataset.emoji;
+    // on affiche l’émoji comme message user
+    addMessage(emoji, 'user');
+    // on renvoie vers Julie pour qu’elle réponde
+    sendRecommands(emoji);
+
+    // 2) on répond localement selon l’émoji
+    switch (emoji) {
+      case '👍':
+        addMessage("Super ! Je suis ravie que ces recommandations vous plaisent 😊", 'bot');
+        break;
+      case '🤔':
+        addMessage("Vous hésitez ? Je peux vous donner plus de détails sur un spot ou proposer d’autres options.", 'bot');
+        break;
+      case '🔄':
+        addMessage("Très bien, je reformule mes recommandations… ⏳", 'bot');
+        // si tu veux tout de même relancer une requête au back pour rafraîchir la reco :
+        // sendRecommands();
+        break;
+      default:
+        break;
+    }
+  } // ← fermeture du `if`
+}); // ← fermeture du `addEventListener`
       // ─── Onboarding classique ───────────────────────────────────
       btnLangs.forEach(btn =>
         btn.addEventListener('click', () => show(stepIntro))
@@ -281,7 +361,8 @@ addMessage(message, 'bot');
     
       // ─── Démarrage de l’app ────────────────────────────────────
       show(stepLang);
-    });
+    
+  });
     </script>
 </body>
 </html>
