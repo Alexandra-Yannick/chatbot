@@ -1,5 +1,19 @@
 {
     "rewrites": [
-      { "source": "/", "destination": "/chat.html" }
+      {
+        "source": "/",
+        "destination": "/chat.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/(.*)",
+        "headers": [
+          {
+            "key": "X-Frame-Options",
+            "value": "ALLOWALL"
+          }
+        ]
+      }
     ]
   }
